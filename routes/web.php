@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +19,13 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 Auth::routes();
 
-
-Route::middleware(['auth', 'menu', 'app.sprovider'])->group( function () {
+Route::middleware(['auth'])->group( function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+Route::get('/unauthorized', function () {
+    return view('layouts.unauthorized');
+})->name('unauthorized');
