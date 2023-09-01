@@ -78,7 +78,7 @@ class User extends Authenticatable
     }
 
     public function permissionsByRol(){
-        $lRoles = $this->roles()->pluck('id_role');
+        $lRoles = $this->roles()->pluck('id_role')->toArray();
         $RolePermissions = \DB::connection('mysqlmngr')
                                 ->table('adm_roles_permissions as rp')
                                 ->join('adm_permissions as p', 'p.id_permission', '=', 'rp.permission_id')

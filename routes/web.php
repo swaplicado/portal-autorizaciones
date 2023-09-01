@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Pages\RequisitionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,17 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware(['auth'])->group( function () {
+Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    /** requisiciones */
+    Route::group(['as' => 'requisitions.'], function () {
+        Route::get('/requisitions', [RequisitionsController::class, 'index'])->name('index');
+        Route::post('/approbeResource', [RequisitionsController::class, 'approbeResource'])->name('approbe');
+        Route::post('/rejectResource', [RequisitionsController::class, 'rejectResource'])->name('reject');
+    });
+
 });
 
 Route::get('/unauthorized', function () {

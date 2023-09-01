@@ -14,7 +14,7 @@ class AppGuardMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $key, $level)
+    public function handle(Request $request, Closure $next)
     {
         $type = \Auth::user()->type();
 
@@ -39,11 +39,11 @@ class AppGuardMiddleware
                 return redirect()->route('unauthorized');
             }
 
-            $havePermission = \Auth::user()->havePermission($key, $level);
+            // $havePermission = \Auth::user()->havePermission($key, $level);
 
-            if(!$havePermission){
-                return redirect()->route('unauthorized');
-            }
+            // if(!$havePermission){
+            //     return redirect()->route('unauthorized');
+            // }
 
             return $next($request);
         }

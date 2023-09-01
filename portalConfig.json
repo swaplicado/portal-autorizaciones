@@ -1,0 +1,9 @@
+{
+    "AppLinkRoute": "127.0.0.1:9002",
+    "AppLinkRouteLogin": "login",
+    "AppLinkRouteGetResources": "requisitions/getResources",
+    "AppLinkRouteAuthorizeResource": "requisitions/approbeRequisition",
+    "AppLinkRouteRejectResource": "requisitions/rejectRequisition",
+
+    "folio_size": 5
+}
