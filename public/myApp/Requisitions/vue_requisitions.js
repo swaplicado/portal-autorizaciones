@@ -15,9 +15,14 @@ var app = new Vue({
         modal_title: null,
         isReject: false,
         comment: null,
+        lSteps: [],
     },
     mounted(){
+        self = this;
 
+        if(this.oData.responseIndexCode != 200){
+            SGui.showMessage('', responseIndexMessage, 'error');
+        }
     },
     methods: {
         cleanData(){
@@ -31,6 +36,8 @@ var app = new Vue({
             this.date = null;
             this.modal_title = null;
             this.isReject = false;
+            this.lSteps = [];
+            this.comment = null;
         },
 
         showModal(data){
@@ -87,7 +94,16 @@ var app = new Vue({
                 let data = result.data;
                 if(data.success){
                     this.lResources = data.lResources;
-                    drawTableJson('table_resources', self.lResources, 'idData', 'folio', 'dataTypeName', 'authorizationStatusName');
+                    // drawTableJson('table_resources', self.lResources, 'idData', 'folio', 'dataTypeName', 'authorizationStatusName');
+                    drawTableJson(
+                        'table_resources',
+                        self.lResources,
+                        'idData',
+                        'dataType',
+                        'folio',
+                        'dataTypeName',
+                        'authorizationStatusName'
+                    );
                     SGui.showMessage('', data.message, data.icon);
                     $('#modal_requisition').modal('hide');
                 }else{
@@ -99,5 +115,58 @@ var app = new Vue({
                 SGui.showError(error);
             })
         },
+
+        async showSteps(data){
+            this.cleanData();
+            SGui.showWaiting(15000);
+            await this.getSteps(data[indexesRequisitionsTable.idResource]);
+
+            let arrSteps = [];
+
+            for(let step of this.lSteps){
+                arrSteps.push(
+                    [
+                        step.stepUsername,
+                        (step.isAuthorized ? 'Autorizado' : ( step.isRejected ? 'Rechazado' : "Pendiente")),
+                        (step.isRequired ? 'Sí' : 'No'),
+                        step.level,
+                        (step.isAuthorized ? step.authUsername : ''),
+                        (step.isRejected ? step.rejectUsername : ''),
+                        (step.isAuthorized ? step.timeAuthorized : (step.isRejected ? step.timeRejected : ''))
+                    ]
+                )
+            }
+
+            this.modal_title = "Requisicion " + data[indexesRequisitionsTable.folio];
+            drawTable('table_steps', arrSteps);
+            Swal.close();
+            $('#modal_steps').modal('show');
+        },
+
+        getSteps(resource_id){
+            let route = oServerData.routeSteps;
+
+            return new Promise((resolve, reject) => 
+                axios.post(route,{
+                    'resource_id': resource_id
+                })
+                .then( result => {
+                    let data = result.data;
+
+                    if(data.success){
+                        this.lSteps = data.lSteps;
+                        resolve('ok');
+                    }else{
+                        SGui.showMessage('', data.message, data.icon);
+                        reject('error');
+                    }
+                })
+                .catch( function(error){
+                    console.log(error);
+                    SGui.showError(error);
+                    reject('error');
+                })
+            );
+        }
     }
 });

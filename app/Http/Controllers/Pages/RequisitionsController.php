@@ -4,14 +4,30 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Utils\AppLinkUtils;
+use App\Utils\dateUtils;
+use App\Utils\folioUtils;
 use Illuminate\Http\Request;
 
 class RequisitionsController extends Controller
 {
     public function index(){
-        $lResources = $this->getResources();
+        // $lResources = $this->getResources();
+
+        $data = AppLinkUtils::getResources(\Auth::user());
+
+        $lResources = [];
+        $message = "";
+        $code = $data->code;
+        if($data->code != 200){
+            $message = $data->message;
+        }else{
+            $oData = json_decode($data->data);
+            $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
+        }
         
-        return view('requisitions.requisitions')->with('lResources', $lResources);
+        return view('requisitions.requisitions')->with('lResources', $lResources)
+                                                ->with('code', $code)
+                                                ->with('message', $message);
     }
 
     public function getResources(){
@@ -40,6 +56,7 @@ class RequisitionsController extends Controller
                 "idResource": '.$idResource.',
                 "dataType": '.$dataType.',
                 "authorize": '.$authorize.',
+                "userId": '.\Auth::user()->external_id_n.',
                 "user": "'.\Auth::user()->username.'"
             }';
 
@@ -52,7 +69,20 @@ class RequisitionsController extends Controller
                 return json_encode(['success' => false, 'message' => 'No se obtuvo respuesta desde AppLink', 'icon' => 'error']);
             }
 
-            $lResources = $this->getResources();
+            // $lResources = $this->getResources();
+
+            $data = AppLinkUtils::getResources(\Auth::user());
+
+            $lResources = [];
+            $message = "";
+            if($data->code != 200){
+                $message = $data->message;
+                \Log::error($message);
+                return json_encode(['success' => false, 'message' => $message, 'icon' => 'error']);
+            }
+
+            $oData = json_decode($data->data);
+            $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
 
         } catch (\Throwable $th) {
             \Log::error($th);
@@ -72,8 +102,10 @@ class RequisitionsController extends Controller
         try {
             $body = '{
                 "idResource": '.$idResource.',
-                "authorize": '.$authorize.',
                 "dataType": '.$dataType.',
+                "authorize": '.$authorize.',
+                "comment": "'.$comment.'",
+                "userId": '.\Auth::user()->external_id_n.',
                 "user": "'.\Auth::user()->username.'"
             }';
 
@@ -86,7 +118,20 @@ class RequisitionsController extends Controller
                 return json_encode(['success' => false, 'message' => 'No se obtuvo respuesta desde AppLink', 'icon' => 'error']);
             }
 
-            $lResources = $this->getResources();
+            // $lResources = $this->getResources();
+
+            $data = AppLinkUtils::getResources(\Auth::user());
+
+            $lResources = [];
+            $message = "";
+            if($data->code != 200){
+                $message = $data->message;
+                \Log::error($message);
+                return json_encode(['success' => false, 'message' => $message, 'icon' => 'error']);
+            }
+
+            $oData = json_decode($data->data);
+            $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
 
         } catch (\Throwable $th) {
             \Log::error($th);
@@ -94,5 +139,38 @@ class RequisitionsController extends Controller
         }
 
         return json_encode(['success' => true, 'lResources' => $lResources, 'message' => $result->message, 'icon' => 'success']);
+    }
+
+    public function getSteps(Request $request){
+        $idResource = $request->resource_id;
+        try {
+            $config = \App\Utils\Configuration::getConfigurations();
+            $body = '{
+                "idResource": '.$idResource.',
+                "user": "'.\Auth::user()->username.'"
+            }';
+
+            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteGetSteps, "POST", \Auth::user(), $body);
+            if(!is_null($result)){
+                if($result->code != 200){
+                    return json_encode(['success' => false, 'message' => $result->message, 'icon' => 'error']);
+                }
+            }else{
+                return json_encode(['success' => false, 'message' => 'No se obtuvo respuesta desde AppLink', 'icon' => 'error']);
+            }
+
+            $lSteps = json_decode($result->data);
+
+            foreach($lSteps as $step){
+                $step->timeAuthorized = dateUtils::formatDate(str_replace("'", "", $step->timeAuthorized), 'd-m-Y mm:HH:ss');
+                $step->timeRejected = dateUtils::formatDate(str_replace("'", "", $step->timeRejected), 'd-m-Y mm:HH:ss');
+            }
+
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return json_encode(['success' => false, 'message' => $th->getMessage(), 'icon' => 'error']);
+        }
+
+        return json_encode(['success' => true, 'lSteps' => $lSteps, 'message' => $result->message, 'icon' => 'success']);
     }
 }

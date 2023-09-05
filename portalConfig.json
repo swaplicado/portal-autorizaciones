@@ -4,6 +4,7 @@
     "AppLinkRouteGetResources": "requisitions/getResources",
     "AppLinkRouteAuthorizeResource": "requisitions/approbeRequisition",
     "AppLinkRouteRejectResource": "requisitions/rejectRequisition",
+    "AppLinkRouteGetSteps": "requisitions/getSteps", 
 
     "folio_size": 5
 }

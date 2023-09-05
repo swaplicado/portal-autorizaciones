@@ -172,3 +172,38 @@
         </button>
     @endif
 @endif
+
+@if (isset($lock))
+    @if (isset($lock_type))
+        @switch($lock_type)
+            @case('principal')
+                <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock">
+                    <i class="bx bxs-lock"></i>
+                </button>
+                @break
+
+            @case('inverse')
+                <button type="button" class="btn btn-inverse-dark btn-rounded btn-icon" id="btn_lock_inverse">
+                    <i class="bx bxs-lock"></i>
+                </button>
+                @break
+                
+            @case('outline')
+                <button type="button" class="btn btn-outline-dark btn-rounded btn-icon" id="btn_lock_outline">
+                    <i class="bx bxs-lock"></i>
+                </button>
+                @break
+                
+            @default
+                <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock">
+                    <i class="bx bxs-lock"></i>
+                </button>
+                @break
+
+        @endswitch
+    @else
+        <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock">
+            <i class="bx bxs-lock"></i>
+        </button>
+    @endif
+@endif

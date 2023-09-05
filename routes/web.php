@@ -31,6 +31,7 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
         Route::get('/requisitions', [RequisitionsController::class, 'index'])->name('index');
         Route::post('/approbeResource', [RequisitionsController::class, 'approbeResource'])->name('approbe');
         Route::post('/rejectResource', [RequisitionsController::class, 'rejectResource'])->name('reject');
+        Route::post('/getSteps', [RequisitionsController::class, 'getSteps'])->name('steps');
     });
 
 });
