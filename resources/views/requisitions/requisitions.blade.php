@@ -4,6 +4,8 @@
 <script>
     function GlobalData(){
         this.lResources = <?php echo json_encode($lResources); ?>;
+        this.lStatus = <?php echo json_encode($lStatus); ?>;
+        this.lTypes = <?php echo json_encode($lTypes); ?>;
         this.routeApprobe = <?php echo json_encode(route('requisitions.approbe')); ?>;
         this.routeReject = <?php echo json_encode(route('requisitions.reject')); ?>;
         this.routeSteps = <?php echo json_encode(route('requisitions.steps')); ?>;
@@ -14,9 +16,10 @@
     var indexesRequisitionsTable = {
                 'idResource': 0,
                 'typeResource': 1,
-                'folio': 2,
-                'type': 3,
-                'status': 4,
+                'statusResource': 2,
+                'folio': 3,
+                'type': 4,
+                'status': 5,
             };
 </script>
 @endsection
@@ -36,6 +39,10 @@
 
         <div class="grid-margin">
             @include('layouts.buttons', ['show' => true, 'detail' => true, 'lock' => true])
+            <label for="type_filter">Filtrar tipo: </label>
+            <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
+            <label for="status_filter">Filtrar estatus: </label>
+            <select class="select2-class form-control" name="status_filter" id="status_filter"></select>
         </div>
 
         <div class="table-responsive">
@@ -43,6 +50,7 @@
                 <thead>
                     <th>idResource</th>
                     <th>typeResource</th>
+                    <th>statusResource</th>
                     <th>folio</th>
                     <th>Tipo</th>
                     <th>Estatus</th>
@@ -58,10 +66,43 @@
 @endsection
 
 @section('scripts')
+
+    <script>
+        moment.locale('es');
+        $(document).ready(function () {
+            $.fn.dataTable.ext.search.push(
+                function( settings, data, dataIndex ) {
+                    let col_type = null;
+                    let col_status = null;
+
+                    col_type = parseInt( data[indexesRequisitionsTable.typeResource] );
+                    col_status = parseInt( data[indexesRequisitionsTable.statusResource] );
+
+                    if(settings.nTable.id == 'table_resources'){
+                        let iType = parseInt( $('#type_filter').val(), 10 );
+                        let iStatus = parseInt( $('#status_filter').val(), 10 );
+                        if(col_type == iType || iType == 0){
+                            return col_status == iStatus || iStatus == 0;
+                        }
+                    }
+                    return false;
+                }
+            );
+
+            $('#type_filter').change( function() {
+                table['table_resources'].draw();
+            });
+            
+            $('#status_filter').change( function() {
+                table['table_resources'].draw();
+            });
+        });
+    </script>
+
     @include('layouts.table_jsControll', [
                                             'table_id' => 'table_resources',
-                                            'colTargets' => [0, 1],
-                                            'colTargetsSercheable' => [],
+                                            'colTargets' => [0],
+                                            'colTargetsSercheable' => [1,2],
                                             'select' => true,
                                             'show' => true,
                                         ] )
@@ -82,6 +123,7 @@
                 oServerData.lResources,
                 'idData',
                 'dataType',
+                'authorizationStatus',
                 'folio',
                 'dataTypeName',
                 'authorizationStatusName'

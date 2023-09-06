@@ -23,6 +23,20 @@ var app = new Vue({
         if(this.oData.responseIndexCode != 200){
             SGui.showMessage('', responseIndexMessage, 'error');
         }
+
+        $('.select2-class').select2({})
+
+        $('#status_filter').select2({
+            data: self.oData.lStatus,
+        }).on('select2:select', function(e) {
+            
+        });
+
+        $('#type_filter').select2({
+            data: self.oData.lTypes,
+        }).on('select2:select', function(e) {
+            
+        });
     },
     methods: {
         cleanData(){
@@ -100,6 +114,7 @@ var app = new Vue({
                         self.lResources,
                         'idData',
                         'dataType',
+                        'authorizationStatus',
                         'folio',
                         'dataTypeName',
                         'authorizationStatusName'

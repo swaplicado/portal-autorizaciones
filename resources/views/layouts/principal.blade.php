@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('varios/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('varios/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('boxicons/css/boxicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('select2js/css/select2.min.css') }}">
 
     <!-- Datatables CSS -->
     <link rel="stylesheet" href="{{ asset('datatables/datatables.css') }}">
@@ -40,6 +41,8 @@
     <script type="text/javascript" src="{{ asset('vue/vue.js') }}"></script>
     <script src="{{ asset('sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('js/myApp/gui/SGui.js') }}"></script>
+    <script src="{{ asset('moment/moment.js') }}"></script>
+    <script src="{{ asset('moment/moment-with-locales.js') }}"></script>
     <!-- Header scripts section -->
     @yield('headJs')
     <!-- end Header scripts section-->
@@ -127,7 +130,7 @@
     <script src="{{ asset('js/principal/todolist.js') }}"></script>
     <script src="{{ asset('js/principal/Chart.roundedBarCharts.js') }}"></script>
     <script src="{{ asset('axios/axios.min.js') }}"></script>
-
+    <script src="{{ asset('varios/select2/select2.min.js') }}"></script>
     <!-- JS section -->
     @yield('scripts')
     <!-- End JS section -->

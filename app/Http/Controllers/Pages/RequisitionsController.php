@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pages;
 
+use App\Constants\SysConst;
 use App\Http\Controllers\Controller;
 use App\Utils\AppLinkUtils;
 use App\Utils\dateUtils;
@@ -24,8 +25,15 @@ class RequisitionsController extends Controller
             $oData = json_decode($data->data);
             $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
         }
+
+        $lStatus = SysConst::lAuthStatus;
+        array_splice($lStatus, 0, 0, array(['id' => 0, 'text' => 'Todos']));
+        $lTypes = SysConst::lTypes;
+        array_splice($lTypes, 0, 0, array(['id' => 0, 'text' => 'Todos']));
         
         return view('requisitions.requisitions')->with('lResources', $lResources)
+                                                ->with('lStatus', $lStatus)
+                                                ->with('lTypes', $lTypes)
                                                 ->with('code', $code)
                                                 ->with('message', $message);
     }
