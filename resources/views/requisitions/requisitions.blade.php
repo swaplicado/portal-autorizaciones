@@ -39,10 +39,14 @@
 
         <div class="grid-margin">
             @include('layouts.buttons', ['show' => true, 'detail' => true, 'lock' => true])
-            <label for="type_filter">Filtrar tipo: </label>
-            <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
-            <label for="status_filter">Filtrar estatus: </label>
-            <select class="select2-class form-control" name="status_filter" id="status_filter"></select>
+            <span>
+                <label for="type_filter">Filtrar tipo: </label>
+                <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
+            </span>
+            <span>
+                <label for="status_filter">Filtrar estatus: </label>
+                <select class="select2-class form-control" name="status_filter" id="status_filter"></select>
+            </span>
         </div>
 
         <div class="table-responsive">
@@ -51,7 +55,7 @@
                     <th>idResource</th>
                     <th>typeResource</th>
                     <th>statusResource</th>
-                    <th>folio</th>
+                    <th>Folio</th>
                     <th>Tipo</th>
                     <th>Estatus</th>
                 </thead>
@@ -83,9 +87,12 @@
                         let iStatus = parseInt( $('#status_filter').val(), 10 );
                         if(col_type == iType || iType == 0){
                             return col_status == iStatus || iStatus == 0;
+                        }else{
+                            return false;
                         }
                     }
-                    return false;
+
+                    return true;
                 }
             );
 

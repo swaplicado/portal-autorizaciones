@@ -17,7 +17,7 @@ class Menu
         $viewsAccess = $lPermissions->where('level', 'view');
 
         $lMenus = [
-            (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Home']
+            (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio']
         ];
         foreach($viewsAccess as $view){
             switch ($view->key_code) {

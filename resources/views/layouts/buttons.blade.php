@@ -178,32 +178,32 @@
         @switch($lock_type)
             @case('principal')
                 <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock">
-                    <i class="bx bxs-lock"></i>
+                    <i class="bx bx-collection"></i>
                 </button>
                 @break
 
             @case('inverse')
                 <button type="button" class="btn btn-inverse-dark btn-rounded btn-icon" id="btn_lock_inverse">
-                    <i class="bx bxs-lock"></i>
+                    <i class="bx bx-collection"></i>
                 </button>
                 @break
                 
             @case('outline')
                 <button type="button" class="btn btn-outline-dark btn-rounded btn-icon" id="btn_lock_outline">
-                    <i class="bx bxs-lock"></i>
+                    <i class="bx bx-collection"></i>
                 </button>
                 @break
                 
             @default
                 <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock">
-                    <i class="bx bxs-lock"></i>
+                    <i class="bx bx-collection"></i>
                 </button>
                 @break
 
         @endswitch
     @else
         <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock">
-            <i class="bx bxs-lock"></i>
+            <i class="bx bx-collection"></i>
         </button>
     @endif
 @endif

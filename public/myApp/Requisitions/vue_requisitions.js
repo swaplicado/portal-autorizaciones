@@ -65,7 +65,7 @@ var app = new Vue({
             this.consumeEntity = oResource.consumeEntity;
             this.supplierEntity = oResource.supplierEntity;
             this.date = oResource.date;
-            this.modal_title = "Requisicion";
+            this.modal_title = "Requisición";
             $('#modal_requisition').modal('show');
         },
 
@@ -152,7 +152,7 @@ var app = new Vue({
                 )
             }
 
-            this.modal_title = "Requisicion " + data[indexesRequisitionsTable.folio];
+            this.modal_title = "Requisición " + data[indexesRequisitionsTable.folio];
             drawTable('table_steps', arrSteps);
             Swal.close();
             $('#modal_steps').modal('show');
