@@ -12,22 +12,31 @@ class Menu
             return "";
         }
 
-        $lPermissions = collect($oUser->permissionsByRol());
+        $type = \Auth::user()->type();
 
-        $viewsAccess = $lPermissions->where('level', 'view');
-
-        $lMenus = [
-            (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio']
-        ];
-        foreach($viewsAccess as $view){
-            switch ($view->key_code) {
-                case 'autorizador.requisiciones':
-                    $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones'];
-                    break;
-                
-                default:
-                    # code...
-                    break;
+        if($type->id_typesuser == 1){
+            $lMenus = [
+                (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio'],
+                (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones']
+            ];
+        }else{
+            $lPermissions = collect($oUser->permissionsByRol());
+    
+            $viewsAccess = $lPermissions->where('level', 'view');
+    
+            $lMenus = [
+                (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio']
+            ];
+            foreach($viewsAccess as $view){
+                switch ($view->key_code) {
+                    case 'autorizador.requisiciones':
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones'];
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
             }
         }
 
