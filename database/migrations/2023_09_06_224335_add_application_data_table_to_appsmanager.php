@@ -32,7 +32,7 @@ class AddApplicationDataTableToAppsmanager extends Migration
             ],
         ]);
 
-        DB::connection('mysqlmngr')->table('adm_permission')->insert([
+        DB::connection('mysqlmngr')->table('adm_permissions')->insert([
             [
                 'id_permission' => 6,
                 'app_n_id' => 2,
