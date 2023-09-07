@@ -19,8 +19,8 @@
 
     <!-- Datatables CSS -->
     <link rel="stylesheet" href="{{ asset('datatables/datatables.css') }}">
-    <link rel="stylesheet" href="{{ asset('varios/datatables.net-bs4/dataTables.bootstrap4.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('js/principal/select.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('varios/datatables.net-bs4/datatables.bootstrap4.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('js/principal/select.datatables.min.css') }}">
     <!-- End datatables CSS -->
 
     <!-- CSS principal -->
@@ -120,8 +120,8 @@
     <script src="{{ asset('varios/js/vendor.bundle.base.js') }}"></script>
     <script src="{{ asset('varios/chart.js/Chart.min.js') }}"></script>
     <!-- Datatables js -->
-    <script src="{{ asset('datatables/dataTables.js') }}"></script>
-    <script src="{{ asset('varios/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
+    <script src="{{ asset('datatables/datatables.js') }}"></script>
+    <script src="{{ asset('varios/datatables.net-bs4/datatables.bootstrap4.js') }}"></script>
     <!-- End datatables js -->
     <script src="{{ asset('js/principal/off-canvas.js') }}"></script>
     <script src="{{ asset('js/principal/hoverable-collapse.js') }}"></script>
