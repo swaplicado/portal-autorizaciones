@@ -154,6 +154,7 @@ var app = new Vue({
 
             this.modal_title = "Requisición " + data[indexesRequisitionsTable.folio];
             drawTable('table_steps', arrSteps);
+            addClassToColumn('table_steps', arrSteps.length, 6, 'nobreak');
             Swal.close();
             $('#modal_steps').modal('show');
         },

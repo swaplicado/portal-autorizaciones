@@ -41,3 +41,10 @@ function drawTableJson(nameTable, jsonData, ...keys){
         table[nameTable].draw();
     }
 }
+
+function addClassToColumn(nameTable, rows, index, className){
+    for (let i = 1; i < rows; i++) {
+        let row = table[nameTable].row(i).column(index).nodes().to$();
+        $(row).addClass(className);
+    }
+}
