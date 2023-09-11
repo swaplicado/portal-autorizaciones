@@ -39,11 +39,11 @@
 
         <div class="grid-margin">
             @include('layouts.buttons', ['show' => true, 'detail' => true, 'lock' => true])
-            <span>
+            <span class="nobreak">
                 <label for="type_filter">Filtrar tipo: </label>
                 <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
             </span>
-            <span>
+            <span class="nobreak">
                 <label for="status_filter">Filtrar estatus: </label>
                 <select class="select2-class form-control" name="status_filter" id="status_filter"></select>
             </span>

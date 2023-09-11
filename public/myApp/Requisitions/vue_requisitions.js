@@ -119,7 +119,7 @@ var app = new Vue({
                         'dataTypeName',
                         'authorizationStatusName'
                     );
-                    SGui.showMessage('', data.message, data.icon);
+                    SGui.showOk();
                     $('#modal_requisition').modal('hide');
                 }else{
                     SGui.showMessage('', data.message, data.icon);
