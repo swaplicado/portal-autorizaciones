@@ -1,4 +1,7 @@
 {
+    "appmanagerRoute": "http://127.0.0.1:8000",
+    "appmanagerProfileRoute": "http://127.0.0.1:8000/profile",
+
     "AppLinkRoute": "127.0.0.1:9002",
     "AppLinkRouteLogin": "login",
     "AppLinkRouteGetResources": "requisitions/getResources",
