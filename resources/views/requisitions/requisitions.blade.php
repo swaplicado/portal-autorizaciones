@@ -9,6 +9,7 @@
         this.routeApprobe = <?php echo json_encode(route('requisitions.approbe')); ?>;
         this.routeReject = <?php echo json_encode(route('requisitions.reject')); ?>;
         this.routeSteps = <?php echo json_encode(route('requisitions.steps')); ?>;
+        this.routeRows = <?php echo json_encode(route('requisitions.rows')); ?>;
         this.responseIndexCode = <?php echo json_encode($code); ?>;
         this.responseIndexMessage = <?php echo json_encode($message); ?>;
     }
@@ -38,7 +39,7 @@
     <div class="card-body">
 
         <div class="grid-margin">
-            @include('layouts.buttons', ['show' => true, 'detail' => true, 'lock' => true])
+            @include('layouts.buttons', ['show' => true, 'lock' => true])
             <span class="nobreak">
                 <label for="type_filter">Filtrar tipo: </label>
                 <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
@@ -110,7 +111,8 @@
                                             'table_id' => 'table_resources',
                                             'colTargets' => [0],
                                             'colTargetsSercheable' => [1,2],
-                                            'select' => true,
+                                            // 'select' => true,
+                                            'double_click' => true,
                                             'show' => true,
                                         ] )
 
@@ -119,6 +121,12 @@
                                             'colTargets' => [],
                                             'colTargetsSercheable' => [],
                                             'order' => [[3, 'asc']],
+                                        ] )
+
+    @include('layouts.table_jsControll', [
+                                            'table_id' => 'table_details',
+                                            'colTargets' => [0],
+                                            'colTargetsSercheable' => [],
                                         ] )
 
     <script type="text/javascript" src="{{ asset('myApp/Requisitions/vue_requisitions.js') }}"></script>

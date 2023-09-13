@@ -181,4 +181,32 @@ class RequisitionsController extends Controller
 
         return json_encode(['success' => true, 'lSteps' => $lSteps, 'message' => $result->message, 'icon' => 'success']);
     }
+
+    public function getRows(Request $request){
+        try {
+            $idResource = $request->idResource;
+
+            $config = \App\Utils\Configuration::getConfigurations();
+            $body = '{
+                "idResource": '.$idResource.',
+                "user": "'.\Auth::user()->username.'"
+            }';
+
+            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteGetRows, "POST", \Auth::user(), $body);
+            if(!is_null($result)){
+                if($result->code != 200){
+                    return json_encode(['success' => false, 'message' => $result->message, 'icon' => 'error']);
+                }
+            }else{
+                return json_encode(['success' => false, 'message' => 'No se obtuvo respuesta desde AppLink', 'icon' => 'error']);
+            }
+
+            $lRows = json_decode($result->data);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return json_encode(['success' => false, 'message' => $th->getMessage(), 'icon' => 'error']);
+        }
+
+        return json_encode(['success' => true, 'lRows' => $lRows]);
+    }
 }

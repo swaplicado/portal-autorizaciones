@@ -16,6 +16,7 @@ var app = new Vue({
         isReject: false,
         comment: null,
         lSteps: [],
+        lRows: [],
     },
     mounted(){
         self = this;
@@ -54,7 +55,7 @@ var app = new Vue({
             this.comment = null;
         },
 
-        showModal(data){
+        async showModal(data){
             this.cleanData();
             this.idResource = data[indexesRequisitionsTable.idResource];
             let oResource = this.lResources.find(({ idData }) => idData == this.idResource);
@@ -65,7 +66,10 @@ var app = new Vue({
             this.consumeEntity = oResource.consumeEntity;
             this.supplierEntity = oResource.supplierEntity;
             this.date = oResource.date;
-            this.modal_title = "Requisición";
+            this.modal_title = "Requisición " + this.folio;
+
+            await this.getRows(this.idResource);
+
             $('#modal_requisition').modal('show');
         },
 
@@ -183,6 +187,44 @@ var app = new Vue({
                     reject('error');
                 })
             );
+        },
+
+        getRows(resource_id){
+            SGui.showWaiting(15000);
+            let route = oServerData.routeRows;
+            
+            return new Promise((resolve, reject) => 
+                axios.post(route, {
+                    'idResource': resource_id
+                })
+                .then( result => {
+                    let data = result.data;
+
+                    if(data.success){
+                        this.lRows = data.lRows;
+                        drawTableJson(
+                            'table_details',
+                            this.lRows,
+                            'idEty',
+                            'item',
+                            'unit',
+                            'qty',
+                            'priceUnit',
+                            'total'
+                        );
+                        Swal.close();
+                        resolve('ok');
+                    }else{
+                        SGui.showMessage('', data.message, data.icon);
+                        reject('error');
+                    }
+                })
+                .catch( function(error){
+                    console.log(error);
+                    SGui.showError(error);
+                    reject('error');
+                })
+            )
         }
     }
 });

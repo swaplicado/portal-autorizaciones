@@ -2,7 +2,7 @@
     <div class="modal-dialog" style="max-width: 50rem">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_providers_form">@{{ modal_title }}</h5>
+                <h5 class="modal-title" id="modal_providers_form"><b> @{{ modal_title }} </b></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -72,6 +72,40 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button v-if="!isReject" type="button" class="btn btn-success btn-icon-text" id="btn_approve" v-on:click="confirmRequestResource(1)">
+                    <b>Autorizar</b>
+                    <i class="bx bxs-like"></i>
+                </button>
+                <button v-if="!isReject" type="button" class="btn btn-danger btn-icon-text" id="btn_approve" v-on:click="isReject = true;">
+                    <b>Rechazar</b>
+                    <i class="bx bxs-dislike"></i>
+                </button>
+                <button v-if="isReject" type="button" class="btn btn-info btn-icon-text" id="btn_approve" v-on:click="confirmRequestResource(0)">
+                    <b>Enviar rechazo</b>
+                    <i class="bx bxs-paper-plane"></i>
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><b>Cerrar</b></button>
+            </div>
+            <div class="modal-body separator-light">
+                <form class="forms-sample">
+                    <div class="table-responsive">
+                        <table class="display expandable-table dataTable no-footer" id="table_details" width="100%" cellspacing="0">
+                            <thead>
+                                <th>idEty</th>
+                                <th>Item</th>
+                                <th>Unidad</th>
+                                <th>Cantidad</th>
+                                <th>Precio u.</th>
+                                <th>Total</th>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
                     </div>
                 </form>
             </div>

@@ -103,11 +103,32 @@
                     }
                 });
             
+        /**
+         * Función que hace seleccionable los renglones de la tabla
+         */
         @if(isset($select))
             $('#{{$table_id}} tbody').on('click', 'tr', function () {
                 if(!$(this).hasClass('noSelectableRow')){
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
+                    }
+                    else {
+                        table['{{$table_id}}'].$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                    }
+                }
+            });
+        @endif
+
+        /**
+         * Abrir modal al hacer doble click sobre el renglon,
+         * NOTA: Esta funcion no puede ir junto con la funcion select
+         */
+        @if(isset($double_click))
+            $('#{{$table_id}} tbody').on('click', 'tr', function () {
+                if(!$(this).hasClass('noSelectableRow')){
+                    if ($(this).hasClass('selected')) {
+                        app.showModal(table['{{$table_id}}'].row('.selected').data());
                     }
                     else {
                         table['{{$table_id}}'].$('tr.selected').removeClass('selected');

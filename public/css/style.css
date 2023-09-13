@@ -30852,3 +30852,15 @@ input[type=file]::file-selector-button:hover {
 .nobreak  {  
   white-space: nowrap;  hyphens: none;  
 }
+
+.separator {
+    border-top: 1px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.separator-light {
+    border-top: 1px solid #CED4DA;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

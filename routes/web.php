@@ -32,6 +32,7 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
         Route::post('/approbeResource', [RequisitionsController::class, 'approbeResource'])->name('approbe');
         Route::post('/rejectResource', [RequisitionsController::class, 'rejectResource'])->name('reject');
         Route::post('/getSteps', [RequisitionsController::class, 'getSteps'])->name('steps');
+        Route::post('/getRows', [RequisitionsController::class, 'getRows'])->name('rows');
     });
 
 });
