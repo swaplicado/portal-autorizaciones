@@ -18,9 +18,27 @@
                 'idResource': 0,
                 'typeResource': 1,
                 'statusResource': 2,
-                'folio': 3,
-                'type': 4,
-                'status': 5,
+                'idPriority': 3,
+                'user_req': 4,
+                'date': 5,
+                'consumeEntity': 6,
+                'folio': 7,
+                'type': 8,
+                'priority': 9,
+                'status': 10,
+            };
+
+    var indexesRequisitionDetailsTable = {
+                'idEty': 0,
+                'consumeEntity': 1,
+                'subConsumeEntity': 2,
+                'fcc': 3,
+                'Item': 4,
+                'Unidad': 5,
+                'Cantidad': 6,
+                'Precio u.': 7,
+                'Total': 8,
+                'C. Consumo': 9,
             };
 </script>
 @endsection
@@ -56,12 +74,17 @@
                     <th>idResource</th>
                     <th>typeResource</th>
                     <th>statusResource</th>
+                    <th>idPriority</th>
+                    <th>Usuario requisición</th>
+                    <th>Fecha</th>
+                    <th>Centro consumo</th>
                     <th>Folio</th>
                     <th>Tipo</th>
+                    <th>Prioridad</th>
                     <th>Estatus</th>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </div>
@@ -109,11 +132,12 @@
 
     @include('layouts.table_jsControll', [
                                             'table_id' => 'table_resources',
-                                            'colTargets' => [0],
-                                            'colTargetsSercheable' => [1,2],
+                                            'colTargets' => [0,8],
+                                            'colTargetsSercheable' => [1,2,3],
                                             // 'select' => true,
                                             'double_click' => true,
                                             'show' => true,
+                                            'colTargetsNoOrder' => [4,5,6,7,8,9,10],
                                         ] )
 
     @include('layouts.table_jsControll', [
@@ -125,8 +149,10 @@
 
     @include('layouts.table_jsControll', [
                                             'table_id' => 'table_details',
-                                            'colTargets' => [0],
+                                            'colTargets' => [0,1,2,3],
                                             'colTargetsSercheable' => [],
+                                            'colTargetsAlignRight' => [6,7,8],
+                                            'colTargetsAlignCenter' => [9]
                                         ] )
 
     <script type="text/javascript" src="{{ asset('myApp/Requisitions/vue_requisitions.js') }}"></script>
@@ -139,8 +165,13 @@
                 'idData',
                 'dataType',
                 'authorizationStatus',
+                'fkPriority',
+                'userCreator',
+                'date',
+                'consumeEntity',
                 'folio',
                 'dataTypeName',
+                'priority',
                 'authorizationStatusName'
             );
         })
@@ -163,5 +194,21 @@
 
             app.showSteps(table['table_resources'].row('.selected').data());
         });
+
+        function showConsumeEntity(consumeEntity, subConsumeEntity, fcc){
+            Swal.fire({
+                title: "<strong>Consumos</strong>",
+                html: '<ul style="text-align: left;">' +
+                            '<li><b>Centro consumo:</b> ' + consumeEntity + '</li>' +
+                            '<li><b>Subcentro consumo:</b> ' + subConsumeEntity + '</li>' +
+                            '<li><b>Centro costo:</b> ' + fcc + '</li>'+
+                        '</ul>',
+                showCloseButton: true,
+                focusConfirm: false,
+                confirmButtonText: `
+                    <i class="fa fa-thumbs-up"></i> Ok
+                `,
+            });
+        }
     </script>
 @endsection

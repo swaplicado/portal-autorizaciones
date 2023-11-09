@@ -44,6 +44,9 @@ class dateUtils {
                 case 'd-m-Y mm:HH:ss':
                     $date = $oDate->format('d').'-'.$oDate->format('m').'-'.$oDate->format('Y').' '.$oDate->format('H').':'.$oDate->format('i').':'.$oDate->format('s');
                     break;
+                case 'D-m-Y mm:HH:ss':
+                    $date = $oDate->format('d').'-'.dateUtils::monthsAux[$oDate->month].'-'.$oDate->format('Y').' '.$oDate->format('H').':'.$oDate->format('i').':'.$oDate->format('s');
+                    break;
                 default:
                     $date = $oDate->format($format);
                     break;

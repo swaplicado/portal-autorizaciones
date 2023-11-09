@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Utils\AppLinkUtils;
 use App\Utils\dateUtils;
 use App\Utils\folioUtils;
+use App\Utils\formatersUtils;
 use Illuminate\Http\Request;
 
 class RequisitionsController extends Controller
@@ -24,6 +25,9 @@ class RequisitionsController extends Controller
         }else{
             $oData = json_decode($data->data);
             $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
+            foreach($lResources as $oRes){
+                $oRes->date = dateUtils::formatDate($oRes->date, 'D-m-Y');
+            }
         }
 
         $lStatus = SysConst::lAuthStatus;
@@ -54,6 +58,10 @@ class RequisitionsController extends Controller
     }
 
     public function approbeResource(Request $request){
+        if(is_null(\Auth::user()->external_id_n)){
+            return json_encode(['success' => false, 'message' => 'Este usuario no puede autorizar en el sistema externo', 'icon' => 'error']);
+        }
+        
         $config = \App\Utils\Configuration::getConfigurations();
         $idResource = $request->idResource;
         $dataType = $request->dataType;
@@ -91,6 +99,9 @@ class RequisitionsController extends Controller
 
             $oData = json_decode($data->data);
             $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
+            foreach($lResources as $oRes){
+                $oRes->date = dateUtils::formatDate($oRes->date, 'D-m-Y');
+            }
 
         } catch (\Throwable $th) {
             \Log::error($th);
@@ -101,6 +112,10 @@ class RequisitionsController extends Controller
     }
 
     public function rejectResource(Request $request){
+        if(is_null(\Auth::user()->external_id_n)){
+            return json_encode(['success' => false, 'message' => 'Este usuario no puede rechazar en el sistema externo', 'icon' => 'error']);
+        }
+
         $config = \App\Utils\Configuration::getConfigurations();
         $idResource = $request->idResource;
         $dataType = $request->dataType;
@@ -140,6 +155,9 @@ class RequisitionsController extends Controller
 
             $oData = json_decode($data->data);
             $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
+            foreach($lResources as $oRes){
+                $oRes->date = dateUtils::formatDate($oRes->date, 'D-m-Y');
+            }
 
         } catch (\Throwable $th) {
             \Log::error($th);
@@ -170,8 +188,8 @@ class RequisitionsController extends Controller
             $lSteps = json_decode($result->data);
 
             foreach($lSteps as $step){
-                $step->timeAuthorized = dateUtils::formatDate(str_replace("'", "", $step->timeAuthorized), 'd-m-Y mm:HH:ss');
-                $step->timeRejected = dateUtils::formatDate(str_replace("'", "", $step->timeRejected), 'd-m-Y mm:HH:ss');
+                $step->timeAuthorized = dateUtils::formatDate(str_replace("'", "", $step->timeAuthorized), 'D-m-Y mm:HH:ss');
+                $step->timeRejected = dateUtils::formatDate(str_replace("'", "", $step->timeRejected), 'D-m-Y mm:HH:ss');
             }
 
         } catch (\Throwable $th) {
@@ -202,6 +220,11 @@ class RequisitionsController extends Controller
             }
 
             $lRows = json_decode($result->data);
+            foreach($lRows as $row){
+                $row->qty = formatersUtils::formatNumber($row->qty);
+                $row->priceUnit = formatersUtils::formatCoin($row->priceUnit);
+                $row->total = formatersUtils::formatCoin($row->total);
+            }
         } catch (\Throwable $th) {
             \Log::error($th);
             return json_encode(['success' => false, 'message' => $th->getMessage(), 'icon' => 'error']);

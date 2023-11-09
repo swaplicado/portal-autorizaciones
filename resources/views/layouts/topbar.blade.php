@@ -14,47 +14,7 @@
             <span class="icon-menu"></span>
         </button>
 
-        <!-- Buscar -->
-        <ul class="navbar-nav mr-lg-2">
-            <li class="nav-item nav-search d-none d-lg-block">
-                <div class="input-group">
-                    <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                        <span class="input-group-text" id="search">
-                            <i class="icon-search"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" id="navbar-search-input" placeholder="Buscar"
-                        aria-label="search" aria-describedby="search">
-                </div>
-            </li>
-        </ul>
         <ul class="navbar-nav navbar-nav-right">
-
-            <!-- Notificaciones -->
-            <li class="nav-item dropdown">
-                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-                    data-toggle="dropdown">
-                    <i class="icon-bell mx-0"></i>
-                    <span class="count"></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-                    aria-labelledby="notificationDropdown">
-                    <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-success">
-                                <i class="ti-info-alt mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                            <p class="font-weight-light small-text mb-0 text-muted">
-                                Just now
-                            </p>
-                        </div>
-                    </a>
-                </div>
-            </li>
 
             <!-- Perfil -->
             <li class="nav-item nav-profile dropdown">
@@ -71,13 +31,6 @@
                         Salir
                     </a>
                 </div>
-            </li>
-
-            <!-- boton side derecha -->
-            <li class="nav-item nav-settings d-none d-lg-flex">
-                <a class="nav-link" href="#">
-                    <i class="icon-ellipsis"></i>
-                </a>
             </li>
         </ul>
 

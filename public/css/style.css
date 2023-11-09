@@ -22755,7 +22755,7 @@ select.border-dark.tt-hint:focus {
 
 .form-group label {
   font-size: 0.875rem;
-  line-height: 1.4rem;
+  /* line-height: 1.4rem; */
   vertical-align: top;
   margin-bottom: .5rem;
 }
@@ -30863,4 +30863,188 @@ input[type=file]::file-selector-button:hover {
     border-top: 1px solid #CED4DA;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.sm-form-group {
+  line-height: 0;
+  /* margin-bottom: 0; */
+}
+
+.my-col-sm-3 {
+  padding-left: 5px;
+}
+
+.myTooltip {
+  display:inline-block;
+  position:relative;
+  border-bottom:1px dotted #666;
+  text-align:left;
+}
+
+.myTooltip h3 {margin:12px 0;}
+
+.myTooltip .text-content {
+  padding:10px 20px;
+}
+
+.myTooltip .right {
+  min-width:200px;
+  max-width:400px;
+  top:50%;
+  left:100%;
+  margin-left:20px;
+  transform:translate(0, -50%);
+  padding:0;
+  color:#EEEEEE;
+  background-color:#444444;
+  font-weight:normal;
+  font-size:13px;
+  border-radius:8px;
+  position:absolute;
+  z-index:99999999;
+  box-sizing:border-box;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
+  visibility:hidden; opacity:0; transition:opacity 0.8s;
+}
+
+.myTooltip:hover .right {
+  visibility:visible; opacity:1;
+}
+
+.myTooltip .right img {
+  width:400px;
+  border-radius:8px 8px 0 0;
+}
+
+.myTooltip .right i {
+  position:absolute;
+  top:50%;
+  right:100%;
+  margin-top:-12px;
+  width:12px;
+  height:24px;
+  overflow:hidden;
+}
+.myTooltip .right i::after {
+  content:'';
+  position:absolute;
+  width:12px;
+  height:12px;
+  left:0;
+  top:50%;
+  transform:translate(50%,-50%) rotate(-45deg);
+  background-color:#444444;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
+}
+
+.myTooltip .bottom-right {
+  min-width:200px;
+  max-width:400px;
+  top:50%;
+  left:100%;
+  margin-left:20px;
+  transform:translate(-5%, -5%);
+  padding:0;
+  color:#EEEEEE;
+  background-color:#444444;
+  font-weight:normal;
+  font-size:13px;
+  border-radius:8px;
+  position:absolute;
+  z-index:99999999;
+  box-sizing:border-box;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
+  visibility:hidden; opacity:0; transition:opacity 0.8s;
+}
+
+.myTooltip:hover .bottom-right {
+  visibility:visible; opacity:1;
+}
+
+.myTooltip .bottom-right img {
+  width:400px;
+  border-radius:8px 8px 0 0;
+}
+
+/* Posicion de la flecha */
+.myTooltip .bottom-right i {
+  position:absolute;
+  top:5%;
+  right:100%;
+  margin-top:-12px;
+  width:12px;
+  height:24px;
+  overflow:hidden;
+}
+
+.myTooltip .bottom-right i::after {
+  content:'';
+  position:absolute;
+  width:12px;
+  height:12px;
+  left:0;
+  top:50%;
+  transform:translate(50%,-50%) rotate(-45deg);
+  background-color:#444444;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
+}
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta el valor de opacidad según tus necesidades */
+  z-index: 9999; /* Asegúrate de que el valor de z-index sea mayor que el del modal */
+}
+
+.myTooltip .left {
+  min-width:200px;
+  max-width:400px;
+  top:50%;
+  right:100%;
+  margin-left:20px;
+  transform:translate(0, -50%);
+  padding:0;
+  color:#EEEEEE;
+  background-color:#444444;
+  font-weight:normal;
+  font-size:13px;
+  border-radius:8px;
+  position:absolute;
+  z-index:99999999;
+  box-sizing:border-box;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
+  visibility:hidden; opacity:0; transition:opacity 0.8s;
+}
+
+.myTooltip:hover .left {
+  visibility:visible; opacity:1;
+}
+
+.myTooltip .left img {
+  width:400px;
+  border-radius:8px 8px 0 0;
+}
+
+.myTooltip .left i {
+  position:absolute;
+  top:50%;
+  left:100%;
+  margin-top:-12px;
+  width:12px;
+  height:24px;
+  overflow:hidden;
+}
+.myTooltip .left i::after {
+  content:'';
+  position:absolute;
+  width:12px;
+  height:12px;
+  left:0;
+  top:50%;
+  transform:translate(-50%,-50%) rotate(-45deg);
+  background-color:#444444;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
 }
