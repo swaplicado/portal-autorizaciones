@@ -15,25 +15,30 @@ class RequisitionsController extends Controller
     public function index(){
         // $lResources = $this->getResources();
 
-        $data = AppLinkUtils::getResources(\Auth::user());
-
-        $lResources = [];
-        $message = "";
-        $code = $data->code;
-        if($data->code != 200){
-            $message = $data->message;
-        }else{
-            $oData = json_decode($data->data);
-            $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
-            foreach($lResources as $oRes){
-                $oRes->date = dateUtils::formatDate($oRes->date, 'D-m-Y');
+        try {
+            $data = AppLinkUtils::getResources(\Auth::user());
+    
+            $lResources = [];
+            $message = "";
+            $code = $data->code;
+            if($data->code != 200){
+                $message = $data->message;
+            }else{
+                $oData = json_decode($data->data);
+                $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
+                foreach($lResources as $oRes){
+                    $oRes->date = dateUtils::formatDate($oRes->date, 'D-m-Y');
+                }
             }
+    
+            $lStatus = SysConst::lAuthStatus;
+            array_splice($lStatus, 0, 0, array(['id' => 0, 'text' => 'Todos']));
+            $lTypes = SysConst::lTypes;
+            array_splice($lTypes, 0, 0, array(['id' => 0, 'text' => 'Todos']));
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return view('errorPages.serverError');
         }
-
-        $lStatus = SysConst::lAuthStatus;
-        array_splice($lStatus, 0, 0, array(['id' => 0, 'text' => 'Todos']));
-        $lTypes = SysConst::lTypes;
-        array_splice($lTypes, 0, 0, array(['id' => 0, 'text' => 'Todos']));
         
         return view('requisitions.requisitions')->with('lResources', $lResources)
                                                 ->with('lStatus', $lStatus)
