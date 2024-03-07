@@ -26,9 +26,9 @@ class SysConst {
     public const AUTH_STATUS_REJECTED = 5;
 
     public const lAuthStatus = [
-        ['id' => 1, 'text' => 'No aplica'],
         ['id' => 2, 'text' => 'Pendiente'],
         ['id' => 3, 'text' => 'En proceso'],
+        ['id' => 1, 'text' => 'No aplica'],
         ['id' => 4, 'text' => 'Autorizado'],
         ['id' => 5, 'text' => 'Rechazado'],
     ];

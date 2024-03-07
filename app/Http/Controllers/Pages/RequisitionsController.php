@@ -26,13 +26,16 @@ class RequisitionsController extends Controller
             }else{
                 $oData = json_decode($data->data);
                 $lResources = folioUtils::formatRequisitionsFolio($oData->lAuthData);
+                $loResources = collect($lResources)->sortByDesc('date')->sortByDesc('folio');
+                $lResources = $loResources->values()->all();
                 foreach($lResources as $oRes){
                     $oRes->date = dateUtils::formatDate($oRes->date, 'D-m-Y');
                 }
             }
     
             $lStatus = SysConst::lAuthStatus;
-            array_splice($lStatus, 0, 0, array(['id' => 0, 'text' => 'Todos']));
+            array_push($lStatus, ['id' => 0, 'text' => 'Todos']);
+            // array_splice($lStatus, 0, 0, array(['id' => 0, 'text' => 'Todos']));
             $lTypes = SysConst::lTypes;
             array_splice($lTypes, 0, 0, array(['id' => 0, 'text' => 'Todos']));
         } catch (\Throwable $th) {

@@ -20,12 +20,13 @@
                 'statusResource': 2,
                 'idPriority': 3,
                 'user_req': 4,
-                'date': 5,
-                'consumeEntity': 6,
-                'folio': 7,
-                'type': 8,
-                'priority': 9,
-                'status': 10,
+                'folio': 5,
+                'authorizationUser': 6,
+                'date': 7,
+                'consumeEntity': 8,
+                'type': 9,
+                'priority': 10,
+                'status': 11,
             };
 
     var indexesRequisitionDetailsTable = {
@@ -76,12 +77,13 @@
                     <th>statusResource</th>
                     <th>idPriority</th>
                     <th>Usuario requisición</th>
+                    <th>Folio</th>
+                    <th>Usuario autorización</th>
                     <th>Fecha</th>
                     <th>Centro consumo</th>
-                    <th>Folio</th>
                     <th>Tipo</th>
                     <th>Prioridad</th>
-                    <th>Estatus</th>
+                    <th>Estatus autorización</th>
                 </thead>
                 <tbody>
 
@@ -132,14 +134,14 @@
 
     @include('layouts.table_jsControll', [
                                             'table_id' => 'table_resources',
-                                            'colTargets' => [0,8],
+                                            'colTargets' => [0,9],
                                             'colTargetsSercheable' => [1,2,3],
                                             // 'select' => true,
                                             'double_click' => true,
                                             'show' => true,
-                                            'colTargetsNoOrder' => [4,5,6,7,8,9,10],
+                                            'colTargetsNoOrder' => [4,5,6,7,8,9,10,11],
+                                            'noSort' => true,
                                         ] )
-
     @include('layouts.table_jsControll', [
                                             'table_id' => 'table_steps',
                                             'colTargets' => [],
@@ -167,12 +169,13 @@
                 'authorizationStatus',
                 'fkPriority',
                 'userCreator',
+                'folio',
+                'authorizationUser',
                 'date',
                 'consumeEntity',
-                'folio',
                 'dataTypeName',
                 'priority',
-                'authorizationStatusName'
+                'authorizationStatusName',
             );
         })
     </script>

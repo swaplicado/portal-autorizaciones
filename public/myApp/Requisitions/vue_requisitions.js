@@ -24,7 +24,7 @@ var app = new Vue({
         self = this;
 
         if(this.oData.responseIndexCode != 200){
-            SGui.showMessage('', responseIndexMessage, 'error');
+            SGui.showMessage('', this.oData.responseIndexMessage, 'error');
         }
 
         $('.select2-class').select2({})
@@ -127,12 +127,13 @@ var app = new Vue({
                         'authorizationStatus',
                         'fkPriority',
                         'userCreator',
+                        'folio',
+                        'authorizationUser',
                         'date',
                         'consumeEntity',
-                        'folio',
                         'dataTypeName',
                         'priority',
-                        'authorizationStatusName'
+                        'authorizationStatusName',
                     );
                     SGui.showOk();
                     $('#modal_requisition').modal('hide');
