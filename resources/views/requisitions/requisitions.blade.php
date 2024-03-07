@@ -139,8 +139,8 @@
                                             // 'select' => true,
                                             'double_click' => true,
                                             'show' => true,
-                                            'colTargetsNoOrder' => [4,5,6,7,8,9,10,11],
-                                            'noSort' => true,
+                                            'colTargetsNoOrder' => [],
+                                            // 'noSort' => true,
                                         ] )
     @include('layouts.table_jsControll', [
                                             'table_id' => 'table_steps',
