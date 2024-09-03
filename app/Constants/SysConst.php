@@ -28,14 +28,14 @@ class SysConst {
     public const lAuthStatus = [
         ['id' => 2, 'text' => 'Pendiente'],
         ['id' => 3, 'text' => 'En proceso'],
-        ['id' => 1, 'text' => 'No aplica'],
+        // ['id' => 1, 'text' => 'No aplica'],
         ['id' => 4, 'text' => 'Autorizado'],
         ['id' => 5, 'text' => 'Rechazado'],
     ];
 
     public const lTypes = [
-        ['id' => 1, 'text' => 'Requisicion'],
-        ['id' => 2, 'text' => 'Documento'],
+        ['id' => 1, 'text' => 'Requisición'],
+        // ['id' => 2, 'text' => 'Documento'],
     ];
 }
 ?>

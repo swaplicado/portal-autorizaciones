@@ -2,9 +2,9 @@
 
     <!-- logo -->
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="{{ asset('images/aeth.png') }}" class="mr-2"
+        <a class="navbar-brand brand-logo mr-5" href="{{ route('home') }}"><img src="{{ asset('images/aeth.png') }}" class="mr-2"
                 alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{ asset('images/aeth_mini.png') }}"
+        <a class="navbar-brand brand-logo-mini" href="{{ route('home') }}"><img src="{{ asset('images/aeth_mini.png') }}"
                 alt="logo" /></a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">

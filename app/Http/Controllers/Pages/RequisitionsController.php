@@ -37,7 +37,7 @@ class RequisitionsController extends Controller
             array_push($lStatus, ['id' => 0, 'text' => 'Todos']);
             // array_splice($lStatus, 0, 0, array(['id' => 0, 'text' => 'Todos']));
             $lTypes = SysConst::lTypes;
-            array_splice($lTypes, 0, 0, array(['id' => 0, 'text' => 'Todos']));
+            // array_splice($lTypes, 0, 0, array(['id' => 0, 'text' => 'Todos']));
         } catch (\Throwable $th) {
             \Log::error($th);
             return view('errorPages.serverError');
