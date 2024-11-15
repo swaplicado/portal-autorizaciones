@@ -14,7 +14,7 @@
             <blockquote class="blockquote">
               <h1>Bienvenido</h1>
               <h1>{{\Auth::user()->names}}</h1>
-              <h1> a PA</h1>
+              <h1> al portal de autorizaciones</h1>
             </blockquote>
             <figcaption class="blockquote-footer" style="padding-left: 7%">
                 Bienvenido {{\Auth::user()->full_name}} a Portal autorizaciones
