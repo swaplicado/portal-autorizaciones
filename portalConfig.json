@@ -9,6 +9,7 @@
     "AppLinkRouteRejectResource": "requisitions/rejectRequisition",
     "AppLinkRouteGetSteps": "requisitions/getSteps",
     "AppLinkRouteGetRows": "requisitions/getRows",
+    "AppLinkRouteGetDps": "api/dps",
 
     "folio_size": 5
 }

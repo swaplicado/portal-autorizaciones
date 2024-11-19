@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Pages;
 
-use App\Constants\SysConst;
-use App\Http\Controllers\Controller;
-use App\Utils\AppLinkUtils;
+use Auth;
 use App\Utils\dateUtils;
 use App\Utils\folioUtils;
-use App\Utils\formatersUtils;
+use App\Constants\SysConst;
+use App\Utils\AppLinkUtils;
 use Illuminate\Http\Request;
+use App\Utils\formatersUtils;
+use App\Http\Controllers\Controller;
 
 class RequisitionsController extends Controller
 {
@@ -16,7 +17,7 @@ class RequisitionsController extends Controller
         // $lResources = $this->getResources();
 
         try {
-            $data = AppLinkUtils::getResources(\Auth::user());
+            $data = AppLinkUtils::getResources(Auth::user());
     
             $lResources = [];
             $message = "";
@@ -51,7 +52,7 @@ class RequisitionsController extends Controller
     }
 
     public function getResources(){
-        $data = AppLinkUtils::getResources(\Auth::user());
+        $data = AppLinkUtils::getResources(Auth::user());
         $data = $data->lAuthData;
         $config = \App\Utils\Configuration::getConfigurations();
         foreach ($data as $key => $value) {
@@ -66,7 +67,7 @@ class RequisitionsController extends Controller
     }
 
     public function approbeResource(Request $request){
-        if(is_null(\Auth::user()->external_id_n)){
+        if(is_null(Auth::user()->external_id_n)){
             return json_encode(['success' => false, 'message' => 'Este usuario no puede autorizar en el sistema externo', 'icon' => 'error']);
         }
         
@@ -80,11 +81,13 @@ class RequisitionsController extends Controller
                 "idResource": '.$idResource.',
                 "dataType": '.$dataType.',
                 "authorize": '.$authorize.',
-                "userId": '.\Auth::user()->external_id_n.',
-                "user": "'.\Auth::user()->username.'"
+                "userId": '.Auth::user()->external_id_n.',
+                "user": "'.Auth::user()->username.'"
             }';
 
-            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteAuthorizeResource, 'POST', \Auth::user(), $body);
+            $requireAuth = true;
+            $parameters = null;
+            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteAuthorizeResource, 'POST', Auth::user(), $body, $requireAuth, $parameters);
             if(!is_null($result)){
                 if($result->code != 200){
                     return json_encode(['success' => false, 'message' => $result->message, 'icon' => 'error']);
@@ -95,7 +98,7 @@ class RequisitionsController extends Controller
 
             // $lResources = $this->getResources();
 
-            $data = AppLinkUtils::getResources(\Auth::user());
+            $data = AppLinkUtils::getResources(Auth::user());
 
             $lResources = [];
             $message = "";
@@ -120,7 +123,7 @@ class RequisitionsController extends Controller
     }
 
     public function rejectResource(Request $request){
-        if(is_null(\Auth::user()->external_id_n)){
+        if(is_null(Auth::user()->external_id_n)){
             return json_encode(['success' => false, 'message' => 'Este usuario no puede rechazar en el sistema externo', 'icon' => 'error']);
         }
 
@@ -136,11 +139,12 @@ class RequisitionsController extends Controller
                 "dataType": '.$dataType.',
                 "authorize": '.$authorize.',
                 "comment": "'.$comment.'",
-                "userId": '.\Auth::user()->external_id_n.',
-                "user": "'.\Auth::user()->username.'"
+                "userId": '.Auth::user()->external_id_n.',
+                "user": "'.Auth::user()->username.'"
             }';
-
-            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteRejectResource, 'POST', \Auth::user(), $body);
+            $requireAuth = true;
+            $parameters = null;
+            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteRejectResource, 'POST', Auth::user(), $body, $requireAuth, $parameters);
             if(!is_null($result)){
                 if($result->code != 200){
                     return json_encode(['success' => false, 'message' => $result->message, 'icon' => 'error']);
@@ -151,7 +155,7 @@ class RequisitionsController extends Controller
 
             // $lResources = $this->getResources();
 
-            $data = AppLinkUtils::getResources(\Auth::user());
+            $data = AppLinkUtils::getResources(Auth::user());
 
             $lResources = [];
             $message = "";
@@ -181,10 +185,12 @@ class RequisitionsController extends Controller
             $config = \App\Utils\Configuration::getConfigurations();
             $body = '{
                 "idResource": '.$idResource.',
-                "user": "'.\Auth::user()->username.'"
+                "user": "'.Auth::user()->username.'"
             }';
 
-            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteGetSteps, "POST", \Auth::user(), $body);
+            $requireAuth = true;
+            $parameters = null;
+            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteGetSteps, "POST", Auth::user(), $body, $requireAuth, $parameters);
             if(!is_null($result)){
                 if($result->code != 200){
                     return json_encode(['success' => false, 'message' => $result->message, 'icon' => 'error']);
@@ -215,10 +221,12 @@ class RequisitionsController extends Controller
             $config = \App\Utils\Configuration::getConfigurations();
             $body = '{
                 "idResource": '.$idResource.',
-                "user": "'.\Auth::user()->username.'"
+                "user": "'.Auth::user()->username.'"
             }';
 
-            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteGetRows, "POST", \Auth::user(), $body);
+            $requireAuth = true;
+            $parameters = null;
+            $result = AppLinkUtils::requestAppLink($config->AppLinkRouteGetRows, "POST", Auth::user(), $body, $requireAuth, $parameters);
             if(!is_null($result)){
                 if($result->code != 200){
                     return json_encode(['success' => false, 'message' => $result->message, 'icon' => 'error']);

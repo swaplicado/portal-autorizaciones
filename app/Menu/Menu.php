@@ -14,25 +14,29 @@ class Menu
 
         $type = \Auth::user()->type();
 
-        if($type->id_typesuser == 1){
+        if ($type->id_typesuser == 1) {
             $lMenus = [
                 (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio'],
-                (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones']
+                (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones'],
+                (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Órdenes de compra']
             ];
-        }else{
+        } else {
             $lPermissions = collect($oUser->permissionsByRol());
-    
+
             $viewsAccess = $lPermissions->where('level', 'view');
-    
+
             $lMenus = [
                 (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio']
             ];
-            foreach($viewsAccess as $view){
+            foreach ($viewsAccess as $view) {
                 switch ($view->key_code) {
                     case 'autorizador.requisiciones':
                         $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones'];
                         break;
-                    
+                    case 'autorizador.dps_oc':
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Órdenes de compra'];
+                        break;
+
                     default:
                         # code...
                         break;

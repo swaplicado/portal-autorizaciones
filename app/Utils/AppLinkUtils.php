@@ -71,16 +71,17 @@ class AppLinkUtils {
         return $data;
     }
 
-    public static function requestAppLink($route, $method, $oUser, $body = null, $requireAuth = true){
+    public static function requestAppLink($route, $method, $oUser, $body = null, $requireAuth = true, $parameters = null)
+    {
         $config = \App\Utils\Configuration::getConfigurations();
 
-        if($requireAuth){
+        if ($requireAuth) {
             $data = AppLinkUtils::AppLinkLogin($oUser);
-            if(!is_null($data)){
-                if($data->code != 200){
+            if (!is_null($data)) {
+                if ($data->code != 200) {
                     return $data;
                 }
-            }else{
+            } else {
                 return null;
             }
             $headers = [
@@ -88,22 +89,34 @@ class AppLinkUtils {
                 'Content-Type' => 'application/json',
                 'Authorization' => $data->token
             ];
-        }else{
+        } else {
             $headers = [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'
             ];
         }
 
-        
+
         $client = new Client([
             'base_uri' => $config->AppLinkRoute,
             'timeout' => 30.0,
             'headers' => $headers
         ]);
 
-        $request = new \GuzzleHttp\Psr7\Request($method, $route, $headers, $body);
-        $response = $client->send($request);
+        $options = [];
+
+        // Agregar parámetros de consulta para solicitudes GET
+        if ($method === 'GET' && $parameters) {
+            $options['query'] = $parameters;
+        }
+
+        // Agregar cuerpo para solicitudes POST, PUT, etc.
+        if (in_array($method, ['POST', 'PUT', 'PATCH']) && isset($body)) {
+            $options['json'] = $body; // Asume que `$body` es un arreglo para JSON
+        }
+
+        // Enviar la solicitud
+        $response = $client->request($method, $route, $options);
         $jsonString = $response->getBody()->getContents();
 
         $data = json_decode($jsonString);

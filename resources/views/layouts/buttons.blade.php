@@ -132,7 +132,7 @@
 
         @endswitch
     @else
-        <button type="button" class="btn btn-secondary btn-rounded btn-icon" id="btn_show">
+        <button type="button" class="btn btn-secondary btn-rounded btn-icon" id="btn_show" title="ver requisición">
             <i class="bx bxs-show"></i>
         </button>
     @endif
@@ -202,7 +202,7 @@
 
         @endswitch
     @else
-        <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock">
+        <button type="button" class="btn btn-dark btn-rounded btn-icon" id="btn_lock" title="Pasos de autorización">
             <i class="bx bx-collection"></i>
         </button>
     @endif

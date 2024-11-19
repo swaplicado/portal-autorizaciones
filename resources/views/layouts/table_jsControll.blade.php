@@ -1,135 +1,162 @@
 <script>
     var table = new Object();
-    table["{{$table_id}}"] = '';
+    table["{{ $table_id }}"] = '';
     $(document).ready(function() {
-        table['{{$table_id}}'] = $('#{{$table_id}}').DataTable({
-                    "language": {
-                        "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst":    "Primero",
-                            "sLast":     "Último",
-                            "sNext":     "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        table['{{ $table_id }}'] = $('#{{ $table_id }}').DataTable({
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+            // "scrollX": true,
+            "responsive": false,
+            @if (isset($noInfo))
+                "info": false,
+            @endif
+            @if (isset($noSearch))
+                "searching": false,
+            @endif
+            @if (isset($noPaging))
+                "paging": false,
+            @endif
+            @if (isset($noColReorder))
+                "colReorder": false,
+            @else
+                "colReorder": true,
+            @endif
+            @if (isset($noSort))
+                "bSort": false,
+            @endif
+            @if (!isset($noDom))
+                "dom": 'Bfrtip',
+            @endif
+            @if (isset($order))
+                "order": <?php echo json_encode($order); ?>,
+            @endif
+            @if (isset($responsive))
+                "responsive": true,
+            @endif
+            @if (isset($lengthMenu))
+                "lengthMenu": <?php echo json_encode($lengthMenu); ?>,
+            @else
+                "lengthMenu": [
+                    [10, 25, 50, 100, -1],
+                    ['Mostrar 10', 'Mostrar 25', 'Mostrar 50', 'Mostrar 100', 'Mostrar todo']
+                ],
+            @endif
+            @if (isset($ordering))
+                "ordering": true,
+            @endif
+            "columnDefs": [{
+                    "targets": <?php echo json_encode($colTargets); ?>,
+                    "visible": false,
+                    "searchable": false,
+                    "orderable": false,
+                },
+                {
+                    "targets": <?php echo json_encode($colTargetsSercheable); ?>,
+                    "visible": false,
+                    "searchable": true,
+                    "orderable": false,
+                },
+                {
+                    @if (isset($colTargetsNoOrder))
+                        "targets": <?php echo json_encode($colTargetsNoOrder); ?>,
+                        "visible": true,
+                        "orderable": false,
+                        // "targets": "no-sort",
+                    @endif
+                },
+                {
+                    @if (isset($colTargetsAlignRight))
+                        "targets": <?php echo json_encode($colTargetsAlignRight); ?>,
+                        "className": "dt-body-right",
+                    @endif
+                },
+                {
+                    @if (isset($colTargetsAlignCenter))
+                        "targets": <?php echo json_encode($colTargetsAlignCenter); ?>,
+                        "className": "dt-body-center",
+                    @endif
+                },
+                {
+                    @if (isset($colTargetsAmount))
+                        "targets": <?php echo json_encode($colTargetsAmount); ?>,
+                        "render": function(data, type, row) {
+                            // Aplica el formato solo en la visualización
+                            return type === 'display' && !isNaN(parseFloat(data)) ?
+                                (parseFloat(data).toFixed(2)) :
+                                data;
                         }
-                    },
-                    // "scrollX": true,
-                    "responsive": false,
-                    @if(isset($noInfo))
-                        "info": false,
                     @endif
-                    @if(isset($noSearch))
-                        "searching": false,
-                    @endif
-                    @if(isset($noPaging))
-                        "paging": false,
-                    @endif
-                    @if(isset($noColReorder))
-                        "colReorder": false,
-                    @else
-                        "colReorder": true,
-                    @endif
-                    @if(isset($noSort))
-                        "bSort": false,
-                    @endif
-                    @if(!isset($noDom))
-                        "dom": 'Bfrtip',
-                    @endif
-                    @if(isset($order))
-                        "order": <?php echo json_encode($order) ?>,
-                    @endif
-                    @if(isset($responsive))
-                        "responsive": true,
-                    @endif
-                    @if(isset($lengthMenu))
-                        "lengthMenu": <?php echo json_encode($lengthMenu) ?>,
-                    @else
-                        "lengthMenu": [
-                            [ 10, 25, 50, 100, -1 ],
-                            [ 'Mostrar 10', 'Mostrar 25', 'Mostrar 50', 'Mostrar 100', 'Mostrar todo' ]
-                        ],
-                    @endif
-                    @if(isset($ordering))
-                        "ordering": true,
-                    @endif
-                    "columnDefs": [
-                        {
-                            "targets": <?php echo json_encode($colTargets) ?>,
-                            "visible": false,
-                            "searchable": false,
-                            "orderable": false,
-                        },
-                        {
-                            "targets": <?php echo json_encode($colTargetsSercheable) ?>,
-                            "visible": false,
-                            "searchable": true,
-                            "orderable": false,
-                        },
-                        {
-                            @if(isset($colTargetsNoOrder))
-                                "targets": <?php echo json_encode($colTargetsNoOrder) ?>,
-                                "visible": true,
-                                "orderable": false,
-                                // "targets": "no-sort",
-                            @endif
-                        },
-                        {
-                            @if(isset($colTargetsAlignRight))
-                                "targets": <?php echo json_encode($colTargetsAlignRight) ?>,
-                                "className": "dt-body-right", 
-                            @endif  
-                        },
-                        {
-                            @if(isset($colTargetsAlignCenter))
-                                "targets": <?php echo json_encode($colTargetsAlignCenter) ?>,
-                                "className": "dt-body-center", 
-                            @endif  
+                },
+                {
+                    @if (isset($colTargetsQuantity))
+                        "targets": <?php echo json_encode($colTargetsQuantity); ?>,
+                        "render": function(data, type, row) {
+                            // Aplica el formato solo en la visualización
+                            return type === 'display' && !isNaN(parseFloat(data)) ?
+                                parseFloat(data).toFixed(4) :
+                                data;
                         }
-                    ],
-                    "buttons": [
-                            'pageLength',
-                            {
-                                extend: 'copy',
-                                text: 'Copiar'
-                            }, 
-                            'csv', 
-                            'excel', 
-                            {
-                                extend: 'print',
-                                text: 'Imprimir'
-                            }
-                        ],
-                    "initComplete": function(){ 
-                        // $("#{{$table_id}}").show();
-                        $("#{{$table_id}}").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
-                    }
-                });
-            
+                    @endif
+                },
+                {
+                    @if (isset($colTargetsNoWrap))
+                        "targets": <?php echo json_encode($colTargetsNoWrap); ?>,
+                        "className": "no-wrap"
+                    @endif
+                }
+            ],
+            "buttons": [
+                'pageLength',
+                {
+                    extend: 'copy',
+                    text: 'Copiar'
+                },
+                'csv',
+                'excel',
+                {
+                    extend: 'print',
+                    text: 'Imprimir'
+                }
+            ],
+            "initComplete": function() {
+                // $("#{{ $table_id }}").show();
+                $("#{{ $table_id }}").wrap(
+                    "<div style='overflow:auto; width:100%;position:relative;'></div>");
+            }
+        });
+
         /**
          * Función que hace seleccionable los renglones de la tabla
          */
-        @if(isset($select))
-            $('#{{$table_id}} tbody').on('click', 'tr', function () {
-                if(!$(this).hasClass('noSelectableRow')){
+        @if (isset($select))
+            $('#{{ $table_id }} tbody').on('click', 'tr', function() {
+                if (!$(this).hasClass('noSelectableRow')) {
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
-                    }
-                    else {
-                        table['{{$table_id}}'].$('tr.selected').removeClass('selected');
+                    } else {
+                        table['{{ $table_id }}'].$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
                     }
                 }
@@ -140,14 +167,13 @@
          * Abrir modal al hacer doble click sobre el renglon,
          * NOTA: Esta funcion no puede ir junto con la funcion select
          */
-        @if(isset($double_click))
-            $('#{{$table_id}} tbody').on('click', 'tr', function () {
-                if(!$(this).hasClass('noSelectableRow')){
+        @if (isset($double_click))
+            $('#{{ $table_id }} tbody').on('click', 'tr', function() {
+                if (!$(this).hasClass('noSelectableRow')) {
                     if ($(this).hasClass('selected')) {
-                        app.showModal(table['{{$table_id}}'].row('.selected').data());
-                    }
-                    else {
-                        table['{{$table_id}}'].$('tr.selected').removeClass('selected');
+                        app.showModal(table['{{ $table_id }}'].row('.selected').data());
+                    } else {
+                        table['{{ $table_id }}'].$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
                     }
                 }
@@ -157,8 +183,8 @@
         /**
          * Crear un registro con vue modal
          */
-        @if(isset($create_modal))
-            $('#btn_create').click(function () {        
+        @if (isset($create_modal))
+            $('#btn_create').click(function() {
                 app.createModal();
             });
         @endif
@@ -166,54 +192,54 @@
         /**
          * Editar un registro con vue modal
          */
-        @if(isset($edit_modal))
-            $('#btn_edit').click(function () {
-                if (table['{{$table_id}}'].row('.selected').data() == undefined) {
+        @if (isset($edit_modal))
+            $('#btn_edit').click(function() {
+                if (table['{{ $table_id }}'].row('.selected').data() == undefined) {
                     SGui.showError("Debe seleccionar un renglón");
                     return;
                 }
-        
-                app.editModal(table['{{$table_id}}'].row('.selected').data());
+
+                app.editModal(table['{{ $table_id }}'].row('.selected').data());
             });
         @endif
 
         /**
          * Borrar un registro con vue
          */
-        @if(isset($delete))
-            $('#btn_delete').click(function  () {
-                if (table['{{$table_id}}'].row('.selected').data() == undefined) {
+        @if (isset($delete))
+            $('#btn_delete').click(function() {
+                if (table['{{ $table_id }}'].row('.selected').data() == undefined) {
                     SGui.showError("Debe seleccionar un renglón");
                     return;
                 }
-                app.deleteRegistry(table['{{$table_id}}'].row('.selected').data());
+                app.deleteRegistry(table['{{ $table_id }}'].row('.selected').data());
             });
         @endif
 
         /**
          * Enviar un registro con vue
          */
-        @if(isset($send))
-            $('#btn_send').click(function  () {
-                if (table['{{$table_id}}'].row('.selected').data() == undefined) {
+        @if (isset($send))
+            $('#btn_send').click(function() {
+                if (table['{{ $table_id }}'].row('.selected').data() == undefined) {
                     SGui.showError("Debe seleccionar un renglón");
                     return;
                 }
-                app.sendRegistry(table['{{$table_id}}'].row('.selected').data());
+                app.sendRegistry(table['{{ $table_id }}'].row('.selected').data());
             });
         @endif
 
         /**
          * Abrir modal con datos de tabla 
          */
-        @if(isset($show))
-            $('#btn_show').click(function () {
-                if(table['{{$table_id}}'].row('.selected').data() == undefined){
+        @if (isset($show))
+            $('#btn_show').click(function() {
+                if (table['{{ $table_id }}'].row('.selected').data() == undefined) {
                     SGui.showError("Debe seleccionar un renglón");
                     return;
                 }
 
-                app.showModal(table['{{$table_id}}'].row('.selected').data());
+                app.showModal(table['{{ $table_id }}'].row('.selected').data());
             });
         @endif
 

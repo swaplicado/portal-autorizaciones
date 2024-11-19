@@ -1,0 +1,16 @@
+.no-wrap {
+    white-space: nowrap;
+}
+.custom-font-size thead, tr {
+    font-size: 10px !important; /* Cambia este valor al tamaño de fuente deseado */
+}
+#table_dps.custom-font-size,
+#table_dps.custom-font-size tbody,
+#table_dps.custom-font-size tbody tr td {
+    font-size: 10px !important;
+}
+#table_dps.custom-font-size,
+#table_dps.custom-font-size thead,
+#table_dps.custom-font-size thead th {
+    font-size: 10px !important;
+}

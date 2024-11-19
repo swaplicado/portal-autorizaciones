@@ -26,6 +26,8 @@
     <!-- End CSS principal -->
 
     <!-- CSS section -->
+    {{-- <link  rel="stylesheet" href="{{ asset('daterange/daterangepicker.css') }}"> --}}
+
     @yield('headStyles')
     <!-- End CSS section -->
     <!-- End CSS files -->
@@ -104,6 +106,7 @@
     <script src="{{ asset('js/principal/Chart.roundedBarCharts.js') }}"></script>
     <script src="{{ asset('axios/axios.min.js') }}"></script>
     <script src="{{ asset('varios/select2/select2.min.js') }}"></script>
+    {{-- <script src="{{ asset('daterange/daterangepicker.min.js') }}"></script> --}}
     <!-- JS section -->
     @yield('scripts')
     <!-- End JS section -->

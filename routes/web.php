@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Pages\RequisitionsController;
+use App\Http\Controllers\Pages\DPSController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,12 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
         Route::post('/getSteps', [RequisitionsController::class, 'getSteps'])->name('steps');
         Route::post('/getRows', [RequisitionsController::class, 'getRows'])->name('rows');
     });
+    /** dps */
+    Route::group(['as' => 'dps.'], function () {
+        Route::get('/dps', [DPSController::class, 'index'])->name('index');
+        Route::get('/dps-range', [DPSController::class, 'getDocumentsInRange'])->name('dps-range');
+    });
+
 
 });
 

@@ -72,7 +72,7 @@ var app = new Vue({
             this.supplierEntity = oResource.supplierEntity;
             this.date = oResource.date;
             this.usr_req = oResource.userCreator;
-            this.modal_title = "Requisición " + this.folio;
+            this.modal_title = "Folio requisición: " + this.folio;
 
             await this.getRows(this.idResource);
 
