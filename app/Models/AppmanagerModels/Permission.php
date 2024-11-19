@@ -13,4 +13,12 @@ class Permission extends Model
     protected $primaryKey = 'id_permission';
     protected $table = 'adm_permissions';
     public $timestamps = false;
+
+    protected $fillable = [
+        'id_permission',
+        'app_n_id',
+        'key_code',
+        'level',
+        'description'
+    ];
 }
