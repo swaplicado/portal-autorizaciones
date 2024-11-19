@@ -18,11 +18,11 @@ class DpsCore {
         ];
 
         $rData = AppLinkUtils::requestAppLink($url, $method, $oSessionUser, $body, $requireAuth, $parameters);
-        $oData = json_decode($rData->data);
-        if (! $oData->lDocuments) {
+        // $oData = json_decode($rData->data);
+        if (! $rData->data) {
             throw new Exception("Error al obtener los documentos del servidor externo", 1);
         }
 
-        return $oData->lDocuments;
+        return $rData->data;
     }
 }
