@@ -1,15 +1,15 @@
 {
-    "appmanagerRoute": "http://127.0.0.1:8000",
-    "appmanagerProfileRoute": "http://127.0.0.1:8000/profile",
+    "appmanagerRoute": "https://aeth.siieapp.com/appsmanager/public",
+    "appmanagerProfileRoute": "https://aeth.siieapp.com/appsmanager/public/profile",
 
-    "AppLinkRoute": "127.0.0.1:9002",
+    "AppLinkRoute": "168.195.204.164:9002",
     "AppLinkRouteLogin": "login",
     "AppLinkRouteGetResources": "requisitions/getResources",
     "AppLinkRouteAuthorizeResource": "requisitions/approbeRequisition",
     "AppLinkRouteRejectResource": "requisitions/rejectRequisition",
     "AppLinkRouteGetSteps": "requisitions/getSteps",
     "AppLinkRouteGetRows": "requisitions/getRows",
-    "AppLinkRouteGetDps": "api/dps",
+	"AppLinkRouteGetDps": "api/dps",
 
     "folio_size": 5
 }

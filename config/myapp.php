@@ -15,5 +15,5 @@ return [
     'mngr_db' => env('DB_DATABASE_MNGR', 'db'),
     'app_db' => env('DB_DATABASE', 'db'),
     // 'appmanager_link' => "http://localhost/appsmanager/public", // local
-    'appmanager_link' => "http://127.0.0.1:8000"
+    'appmanager_link' => "https://aeth.siieapp.com/appsmanager/public"
 ];
