@@ -13,6 +13,10 @@ class AddDpsMenuPermissions extends Migration
      */
     public function up()
     {
+        $permissionKey = \App\Models\AppmanagerModels\PermissionKey::create([
+            'key_code' => 'autorizador.dps',
+            'description' => 'acceso a la vista de dps',
+        ]);
         // agregar permisos de menu
         $menu = \App\Models\AppmanagerModels\Permission::create([
             'id_permission' => 14,
