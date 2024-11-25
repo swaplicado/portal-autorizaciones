@@ -5,6 +5,7 @@
     <script>
         function GlobalData() {
             this.routeDps = <?php echo json_encode(route('dps.dps-range')); ?>;
+            this.routeDpsView = <?php echo json_encode(route('dps.view')); ?>;
         }
         var oServerData = new GlobalData();
     </script>
@@ -17,7 +18,7 @@
         </div>
         <div class="card-body">
             <div class="grid-margin">
-                @include('layouts.buttons', ['show' => true, 'lock' => true])
+                @include('layouts.buttons', ['show' => false])
                 {{-- <span class="nobreak">
                     <label for="type_filter">Filtrar tipo: </label>
                     <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
@@ -28,9 +29,12 @@
                 </span> --}}
                 <span class="nobreak">
                     <label for="status_filter">Fecha: </label>
-                    <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i class='bx bxs-hand-left bx-sm'></i></button>
-                    <input type="text" readonly class="form-control-sm" :value="sMonthYear" aria-describedby="helpId" placeholder="Nov 2024">
-                    <button type="button" class="btn btn-primary btn-sm" @click="nextMonth"><i class='bx bxs-hand-right bx-sm' ></i></button>
+                    <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i
+                            class='bx bxs-hand-left bx-sm'></i></button>
+                    <input type="text" readonly class="form-control-sm" :value="sMonthYear" aria-describedby="helpId"
+                        placeholder="Nov 2024">
+                    <button type="button" class="btn btn-primary btn-sm" @click="nextMonth"><i
+                            class='bx bxs-hand-right bx-sm'></i></button>
                 </span>
             </div>
 
@@ -42,12 +46,8 @@
                         <th>idDoc</th>
                         <th>Fecha</th>
                         <th>Folio</th>
-                        <th>Referencia</th>
-                        <th>RFC</th>
                         <th>Proveedor</th>
                         <th>Subtotal</th>
-                        <th>Impuesto cargado</th>
-                        <th>Impuesto retenido</th>
                         <th>Total</th>
                         <th>Moneda</th>
                         <th>Tipo cambio</th>
@@ -127,12 +127,23 @@
         'double_click' => true,
         'show' => true,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [7, 8, 9, 10, 12],
-        'colTargetsAmount' => [7, 8, 9, 10],
-        'colTargetsQuantity' => [12],
-        'colTargetsNoWrap' => [2, 6, 14],
+        'colTargetsAlignRight' => [5, 6, 8],
+        'colTargetsAmount' => [5, 6],
+        'colTargetsQuantity' => [8],
+        'colTargetsNoWrap' => [2, 4, 10],
+        'colTargetsDateHumans' => [2, 10],
         // 'noSort' => true,
     ])
     <script type="text/javascript" src="{{ asset('myApp/Utils/datatablesUtils.js') }}"></script>
     <script type="text/javascript" src="{{ asset('myApp/Dps/AppDpsVue.js') }}"></script>
+    <script>
+        $('#btn_show').click(function() {
+            if (table['table_dps'].row('.selected').data() == undefined) {
+                SGui.showError("Debe seleccionar un renglón");
+                return;
+            }
+            SGui.showWaitingBlock(3000);
+            app.onSelectDps(table['table_dps'].row('.selected').data());
+        });
+    </script>
 @endsection

@@ -39,6 +39,8 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
     Route::group(['as' => 'dps.'], function () {
         Route::get('/dps', [DPSController::class, 'index'])->name('index');
         Route::get('/dps-range', [DPSController::class, 'getDocumentsInRange'])->name('dps-range');
+        Route::get('/dps/{idyear}/{iddoc}', [DPSController::class, 'getDocument'])->name('by-pk');
+        Route::get('/dps/view/{idyear?}/{iddoc?}', [DPSController::class, 'view'])->name('view');
     });
 
 

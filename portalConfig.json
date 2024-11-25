@@ -10,6 +10,7 @@
     "AppLinkRouteGetSteps": "requisitions/getSteps",
     "AppLinkRouteGetRows": "requisitions/getRows",
 	"AppLinkRouteGetDps": "api/dps",
+	"AppLinkRouteGetDpsByPk": "api/dps-by-pk",
 
     "folio_size": 5
 }

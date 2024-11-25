@@ -14,3 +14,34 @@
 #table_dps.custom-font-size thead th {
     font-size: 10px !important;
 }
+
+#table_etys.custom-font-size,
+#table_etys.custom-font-size tbody,
+#table_etys.custom-font-size tbody tr td {
+    font-size: 10px !important;
+}
+#table_etys.custom-font-size,
+#table_etys.custom-font-size thead,
+#table_etys.custom-font-size thead th {
+    font-size: 10px !important;
+}
+
+.text-right {
+    text-align: right;
+}
+.text-left {
+    text-align: left;
+}
+.form-control-sm {
+    height: 2.1em;
+}
+
+.custom-minor-row {
+    margin-bottom: 1px; /* Espacio entre filas */
+}
+.card-header-blue {
+    background-color: #20b2aa6e;
+}
+.card-header-yellow {
+    background-color: #f3f17b6e;
+}

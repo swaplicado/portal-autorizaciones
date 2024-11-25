@@ -189,7 +189,7 @@
         });
 
         $('#btn_lock').click(function() {
-            if (table['table_resources'].row('.selected').data() == undefined) {
+            if (table['table_resources'].row('.selected').data() === undefined) {
                 SGui.showError("Debe seleccionar un renglón");
                 return;
             }

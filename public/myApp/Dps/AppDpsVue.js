@@ -41,7 +41,6 @@ var app = new Vue({
                 }
             })
             .then(response => {
-                // console.log('Documentos obtenidos:', response.data);
                 this.vDocuments = response.data; // Actualizar la lista de documentos
                 drawTableJson(
                     'table_dps',
@@ -50,26 +49,25 @@ var app = new Vue({
                     'idDoc',
                     'dt',
                     'dpsFolio',
-                    // 'num',
-                    'dpsNumRef',
-                    'providerFiscalId',
                     'provider',
                     'subTotal',
-                    'taxCharged',
-                    'taxRetained',
                     'total',
                     'currency',
                     'exchangeRate',
                     'matReqFolio',
                     'matReqDt',
-                    'dpsUser',
-                    'matReqUser'
+                    'matReqUser',
+                    'dpsUser'
                 );
             })
             .catch(error => {
                 console.error('Error al obtener los documentos:', error);
                 return [];
             });
+        },
+        onSelectDps(aData) {
+            // redireccionar a la vista de documentos
+            window.location.href = this.oData.routeDpsView + '/' + aData[0] + '/' + aData[1];
         }
     },
     mounted() {

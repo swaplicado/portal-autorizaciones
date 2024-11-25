@@ -25,4 +25,26 @@ class DpsCore {
 
         return $rData->data;
     }
+
+    public static function getDocument($idYear, $idDocument, $oSessionUser) {
+        $config = \App\Utils\Configuration::getConfigurations();
+        $url = $config->AppLinkRoute."/".$config->AppLinkRouteGetDpsByPk;
+        $method = "GET";
+        $body = "";
+        $requireAuth = true;
+        $idUser = 10;
+        $parameters = [
+            'id_year' => $idYear,
+            'id_doc' => $idDocument,
+            'id_user' => $idUser
+        ];
+
+        $rData = AppLinkUtils::requestAppLink($url, $method, $oSessionUser, $body, $requireAuth, $parameters);
+        // $oData = json_decode($rData->data);
+        if (! $rData->data) {
+            throw new Exception("Error al obtener el documento del servidor externo", 1);
+        }
+
+        return $rData->data;
+    }
 }

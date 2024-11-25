@@ -103,9 +103,11 @@
                         "targets": <?php echo json_encode($colTargetsAmount); ?>,
                         "render": function(data, type, row) {
                             // Aplica el formato solo en la visualización
-                            return type === 'display' && !isNaN(parseFloat(data)) ?
-                                (parseFloat(data).toFixed(2)) :
-                                data;
+                            if (type === 'display' && !isNaN(parseFloat(data))) {
+                                return parseFloat(data).toFixed(2).replace(
+                                    /\B(?=(\d{3})+(?!\d))/g, ',');
+                            }
+                            return data; // Devuelve el valor sin cambios si no es válido
                         }
                     @endif
                 },
@@ -124,6 +126,27 @@
                     @if (isset($colTargetsNoWrap))
                         "targets": <?php echo json_encode($colTargetsNoWrap); ?>,
                         "className": "no-wrap"
+                    @endif
+                },
+                {
+                    @if (isset($colTargetsDateHumans))
+                        "targets": <?php echo json_encode($colTargetsDateHumans); ?>,
+                        "render": function(data, type, row) {
+                            // Formatear la fecha solo en la visualización
+                            if (type === 'display' && data) {
+                                // Asegúrate de que la fecha sea válida
+                                const parts = data.split('-'); // Separar el formato yyyy-mm-dd
+                                if (parts.length === 3) {
+                                    const year = parts[0];
+                                    const month = String(parts[1]).padStart(2,
+                                        '0'); // Asegurar dos dígitos
+                                    const day = String(parts[2]).padStart(2,
+                                        '0'); // Asegurar dos dígitos
+                                    return `${day}-${month}-${year}`;
+                                }
+                            }
+                            return data; // Devolver sin cambios si no es una fecha válida o en otro modo
+                        }
                     @endif
                 }
             ],

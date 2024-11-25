@@ -27,4 +27,15 @@ class DPSController extends Controller
         $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user());
         return response()->json($lDocs);
     }
+
+    public function getDocument($idYear, $idDoc)
+    {
+        $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user());
+        return response()->json($lDocs);
+    }
+
+    public function view(Request $request, $idYear = 0, $idDoc = 0) {
+        return view('dps.view')->with('idYear', $idYear)
+                                    ->with('idDoc', $idDoc);
+    }
 }
