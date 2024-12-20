@@ -5,13 +5,16 @@
     <script>
         function GlobalData() {
             this.routeDpsByPk = <?php echo json_encode(route('dps.by-pk', [$idYear, $idDoc])); ?>;
+            this.routeAuthorizeDps = <?php echo json_encode(route('dps.authorize-dps', [$idYear, $idDoc])); ?>;
+            this.routeRejectDps = <?php echo json_encode(route('dps.reject-dps', [$idYear, $idDoc])); ?>;
             this.idYear = <?php echo json_encode($idYear); ?>;
             this.idDoc = <?php echo json_encode($idDoc); ?>;
+            this.idExternalUser = <?php echo json_encode(\Auth::user()->external_id_n); ?>;
+            this.userName = <?php echo json_encode(\Auth::user()->username); ?>;
         }
         var oServerData = new GlobalData();
     </script>
 @endsection
-
 @section('content')
     <div class="card" id="appDocument">
         {{-- <div class="card-header">
@@ -24,6 +27,16 @@
             <div class="card">
                 <h5 class="card-header card-header-blue">Órden de compra (OC)</h5>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Notas:</label>
+                                <textarea readonly type="text" class="form-control form-control-sm" aria-describedby="helpNotesId" rows="2">@{{ oDocument.oDpsHeader.notesAuth }}</textarea>
+                                <small id="helpNotesId" class="text-muted">Estas son las notas que agrega el departamento de
+                                    compras al enviar la OC para su autorización</small>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="form-group">
@@ -141,6 +154,7 @@
                             <label for="">Notas de la órden de compra</label>
                             <textarea readonly class="form-control form-control-sm" style="text-align: left" name="" id=""
                                 rows="2">@{{ getDpsNotes() }}</textarea>
+                            <small class="text-muted">Notas correspondientes a la OC</small>
                         </div>
                     </div>
                 </div>
@@ -156,17 +170,19 @@
                             <th>Concepto</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>
-                            <th>Precio</th>
+                            <th>Precio Un.</th>
                             <th>Subtotal</th>
                             <th>Impuesto cargado</th>
                             <th>Impuesto retenido</th>
                             <th>Total</th>
+                            <th>Moneda</th>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
                 </div>
                 <hr>
+                @include('dps.modalrm')
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
@@ -228,15 +244,24 @@
                                             <label for="">Tipo Req.</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
-                                                :value="oMaterialRequest.mrType">
+                                                :value="oMaterialRequest.mrType === 'C' ? 'Consumo' : 'Resurtido'">
                                             <small id="helpId" class="form-text text-muted">Resurtido: proviene de
                                                 almacén</small>
                                         </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-12 col-md-8">
                                         <div class="form-group">
                                             <label for="">Notas de la requisición</label>
                                             <textarea readonly class="form-control" name="" id="" rows="2">@{{ getMrNotes() }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-group">
+                                            <label for="">PDF de la Requisición</label>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-toggle="modal" data-target="#modalRm">
+                                                Ver requisición de materiales
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -244,49 +269,25 @@
                         </div>
                     </div>
                 </div>
+                @include('dps.modalfile')
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="card border-primary mb-3" style="max-width: 18rem;">
-                            <div class="card-header">Header</div>
-                            <div class="card-body text-primary">
-                                <h5 class="card-title">Primary card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk of the card's content.</p>
+                    <div class="col-12 col-md-4" v-for="(oFileContainer, index) in oDocument.lFiles">
+                        <div class="card border-primary mb-3 with-border" style="max-width: 18rem;">
+                            <div :class="'card-header' + getHeaderColor(oFileContainer.fileType)">@{{ getFileContainerHeader(oFileContainer.fileType) }}
                             </div>
-                            <div class="card-footer bg-transparent border-success">Footer</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-primary mb-3" style="max-width: 18rem;">
-                            <div class="card-header">Header</div>
                             <div class="card-body text-primary">
-                                <h5 class="card-title">Primary card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk of the card's content.</p>
+                                <h5 class="card-title">@{{ oFileContainer.oWebFile.externalBpName }}</h5>
+                                <p class="card-notes">@{{ getFileNotes(oFileContainer) }}</p>
+                                <br>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    @click="setCurrentFileContainer(oFileContainer, index)" data-toggle="modal"
+                                    data-target="#modelId">
+                                    Ver documento
+                                </button>
                             </div>
-                            <div class="card-footer bg-transparent border-success">Footer</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-primary mb-3" style="max-width: 18rem;">
-                            <div class="card-header">Header</div>
-                            <div class="card-body text-primary">
-                                <h5 class="card-title">Primary card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk of the card's content.</p>
-                            </div>
-                            <div class="card-footer bg-transparent border-success">Footer</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-primary mb-3" style="max-width: 18rem;">
-                            <div class="card-header">Header</div>
-                            <div class="card-body text-primary">
-                                <h5 class="card-title">Primary card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk of the card's content.</p>
-                            </div>
-                            <div class="card-footer bg-transparent border-success">Footer</div>
+                            <div class="card-footer bg-transparent border-success" style="text-align: right">
+                                @{{ formatAmount(oFileContainer.totalLocal, 'MXN') }}</div>
                         </div>
                     </div>
                 </div>
@@ -295,58 +296,76 @@
                         <div class="card">
                             <div class="card-header card-header-blue">Autorización</div>
                             <div class="card-body">
+                                <div v-if="oWebAuthorization" class="row">
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="">Estatus autorización:</label>
+                                            <input readonly :value="oWebAuthorization.authStatusName" type="text"
+                                                class="form-control form-control-sm ml-1" aria-describedby="helpIdAuthSt">
+                                            <small id="helpIdAuthSt" class="text-muted ml-1">(Basado en el proceso de
+                                                autorización)</small>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <table class="table table-striped table-inverse table-responsive">
                                             <thead class="thead-inverse">
                                                 <tr>
-                                                    <th>Fecha</th>
-                                                    <th>Comentario</th>
+                                                    <th>Nivel</th>
+                                                    <th>Estatus</th>
+                                                    <th>Fecha autoriz.</th>
+                                                    <th>Fecha rechazo</th>
                                                     <th>Usuario</th>
+                                                    <th>Comentario</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td scope="row">2024-11-21</td>
-                                                    <td>Este es el comentario</td>
-                                                    <td>alejandra.palafox</td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2024-12-10</td>
-                                                    <td>Este es otro comentario de rechazo o autorización</td>
-                                                    <td>alberto.heredia</td>
+                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps">
+                                                    <td scope="row">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td>@{{ oAuthRow.statusName }}</td>
+                                                    <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible aún)' }}</td>
+                                                    <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible aún)' }}</td>
+                                                    <td>@{{ oAuthRow.userName }}</td>
+                                                    <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios aún)' }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row">
+                                <div v-if="isUserInTurn() && (oWebAuthorization.idAuthStatus == 2 || oWebAuthorization.idAuthStatus == 3)"
+                                    class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Usuario autorización</label>
                                             <input readonly type="text" name="" id=""
-                                                class="form-control form-control-sm" :value="'Alberto Heredia'"
+                                                class="form-control form-control-sm" :value="oData.userName"
                                                 aria-describedby="helpId">
                                             <small id="helpId" class="form-text text-muted">Usuario de autorización
                                                 del documento</small>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div v-if="isUserInTurn() && (oWebAuthorization.idAuthStatus == 2 || oWebAuthorization.idAuthStatus == 3)"
+                                    class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="">Comentarios</label>
-                                            <textarea class="form-control" name="" id="" rows="2"></textarea>
+                                            <label for="">Comentarios autorización o rechazo</label>
+                                            <textarea v-model="sComments" class="form-control" name="" id="" rows="2"></textarea>
+                                            <small class="text-muted">Notas que verán los usuarios involucrados en el
+                                                proceso de autorización.</small>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" style="text-align: center">
-                                    <div class="col-md-6">
-                                        <button type="button" class="btn btn-success">Autorizar</button>
+                                <div v-if="isUserInTurn() && (oWebAuthorization.idAuthStatus == 2 || oWebAuthorization.idAuthStatus == 3)"
+                                    class="row" style="text-align: center">
+                                    <div class="col-6">
+                                        <button type="button" @click="authorize()"
+                                            class="btn btn-success">Autorizar</button>
                                     </div>
-                                    <div class="col-md-6">
-                                        <button type="button" class="btn btn-danger">Rechazar</button>
+                                    <div class="col-6">
+                                        <button type="button" @click="reject()" class="btn btn-danger">Rechazar</button>
                                     </div>
                                 </div>
                             </div>

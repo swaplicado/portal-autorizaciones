@@ -38,8 +38,11 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
     /** dps */
     Route::group(['as' => 'dps.'], function () {
         Route::get('/dps', [DPSController::class, 'index'])->name('index');
+        Route::get('/pending', [DPSController::class, 'indexPending'])->name('pending');
         Route::get('/dps-range', [DPSController::class, 'getDocumentsInRange'])->name('dps-range');
         Route::get('/dps/{idyear}/{iddoc}', [DPSController::class, 'getDocument'])->name('by-pk');
+        Route::post('/dps/authorize-dps/{idyear?}/{iddoc?}', [DPSController::class, 'authorizeDps'])->name('authorize-dps');
+        Route::post('/dps/reject-dps/{idyear?}/{iddoc?}', [DPSController::class, 'rejectDps'])->name('reject-dps');
         Route::get('/dps/view/{idyear?}/{iddoc?}', [DPSController::class, 'view'])->name('view');
     });
 

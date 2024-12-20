@@ -14,6 +14,23 @@ class SMaterialRequest {
     constructor() { }
 }
 
+class SDpsFileContainer {
+    constructor() {
+        this.oWebFile = {
+            fileExtension: ''
+        };
+    }
+}
+
+class SWebAuthorization {
+    constructor() {
+        this.authStatusName = 'NA';
+        this.idAuthStatus = 0;
+        this.lastActionAt = 'NA';
+        this.lSteps = [];
+    }
+}
+
 var documentApp = new Vue({
     el: '#appDocument',
     data: {
@@ -22,7 +39,11 @@ var documentApp = new Vue({
         idDoc: oServerData.idDoc,
         oDocument: new SDocument(),
         oDocumentEty: new SDocumentEty(),
-        oMaterialRequest: new SMaterialRequest()
+        oMaterialRequest: new SMaterialRequest(),
+        oCurrentFileContainer: new SDpsFileContainer(),
+        iCurrentIndex: 0,
+        oWebAuthorization: new SWebAuthorization(),
+        sComments: ''
     },
     mounted() {
         this.getDocument();
@@ -33,8 +54,19 @@ var documentApp = new Vue({
             await axios.get(this.oData.routeDpsByPk)
                 .then(response => {
                     this.oDocument = response.data; // Actualizar la lista de documentos
+                    console.log(this.oDocument);
+                    if (this.oDocument.oWebAuthorization) {
+                        this.oWebAuthorization = this.oDocument.oWebAuthorization;
+                    }
+
+                    if (this.oDocument.lEtys) {
+                        for (let oEty of this.oDocument.lEtys) {
+                            oEty.currency = 'MXN';
+                        }
+                    }
                 })
                 .catch(error => {
+                    SGui.showError('Error al obtener los documentos' + error + '. Contacta a soporte técnico.');
                     console.error('Error al obtener los documentos:', error);
                     return [];
                 });
@@ -49,7 +81,7 @@ var documentApp = new Vue({
             return amt;
         },
         formatDateNormal(data) {
-            if (! data) {
+            if (!data) {
                 return '';
             }
             const parts = data.split('-'); // Separar el formato yyyy-mm-dd
@@ -65,7 +97,7 @@ var documentApp = new Vue({
         },
         getDpsNotes() {
             let notes = '';
-            if (! this.oDocument.lNotes) {
+            if (!this.oDocument.lNotes) {
                 return '';
             }
             this.oDocument.lNotes.forEach(note => {
@@ -75,7 +107,7 @@ var documentApp = new Vue({
         },
         getMrNotes() {
             let notes = '';
-            if (! this.oMaterialRequest.lNotes) {
+            if (!this.oMaterialRequest.lNotes) {
                 return 'Estas son las notas de la requisición de materiales';
             }
             this.oMaterialRequest.lNotes.forEach(note => {
@@ -98,7 +130,8 @@ var documentApp = new Vue({
                 'subtotal',
                 'taxCharged',
                 'taxRetained',
-                'total'
+                'total',
+                'currency'
             );
 
             if (this.oDocument.lEtys) {
@@ -115,8 +148,246 @@ var documentApp = new Vue({
                     break;
                 }
             }
-            this.oDocumentEty = this.oDocument.lEtys[0];
             this.oMaterialRequest = this.oDocumentEty.oMaterialRequest;
+        },
+        getHeaderColor(fileType) {
+            if (fileType === 'Q') {
+                return " header-selected";
+            }
+            else if (fileType === 'Q+') {
+                return " header-high-cost";
+            }
+            else if (fileType === 'Q-') {
+                return " header-low-cost";
+            }
+            else if (fileType === 'T') {
+                return " header-sheet";
+            }
+
+            return '';
+        },
+        getFileContainerHeader(fileType) {
+            if (fileType === 'Q') {
+                return "Cotización seleccionada";
+            }
+            else if (fileType === 'Q+') {
+                return "Cotización más cara";
+            }
+            else if (fileType === 'Q-') {
+                return "Cotización más barata";
+            }
+            else if (fileType === 'T') {
+                return "Ficha técnica";
+            }
+
+            return 'Archivo';
+        },
+        setCurrentFileContainer(fileContainer, index) {
+            this.oCurrentFileContainer = fileContainer;
+
+            SGui.showWaitingBlock(4000);
+            if (!this.oCurrentFileContainer) {
+                this.iCurrentIndex = 0;
+                return;
+            }
+            this.iCurrentIndex = index;
+        },
+        prevContainer() {
+            if (this.oDocument.lFiles && this.oDocument.lFiles.length > 0) {
+                if (this.iCurrentIndex > 0) {
+                    this.iCurrentIndex--;
+                    this.setCurrentFileContainer(this.oDocument.lFiles[this.iCurrentIndex], this.iCurrentIndex);
+                }
+                else {
+                    this.iCurrentIndex = this.oDocument.lFiles.length - 1;
+                    this.setCurrentFileContainer(this.oDocument.lFiles[this.iCurrentIndex], this.iCurrentIndex);
+                }
+            }
+        },
+        nextContainer() {
+            if (this.oDocument.lFiles && this.oDocument.lFiles.length > 0) {
+                if (this.iCurrentIndex < this.oDocument.lFiles.length - 1) {
+                    this.iCurrentIndex++;
+                    this.setCurrentFileContainer(this.oDocument.lFiles[this.iCurrentIndex], this.iCurrentIndex);
+                }
+                else {
+                    this.iCurrentIndex = 0;
+                    this.setCurrentFileContainer(this.oDocument.lFiles[this.iCurrentIndex], this.iCurrentIndex);
+                }
+            }
+        },
+        getFileNotes(oContainer) {
+            if (!oContainer) {
+                return "(Sin notas de archivo)";
+            }
+
+            if (!oContainer.notes) {
+                return "(Sin notas de archivo)";
+            }
+
+            return oContainer.notes;
+        },
+        getPdfMaterialRequestUrl(oMatReq) {
+            if (!oMatReq) {
+                return "";
+            }
+
+            if (!oMatReq.mrStorageCloudUrl) {
+                return "";
+            }
+
+            if (this.isBigScreenSize()) {
+                return oMatReq.mrStorageCloudUrl + '#zoom=95'
+            }
+
+            const fileUrl = encodeURIComponent(oMatReq.mrStorageCloudUrl);
+            const googleViewerUrl = `https://docs.google.com/viewer?embedded=true&url=${fileUrl}#zoom=100`;
+
+            return googleViewerUrl;
+        },
+        getFileExtensionType(oContainer) {
+            if (!oContainer) {
+                return "NONE";
+            }
+
+            if (!oContainer.oWebFile.cloudFileUrl) {
+                return "NONE";
+            }
+
+            // a minusculas:
+            const extension = oContainer.oWebFile.fileExtension.toLowerCase();
+            let extensionType = '';
+            switch (extension) {
+                case 'pdf':
+                    extensionType = 'PDF';
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                    extensionType = 'IMAGE';
+                    break;
+                default:
+                    extensionType = 'FILE';
+                    break;
+            }
+
+            return extensionType;
+        },
+        getImageFileUrl(oContainer) {
+            if (!oContainer) {
+                return "#";
+            }
+
+            if (!oContainer.oWebFile.cloudFileUrl) {
+                return "#";
+            }
+
+            return oContainer.oWebFile.cloudFileUrl;
+        },
+        getPdfFileUrl(oContainer) {
+            if (!oContainer) {
+                return "#";
+            }
+
+            if (!oContainer.oWebFile.cloudFileUrl) {
+                return "#";
+            }
+
+            if (this.isBigScreenSize()) {
+                return oContainer.oWebFile.cloudFileUrl + '#zoom=95'
+            }
+
+            const fileUrl = encodeURIComponent(oContainer.oWebFile.cloudFileUrl);
+            const googleViewerUrl = `https://docs.google.com/viewer?embedded=true&url=${fileUrl}#zoom=100`;
+
+            return googleViewerUrl;
+        },
+        getFileUrl(oContainer) {
+            if (!oContainer) {
+                return "#";
+            }
+
+            if (!oContainer.oWebFile.cloudFileUrl) {
+                return "#";
+            }
+
+            return oContainer.oWebFile.cloudFileUrl;
+        },
+        isBigScreenSize() {
+            const screenWidth = window.innerWidth;
+            const isBig = screenWidth >= 768;
+            return isBig;
+        },
+        /**
+         * Autorizaciones
+         */
+        async authorize() {
+            SGui.showWaiting(3000);
+            await axios.post(this.oData.routeAuthorizeDps, {
+                comments: this.sComments,
+            })
+                .then(response => {
+                    console.log(response.data);
+                    const sData = response.data;
+                    const oData = JSON.parse(sData);
+                    if (oData.code === 200) {
+                        this.getDocument();
+                        this.sComments = '';
+                        SGui.showOkMessage('Documento autorizado');
+                    }
+                    else {
+                        SGui.showError(oData.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al autorizar:', error);
+                    return [];
+                });
+        },
+        async reject() {
+            if (!this.sComments) {
+                SGui.showError('Debes escribir un comentario');
+                return;
+            }
+
+            SGui.showWaiting(3000);
+            await axios.post(this.oData.routeRejectDps, {
+                comments: this.sComments,
+            })
+                .then(response => {
+                    console.log(response.data);
+                    const sData = response.data;
+                    const oData = JSON.parse(sData);
+                    if (oData.code === 200) {
+                        this.getDocument();
+                        this.sComments = '';
+                        SGui.showOkMessage('Documento rechazado');
+                    }
+                    else {
+                        SGui.showError(oData.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al rechazar:', error);
+                    return [];
+                });
+        },
+        isUserInTurn() {
+            if (! this.oData.idExternalUser) {
+                return false;
+            }
+            if (! this.oWebAuthorization) {
+                return false;
+            }
+            if (! this.oWebAuthorization.lUsersInTurn) {
+                return false;
+            }
+            const lUsersInTurn = this.oWebAuthorization.lUsersInTurn;
+            const idUser = this.oData.idExternalUser;
+            const bTurn = lUsersInTurn.includes(idUser);
+
+            return bTurn;
         }
     },
 });

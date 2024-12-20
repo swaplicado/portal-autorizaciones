@@ -37,7 +37,9 @@ var app = new Vue({
             await axios.get(this.oData.routeDps, {
                 params: {
                     firstDay: startDate.toISOString().split('T')[0], // Formato YYYY-MM-DD
-                    lastDay: endDate.toISOString().split('T')[0]
+                    lastDay: endDate.toISOString().split('T')[0],
+                    bUser: this.oData.bUser,
+                    statusFilter: this.oData.statusFilter
                 }
             })
             .then(response => {
@@ -61,6 +63,7 @@ var app = new Vue({
                 );
             })
             .catch(error => {
+                SGui.showError('Error al obtener los documentos' + error + '. Contacta a soporte técnico.');
                 console.error('Error al obtener los documentos:', error);
                 return [];
             });

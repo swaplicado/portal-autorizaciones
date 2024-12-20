@@ -32,6 +32,15 @@ class SGui {
         });
     }
 
+    static showOkMessage(sMessage) {
+        Swal.fire({
+            title: '¡Realizado!',
+            timer: 2000,
+            icon: 'success',
+            text: sMessage
+        });
+    }
+
     static showError(sError) {
         Swal.fire({
             icon: 'error',

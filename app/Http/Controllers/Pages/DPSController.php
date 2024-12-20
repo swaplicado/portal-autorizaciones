@@ -6,36 +6,112 @@ use App\Dps\DpsCore;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class DPSController
+ * @package App\Http\Controllers\Pages
+ */
 class DPSController extends Controller
 {
-    public function index()
+    /**
+     * Display the DPS index page.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request)
     {
-        // // leer archivo json
-        // $json = file_get_contents(base_path('ocs.json'));
-        // // convertir a array
-        // $data = json_decode($json, true);
-        // $lDocuments = $data['lDocuments'];
-        
-        return view('dps.index');
+        return view('dps.index')->with('bUser', 0)
+                                ->with('statusFilter', 0);
     }
 
+    /**
+     * Display the DPS index page with pending status.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function indexPending(Request $request)
+    {
+        return view('dps.index')->with('bUser', 1)
+                                ->with('statusFilter', -1);
+    }
+
+    /**
+     * Get documents in a specified date range.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getDocumentsInRange(Request $request)
     {
         $firstDay = $request->input('firstDay');
         $lastDay = $request->input('lastDay');
-        $idUser = 11;
-        $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user());
+        $bUser = $request->input('bUser');
+        $statusFilter = $request->input('statusFilter');
+        if ($bUser > 0) {
+            $idUser = \Auth::user()->external_id_n;
+        } else {
+            $idUser = 0;
+        }
+        $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
         return response()->json($lDocs);
     }
 
-    public function getDocument($idYear, $idDoc)
+    /**
+     * Get a specific document.
+     *
+     * @param Request $request
+     * @param int $idYear
+     * @param int $idDoc
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDocument(Request $request, $idYear, $idDoc)
     {
         $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user());
         return response()->json($lDocs);
     }
 
-    public function view(Request $request, $idYear = 0, $idDoc = 0) {
+    /**
+     * Authorize a specific DPS document.
+     *
+     * @param Request $request
+     * @param int $idYear
+     * @param int $idDoc
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function authorizeDps(Request $request, $idYear, $idDoc)
+    {
+        $sComments = $request->input('comments');
+        $oResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
+        return response()->json($oResponse);
+    }
+
+    /**
+     * Reject a specific DPS document.
+     *
+     * @param Request $request
+     * @param int $idYear
+     * @param int $idDoc
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function rejectDps(Request $request, $idYear, $idDoc)
+    {
+        $sComments = $request->input('comments');
+        $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
+        return response()->json($oResponse);
+    }
+
+    /**
+     * Display the DPS view page.
+     *
+     * @param Request $request
+     * @param int $idYear
+     * @param int $idDoc
+     * @return \Illuminate\View\View
+     */
+    public function view(Request $request, $idYear = 0, $idDoc = 0)
+    {
         return view('dps.view')->with('idYear', $idYear)
-                                    ->with('idDoc', $idDoc);
+                               ->with('idDoc', $idDoc);
     }
 }

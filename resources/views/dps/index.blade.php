@@ -6,6 +6,8 @@
         function GlobalData() {
             this.routeDps = <?php echo json_encode(route('dps.dps-range')); ?>;
             this.routeDpsView = <?php echo json_encode(route('dps.view')); ?>;
+            this.bUser = <?php echo json_encode($bUser); ?>;
+            this.statusFilter = <?php echo json_encode($statusFilter); ?>;
         }
         var oServerData = new GlobalData();
     </script>
@@ -30,11 +32,11 @@
                 <span class="nobreak">
                     <label for="status_filter">Fecha: </label>
                     <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i
-                            class='bx bxs-hand-left bx-sm'></i></button>
+                            class='bx bxs-chevron-left bx-sm'></i></button>
                     <input type="text" readonly class="form-control-sm" :value="sMonthYear" aria-describedby="helpId"
                         placeholder="Nov 2024">
                     <button type="button" class="btn btn-primary btn-sm" @click="nextMonth"><i
-                            class='bx bxs-hand-right bx-sm'></i></button>
+                            class='bx bxs-chevron-right bx-sm'></i></button>
                 </span>
             </div>
 
@@ -45,7 +47,7 @@
                         <th>idYear</th>
                         <th>idDoc</th>
                         <th>Fecha</th>
-                        <th>Folio</th>
+                        <th>Folio OC</th>
                         <th>Proveedor</th>
                         <th>Subtotal</th>
                         <th>Total</th>
@@ -54,7 +56,7 @@
                         <th>Folio Req.</th>
                         <th>Fecha Req.</th>
                         <th>Usuario Req.</th>
-                        <th>Usuario Doc.</th>
+                        <th>Usuario OC.</th>
                     </thead>
                     <tbody>
 

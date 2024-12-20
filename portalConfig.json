@@ -11,6 +11,8 @@
     "AppLinkRouteGetRows": "requisitions/getRows",
 	"AppLinkRouteGetDps": "api/dps",
 	"AppLinkRouteGetDpsByPk": "api/dps-by-pk",
+    "AppLinkRouteAuthorizeDps": "api/authorize-dps",
+    "AppLinkRouteRejectDps": "api/reject-dps",
 
     "folio_size": 5
 }
