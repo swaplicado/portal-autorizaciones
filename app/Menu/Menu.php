@@ -23,7 +23,8 @@ class Menu
             ];
         } else {
             $lPermissions = collect($oUser->permissionsByRol());
-
+            $lDirectPermissions = $oUser->permissions();
+            $lPermissions = $lPermissions->merge($lDirectPermissions);
             $viewsAccess = $lPermissions->where('level', 'view');
 
             $lMenus = [
