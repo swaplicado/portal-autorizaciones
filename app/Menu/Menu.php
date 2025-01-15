@@ -25,6 +25,8 @@ class Menu
             $lPermissions = collect($oUser->permissionsByRol());
             $lDirectPermissions = $oUser->permissions();
             $lPermissions = $lPermissions->merge($lDirectPermissions);
+            // quitar repetidos
+            $lPermissions = $lPermissions->unique('key_code');
             $viewsAccess = $lPermissions->where('level', 'view');
 
             $lMenus = [
