@@ -24,6 +24,12 @@
                     </div>
                 </div>
                 <br>
+                <div v-if="!isBigScreenSize()">
+                    <div class="row">
+                        <small class="form-text text-muted">NOTA: Los campos tienen scroll horizontal para leer el texto completo en caso de que el espacio en tu pantalla no sea suficiente.</small>
+                    </div>
+                    <br>
+                </div>
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
@@ -95,8 +101,7 @@
                     <div class="col-12 col-md-6">
                         <div class="form-group">
                             <label for="">Notas del archivo</label>
-                            <input readonly :value="getFileNotes(oCurrentFileContainer)" type="text"
-                                class="form-control form-control-sm card-notes" aria-describedby="helpId">
+                            <textarea readonly :value="getFileNotes(oCurrentFileContainer)" class="form-control form-control-sm card-notes" name="" id="" rows="2" aria-describedby="helpId"></textarea>
                             <small id="helpId" class="form-text text-muted">Notas Depto. compras</small>
                         </div>
                     </div>

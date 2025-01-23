@@ -57,6 +57,7 @@
                         <th>Fecha Req.</th>
                         <th>Usuario Req.</th>
                         <th>Usuario OC.</th>
+                        <th>Estatus</th>
                     </thead>
                     <tbody>
 
@@ -120,6 +121,7 @@
         //     matReqDt: 14,
         //     dpsUser: 15,
         //     matReqUser: 16
+        //     authText: 17
     </script>
     @include('layouts.table_jsControll', [
         'table_id' => 'table_dps',

@@ -388,6 +388,11 @@ var documentApp = new Vue({
             const bTurn = lUsersInTurn.includes(idUser);
 
             return bTurn;
+        },
+        showAuthorization() {
+            return this.isUserInTurn() && 
+                    (this.oWebAuthorization.idAuthStatus == 2 || this.oWebAuthorization.idAuthStatus == 3) &&
+                    ! this.oDocument.oDpsHeader.authorized;
         }
     },
 });

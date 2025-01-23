@@ -59,7 +59,8 @@ var app = new Vue({
                     'matReqFolio',
                     'matReqDt',
                     'matReqUser',
-                    'dpsUser'
+                    'dpsUser',
+                    'authText'
                 );
             })
             .catch(error => {

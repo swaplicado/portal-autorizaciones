@@ -27,6 +27,12 @@
             <div class="card">
                 <h5 class="card-header card-header-blue">Órden de compra (OC)</h5>
                 <div class="card-body">
+                    <div v-if="! isBigScreenSize()">
+                        <div class="row">
+                            <small class="form-text text-muted">NOTA: Los campos tienen scroll horizontal para leer el texto completo en caso de que el espacio en tu pantalla no sea suficiente.</small>
+                        </div>
+                        <br>
+                    </div>
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -294,16 +300,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header card-header-blue">Autorización</div>
+                            <div class="card-header card-header-blue">Pasos de la autorización</div>
                             <div class="card-body">
                                 <div v-if="oWebAuthorization" class="row">
                                     <form class="form-inline">
                                         <div class="form-group">
                                             <label for="">Estatus autorización:</label>
-                                            <input readonly :value="oWebAuthorization.authStatusName" type="text"
-                                                class="form-control form-control-sm ml-1" aria-describedby="helpIdAuthSt">
-                                            <small id="helpIdAuthSt" class="text-muted ml-1">(Basado en el proceso de
-                                                autorización)</small>
+                                            <input readonly :value="oDocument.oDpsHeader.authText" type="text"
+                                                class="form-control form-control-sm ml-1">
                                         </div>
                                     </form>
                                 </div>
@@ -334,7 +338,7 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div v-if="isUserInTurn() && (oWebAuthorization.idAuthStatus == 2 || oWebAuthorization.idAuthStatus == 3)"
+                                <div v-if="showAuthorization()"
                                     class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -347,7 +351,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="isUserInTurn() && (oWebAuthorization.idAuthStatus == 2 || oWebAuthorization.idAuthStatus == 3)"
+                                <div v-if="showAuthorization()"
                                     class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -358,7 +362,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="isUserInTurn() && (oWebAuthorization.idAuthStatus == 2 || oWebAuthorization.idAuthStatus == 3)"
+                                <div v-if="showAuthorization()"
                                     class="row" style="text-align: center">
                                     <div class="col-6">
                                         <button type="button" @click="authorize()"
