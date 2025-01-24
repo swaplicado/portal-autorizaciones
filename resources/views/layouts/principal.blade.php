@@ -43,6 +43,50 @@
     <script src="{{ asset('js/myApp/gui/SGui.js') }}"></script>
     <script src="{{ asset('moment/moment.js') }}"></script>
     <script src="{{ asset('moment/moment-with-locales.js') }}"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(function(reg) {
+                    console.log('Service Worker registrado!', reg);
+                })
+                .catch(function(error) {
+                    console.log('Error al registrar el Service Worker:', error);
+                });
+        }
+    </script>
+    <script>
+        async function subscribeUser() {
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                try {
+                    console.log('Antes de obtener el Service Worker...');
+                    const registration = await navigator.serviceWorker.ready;
+                    console.log('Service Worker listo:', registration);
+                    const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: "{{ file_get_contents(storage_path(env('VAPID_PUBLIC_KEY'))) }}"
+                    });
+    
+                    // Enviar suscripción al backend Laravel
+                    await fetch('/save-subscription', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify(subscription)
+                    });
+    
+                    alert('Te has suscrito a las notificaciones!');
+                } catch (error) {
+                    console.error('Error al suscribirse:', error);
+                }
+            } else {
+                alert('Las notificaciones no son compatibles con tu navegador');
+            }
+        }
+    
+        // Llamar la función cuando se presione un botón
+    </script>   
     <!-- Header scripts section -->
     @yield('headJs')
     <!-- end Header scripts section-->
@@ -125,7 +169,7 @@
             loader.style.display = 'none'; /* Oculta el círculo después de una pequeña transición */
 
         };
-    </script>
+    </script> 
     <!-- End JS files -->
 </body>
 

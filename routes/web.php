@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Pages\RequisitionsController;
 use App\Http\Controllers\Pages\DPSController;
+use App\Http\Controllers\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,19 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
         Route::get('/dps/view/{idyear?}/{iddoc?}', [DPSController::class, 'view'])->name('view');
     });
 
+    Route::post('/save-subscription', function(Request $request) {
+        $data = $request->all();
+    
+        auth()->user()->pushSubscriptions()->create([
+            'endpoint' => $data['endpoint'],
+            'public_key' => $data['keys']['p256dh'],
+            'auth_token' => $data['keys']['auth'],
+        ]);
+    
+        return response()->json(['success' => true]);
+    });
 
+    Route::get('/send-notification', [NotificationsController::class, 'enviarNotificacion'])->name('send-notification');
 });
 
 Route::get('/unauthorized', function () {

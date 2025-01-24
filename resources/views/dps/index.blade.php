@@ -39,7 +39,9 @@
                             class='bx bxs-chevron-right bx-sm'></i></button>
                 </span>
             </div>
-
+            <div>
+                <button onclick="subscribeUser()">Suscribirse a notificaciones</button>
+            </div>
             <div class="table-responsive">
                 <table class="display expandable-table dataTable no-footer custom-font-size" id="table_dps" width="100%"
                     cellspacing="0">

@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5|dev-develop",
         "laravel/ui": "^3.4",
         "league/oauth2-server": "^8.1",
+        "minishlink/web-push": "^7.0",
         "paragonie/random_compat": "2.*"
     },
     "require-dev": {
