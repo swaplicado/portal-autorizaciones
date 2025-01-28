@@ -192,17 +192,17 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <h5 class="card-header card-header-yellow">Requisición de materiales</h5>
+                            <h5 class="card-header card-header-yellow">Requisición de materiales (RM)</h5>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Folio Req.</label>
+                                            <label for="">Folio RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrFolio">
                                             <small id="helpId" class="form-text text-muted">Este es el número
-                                                identificador de la requisición</small>
+                                                identificador de la RM</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
@@ -212,7 +212,7 @@
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrUser">
                                             <small id="helpId" class="form-text text-muted">Este es el usuario de
-                                                siie que hizo la requisición</small>
+                                                siie que hizo la RM</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
@@ -222,7 +222,7 @@
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="formatDateNormal(oMaterialRequest.mrDate)">
                                             <small id="helpId" class="form-text text-muted">Fecha en la que se
-                                                realizó la requisición</small>
+                                                realizó la RM</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
@@ -247,7 +247,7 @@
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Tipo Req.</label>
+                                            <label for="">Tipo RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrType === 'C' ? 'Consumo' : 'Resurtido'">
@@ -258,12 +258,15 @@
                                     <div class="col-12 col-md-8">
                                         <div class="form-group">
                                             <label for="">Notas de la requisición</label>
-                                            <textarea readonly class="form-control" name="" id="" rows="2">@{{ getMrNotes() }}</textarea>
+                                            <textarea readonly class="form-control" name="mrNotesName" id="mrNotesId" aria-describedby="helpRmEtysId" rows="2">@{{ getMrNotes() }}</textarea>
+                                            <small v-if="oMaterialRequest.lEtyNotes && oMaterialRequest.lEtyNotes.length > 0" 
+                                                    id="helpRmEtysId" 
+                                                    class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la RM.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">PDF de la Requisición</label>
+                                            <label for="">PDF de la requisición de materiales</label>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                 data-toggle="modal" data-target="#modalRm">
                                                 Ver requisición de materiales
@@ -322,16 +325,31 @@
                                                     <th>Fecha rechazo</th>
                                                     <th>Usuario</th>
                                                     <th>Comentario</th>
+                                                    <th>Vigente</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps">
+                                            <tbody v-if="oWebAuthorization.lSteps.filter(row => row.deleted === true).length > 0">
+                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === true)"
+                                                    style="color: gray; font-style: italic;">
                                                     <td scope="row">@{{ oAuthRow.stepLevel }}</td>
                                                     <td>@{{ oAuthRow.statusName }}</td>
+                                                    <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible)' }}</td>
+                                                    <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' }}</td>
+                                                    <td>@{{ oAuthRow.userName }}</td>
+                                                    <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
+                                                </tr>
+                                            </tbody>
+                                            <hr>
+                                            <tbody>
+                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === false)">
+                                                    <td scope="row">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td><b>@{{ oAuthRow.statusName }}</b></td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible aún)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible aún)' }}</td>
-                                                    <td>@{{ oAuthRow.userName }}</td>
-                                                    <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios aún)' }}</td>
+                                                    <td><b>@{{ oAuthRow.userName }}</b></td>
+                                                    <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

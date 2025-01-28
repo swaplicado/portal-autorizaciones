@@ -17,6 +17,7 @@
                     </div>
                     <div class="col-8" style="text-align: center;">
                       <h3>@{{ getFileContainerHeader(oCurrentFileContainer.fileType) }}</h3>
+                      <h4>@{{ "Documento " + (iCurrentIndex + 1) + " de " + iNumFiles }}</h4>
                     </div>
                     <div class="col-2" style="text-align: right">
                         <button type="button" class="btn btn-primary btn-sm" @click="nextContainer"><i
@@ -78,7 +79,7 @@
                             <small id="helpId" class="form-text text-muted">Total moneda de documento</small>
                         </div>
                     </div>
-                    <div class="col">
+                    <div :class="(oDocument.oDpsHeader.currencyId == 1 && isBigScreenSize() ? 'offset-6 ' : '') + 'col'">
                         <div class="form-group">
                             <label for="">Total cotización ML</label>
                             <input readonly type="text"

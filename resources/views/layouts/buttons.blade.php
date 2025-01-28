@@ -132,7 +132,7 @@
 
         @endswitch
     @else
-        <button type="button" class="btn btn-secondary btn-rounded btn-icon" id="btn_show" title="ver requisición">
+        <button type="button" class="btn btn-secondary btn-rounded btn-icon" id="btn_show" title="ver registro">
             <i class="bx bxs-show"></i>
         </button>
     @endif

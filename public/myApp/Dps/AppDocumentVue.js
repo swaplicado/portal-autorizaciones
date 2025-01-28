@@ -42,6 +42,7 @@ var documentApp = new Vue({
         oMaterialRequest: new SMaterialRequest(),
         oCurrentFileContainer: new SDpsFileContainer(),
         iCurrentIndex: 0,
+        iNumFiles: 0,
         oWebAuthorization: new SWebAuthorization(),
         sComments: ''
     },
@@ -191,6 +192,7 @@ var documentApp = new Vue({
                 return;
             }
             this.iCurrentIndex = index;
+            this.iNumFiles = this.oDocument.lFiles ? this.oDocument.lFiles.length : 0;
         },
         prevContainer() {
             if (this.oDocument.lFiles && this.oDocument.lFiles.length > 0) {
