@@ -404,6 +404,7 @@
         'table_id' => 'table_etys',
         'colTargets' => [0, 1, 2],
         'colTargetsSercheable' => [],
+        'order' => [[3, 'asc']],
         // 'select' => true,
         'double_click' => false,
         'show' => false,

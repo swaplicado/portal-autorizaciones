@@ -66,6 +66,9 @@
             @if (isset($ordering))
                 "ordering": true,
             @endif
+            @if (isset($displayLength))
+                "iDisplayLength": <?php echo json_encode($displayLength); ?>,
+            @endif
             "columnDefs": [{
                     "targets": <?php echo json_encode($colTargets); ?>,
                     "visible": false,

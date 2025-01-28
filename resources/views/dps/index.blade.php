@@ -29,15 +29,17 @@
                     <label for="status_filter">Estatus autorización: </label>
                     <select class="select2-class form-control" name="status_filter" id="status_filter"></select>
                 </span> --}}
-                <span class="nobreak">
-                    <label for="status_filter">Fecha: </label>
-                    <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i
-                            class='bx bxs-chevron-left bx-sm'></i></button>
-                    <input type="text" readonly class="form-control-sm" :value="sMonthYear" aria-describedby="helpId"
-                        placeholder="Nov 2024">
-                    <button type="button" class="btn btn-primary btn-sm" @click="nextMonth"><i
-                            class='bx bxs-chevron-right bx-sm'></i></button>
-                </span>
+                @if($statusFilter >= 0)
+                    <span class="nobreak">
+                        <label for="status_filter">Fecha: </label>
+                        <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i
+                                class='bx bxs-chevron-left bx-sm'></i></button>
+                        <input type="text" readonly class="form-control-sm" :value="sMonthYear" aria-describedby="helpId"
+                            placeholder="Nov 2024">
+                        <button type="button" class="btn btn-primary btn-sm" @click="nextMonth"><i
+                                class='bx bxs-chevron-right bx-sm'></i></button>
+                    </span>
+                @endif
             </div>
 
             <div class="table-responsive">
@@ -127,7 +129,8 @@
         'table_id' => 'table_dps',
         'colTargets' => [0, 1],
         'colTargetsSercheable' => [],
-        // 'select' => true,
+        'order' => [[3, 'asc']],
+        'displayLength' => 25,
         'double_click' => true,
         'show' => true,
         'colTargetsNoOrder' => [],
