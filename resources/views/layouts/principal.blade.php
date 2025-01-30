@@ -34,6 +34,7 @@
 
     <!-- Icon browser -->
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/iconIphone.png')}}">
     <!-- End icon browser -->
 
     <!-- Header scripts -->
