@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
@@ -49,17 +50,24 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
 
     Route::post('/save-subscription', function(Request $request) {
         $data = $request->all();
-    
-        auth()->user()->pushSubscriptions()->create([
-            'endpoint' => $data['endpoint'],
-            'public_key' => $data['keys']['p256dh'],
-            'auth_token' => $data['keys']['auth'],
-        ]);
-    
+
+        \Log::info($data);
+
+        try {
+            auth()->user()->pushSubscriptions()->create([
+                'endpoint' => $data['endpoint'],
+                'public_key' => $data['keys']['p256dh'],
+                'auth_token' => $data['keys']['auth'],
+            ]);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json(['success' => false]);
+        }
         return response()->json(['success' => true]);
     });
 
     Route::get('/send-notification', [NotificationsController::class, 'enviarNotificacion'])->name('send-notification');
+    Route::get('/get-public-key', [NotificationsController::class, 'setVapidKeys'])->name('get-public-key');
 });
 
 Route::get('/unauthorized', function () {

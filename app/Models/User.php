@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Constants\SysConst;
 use Laravel\Passport\HasApiTokens;
+use App\Models\PushSubscription;
 
 class User extends Authenticatable
 {
@@ -149,5 +151,10 @@ class User extends Authenticatable
                                 ->where('app_id', config('myapp.id', 0))
                                 ->first()
                         );
+    }
+
+    public function pushSubscriptions(): HasMany
+    {
+        return $this->hasMany(PushSubscription::class);
     }
 }

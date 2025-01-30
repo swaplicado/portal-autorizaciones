@@ -53,21 +53,43 @@
                     console.log('Error al registrar el Service Worker:', error);
                 });
         }
-    </script>
-    <script>
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+            const base64 = (base64String + padding)
+                .replace(/-/g, '+')
+                .replace(/_/g, '/');
+
+            const rawData = atob(base64);
+            return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+        }
+
         async function subscribeUser() {
+            const vapidPublicKey = "{{ env('VAPID_PUBLIC_KEY') }}";
+
             if ('serviceWorker' in navigator && 'PushManager' in window) {
                 try {
+                    const permission = await Notification.requestPermission();
+                    if (permission !== 'granted') {
+                        console.error('Permiso denegado para notificaciones');
+                        return;
+                    }
+                    console.log('Permiso concedido');
+
                     console.log('Antes de obtener el Service Worker...');
                     const registration = await navigator.serviceWorker.ready;
                     console.log('Service Worker listo:', registration);
+
+                    const decodedPublicKey = urlBase64ToUint8Array(vapidPublicKey);
+
                     const subscription = await registration.pushManager.subscribe({
                         userVisibleOnly: true,
-                        applicationServerKey: "{{ file_get_contents(storage_path(env('VAPID_PUBLIC_KEY'))) }}"
+                        applicationServerKey: decodedPublicKey
                     });
-    
-                    // Enviar suscripción al backend Laravel
-                    await fetch('/save-subscription', {
+
+                    console.log('Suscripción exitosa:', subscription);
+
+                    const response = await fetch('/save-subscription', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -75,18 +97,21 @@
                         },
                         body: JSON.stringify(subscription)
                     });
-    
-                    alert('Te has suscrito a las notificaciones!');
+
+                    if (!response.ok) {
+                        throw new Error(`Error al guardar la suscripción: ${response.statusText}`);
+                    }
+
+                    alert('¡Te has suscrito a las notificaciones correctamente!');
                 } catch (error) {
-                    console.error('Error al suscribirse:', error);
+                    console.error('Error al suscribirse:', error.message);
+                    alert('Hubo un problema al suscribirse. Revisa la consola para más detalles.');
                 }
             } else {
-                alert('Las notificaciones no son compatibles con tu navegador');
+                alert('Las notificaciones no son compatibles con tu navegador.');
             }
         }
-    
-        // Llamar la función cuando se presione un botón
-    </script>   
+    </script>
     <!-- Header scripts section -->
     @yield('headJs')
     <!-- end Header scripts section-->
