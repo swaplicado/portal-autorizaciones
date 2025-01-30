@@ -25,7 +25,7 @@
                 b4-card
             </div> --}}
             <div class="card">
-                <h5 class="card-header card-header-blue">Órden de compra (OC)</h5>
+                <h5 class="card-header card-header-blue">Orden de compra (OC)</h5>
                 <div class="card-body">
                     <div v-if="! isBigScreenSize()">
                         <div class="row">
@@ -47,8 +47,10 @@
                         <div class="col-12 col-md-8">
                             <div class="form-group">
                                 <label for="">Proveedor OC</label>
-                                <input readonly type="text" class="form-control form-control-sm" name="provider"
+                                <input v-if="isBigScreenSize()" readonly type="text" class="form-control form-control-sm" name="provider"
                                     id="provider" aria-describedby="helpId" :value="oDocument.oDpsHeader.provider">
+                                <textarea v-else readonly type="text" class="form-control form-control-sm" name="provider"
+                                    id="provider" aria-describedby="helpId" :value="oDocument.oDpsHeader.provider" rows="2"></textarea>
                                 <small id="helpId" class="form-text text-muted">Proveedor de la órden de compra</small>
                             </div>
                         </div>
@@ -316,14 +318,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <table class="table table-striped table-inverse table-responsive">
+                                        <table class="table table-striped table-inverse table-responsive" style="font-size: 0.7em;">
                                             <thead class="thead-inverse">
                                                 <tr>
-                                                    <th>Nivel</th>
+                                                    <th>Niv.</th>
+                                                    <th>Usuario</th>
                                                     <th>Estatus</th>
                                                     <th>Fecha autoriz.</th>
                                                     <th>Fecha rechazo</th>
-                                                    <th>Usuario</th>
                                                     <th>Comentario</th>
                                                     <th>Vigente</th>
                                                 </tr>
@@ -332,10 +334,10 @@
                                                 <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === true)"
                                                     style="color: gray; font-style: italic;">
                                                     <td scope="row">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td>@{{ oAuthRow.userName }}</td>
                                                     <td>@{{ oAuthRow.statusName }}</td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' }}</td>
-                                                    <td>@{{ oAuthRow.userName }}</td>
                                                     <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
                                                     <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
@@ -344,10 +346,10 @@
                                             <tbody>
                                                 <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === false)">
                                                     <td scope="row">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td><b>@{{ oAuthRow.userName }}</b></td>
                                                     <td><b>@{{ oAuthRow.statusName }}</b></td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible aún)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible aún)' }}</td>
-                                                    <td><b>@{{ oAuthRow.userName }}</b></td>
                                                     <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
                                                     <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>

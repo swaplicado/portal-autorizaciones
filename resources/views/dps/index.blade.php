@@ -16,7 +16,7 @@
 @section('content')
     <div class="card" id="appDps">
         <div class="card-header">
-            Órdenes de compra
+            Ordenes de compra
         </div>
         <div class="card-body">
             <div class="grid-margin">
@@ -41,7 +41,12 @@
                     </span>
                 @endif
             </div>
-
+            <div>
+                <p class="form-text text-muted">
+                    <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: de clic en el
+                    botón "Ver" ó presione dos veces sobre la OC.
+                </p>
+            </div>
             <div class="table-responsive">
                 <table class="display expandable-table dataTable no-footer custom-font-size" id="table_dps" width="100%"
                     cellspacing="0">
@@ -151,6 +156,15 @@
             }
             SGui.showWaitingBlock(3000);
             app.onSelectDps(table['table_dps'].row('.selected').data());
+        });
+
+        $(document).on('dblclick', '#table_dps tbody tr', function() {
+            if (table['table_dps'].row(this).data() == undefined) {
+                SGui.showError("Debe seleccionar un renglón");
+                return;
+            }
+            SGui.showWaitingBlock(3000);
+            app.onSelectDps(table['table_dps'].row(this).data());
         });
     </script>
 @endsection

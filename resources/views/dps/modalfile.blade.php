@@ -35,9 +35,11 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="">Proveedor</label>
-                            <input readonly type="text" :value="oCurrentFileContainer.oWebFile.externalBpName"
+                            <input v-if="isBigScreenSize()" readonly type="text" :value="oCurrentFileContainer.oWebFile.externalBpName"
                                 class="form-control form-control-sm" name="" id=""
                                 aria-describedby="helpId" placeholder="">
+                            <textarea v-else readonly class="form-control form-control-sm" name="" id=""
+                                aria-describedby="helpId" placeholder="" rows="2">@{{ oCurrentFileContainer.oWebFile.externalBpName }}</textarea>
                             <small id="helpId" class="form-text text-muted">Fuente de la cotización</small>
                         </div>
                     </div>
@@ -109,8 +111,10 @@
                     <div class="col-12 col-md-6">
                         <div class="form-group">
                             <label for="">Nombre del archivo</label>
-                            <input readonly :value="oCurrentFileContainer.oWebFile.userFileName" type="text"
+                            <input v-if="isBigScreenSize()" readonly :value="oCurrentFileContainer.oWebFile.userFileName" type="text"
                                 class="form-control form-control-sm">
+                            <textarea v-else readonly :value="oCurrentFileContainer.oWebFile.userFileName" class="form-control form-control-sm" 
+                            rows="2"></textarea>
                         </div>
                     </div>
                 </div>
