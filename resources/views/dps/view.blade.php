@@ -312,7 +312,8 @@
                                         <div class="form-group">
                                             <label for="">Estatus autorización:</label>
                                             <input readonly :value="oDocument.oDpsHeader.authText" type="text"
-                                                class="form-control form-control-sm ml-1">
+                                                class="form-control form-control-sm ml-1" 
+                                                style="border: black 2px solid; font-weight: bold;">
                                         </div>
                                     </form>
                                 </div>
