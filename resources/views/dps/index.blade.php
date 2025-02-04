@@ -94,7 +94,7 @@
                     let col_status = data[5];
 
                     if (settings.nTable.id == 'table_dps') {
-                        let sStatus = $('#status_filter').val();
+                        let sStatus = (<?php echo json_encode($statusFilter); ?>) >= 0 ? $('#status_filter').val() : "";
                         return col_status === sStatus || sStatus === "";
                     }
 
