@@ -44,14 +44,25 @@ var app = new Vue({
             })
             .then(response => {
                 this.vDocuments = response.data; // Actualizar la lista de documentos
+
+                for (let element of this.vDocuments) {
+                    element.link = '<a href="' + this.oData.routeDpsView + '/' + 
+                                    element.idYear + '/' + 
+                                    element.idDoc + '">' + 
+                                    element.dpsFolio + '</a>';
+                }
+
                 drawTableJson(
                     'table_dps',
                     this.vDocuments,
                     'idYear',
                     'idDoc',
                     'dt',
-                    'dpsFolio',
+                    'link',
                     'provider',
+                    'authText',
+                    'userInTurn',
+                    'costCenters',
                     'subTotal',
                     'total',
                     'currency',
@@ -60,7 +71,6 @@ var app = new Vue({
                     'matReqDt',
                     'matReqUser',
                     'dpsUser',
-                    'authText'
                 );
             })
             .catch(error => {

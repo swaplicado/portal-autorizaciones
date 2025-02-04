@@ -184,6 +184,7 @@
                             <th>Impuesto retenido</th>
                             <th>Total</th>
                             <th>Moneda</th>
+                            <th>Centro costo</th>
                         </thead>
                         <tbody>
                         </tbody>
@@ -261,7 +262,7 @@
                                         <div class="form-group">
                                             <label for="">Notas de la requisición</label>
                                             <textarea readonly class="form-control" name="mrNotesName" id="mrNotesId" aria-describedby="helpRmEtysId" rows="2">@{{ getMrNotes() }}</textarea>
-                                            <small v-if="oMaterialRequest.lEtyNotes && oMaterialRequest.lEtyNotes.length > 0" 
+                                            <small v-if="oMaterialRequest.lNotes && oMaterialRequest.lNotes.length > 0" 
                                                     id="helpRmEtysId" 
                                                     class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la RM.</small>
                                         </div>

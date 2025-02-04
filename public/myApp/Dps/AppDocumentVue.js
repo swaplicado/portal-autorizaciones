@@ -132,7 +132,8 @@ var documentApp = new Vue({
                 'taxCharged',
                 'taxRetained',
                 'total',
-                'currency'
+                'currency',
+                'costCenter'
             );
 
             if (this.oDocument.lEtys) {

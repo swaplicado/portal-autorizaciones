@@ -101,4 +101,10 @@ class SGui {
     static sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    static isBigScreenSize() {
+        const screenWidth = window.innerWidth;
+        const isBig = screenWidth >= 768;
+        return isBig;
+    }
 }
