@@ -378,7 +378,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Comentarios autorización o rechazo</label>
-                                            <textarea v-model="sComments" class="form-control" name="" id="" rows="2"></textarea>
+                                            <textarea v-model="sComments" class="form-control" name="" id="" rows="2" maxlength="255"></textarea>
                                             <small class="text-muted">Notas que verán los usuarios involucrados en el
                                                 proceso de autorización.</small>
                                         </div>
