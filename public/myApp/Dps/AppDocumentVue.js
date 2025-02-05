@@ -326,7 +326,9 @@ var documentApp = new Vue({
          * Autorizaciones
          */
         async authorize() {
-            this.validateAuthorization();
+            if (! this.validateAuthorization()) {
+                return;
+            }
 
             SGui.showWaiting(3000);
             await axios.post(this.oData.routeAuthorizeDps, {
