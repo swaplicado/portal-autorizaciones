@@ -327,7 +327,7 @@ var documentApp = new Vue({
          */
         async authorize() {
             this.validateAuthorization();
-            
+
             SGui.showWaiting(3000);
             await axios.post(this.oData.routeAuthorizeDps, {
                 comments: this.sComments,
@@ -356,7 +356,9 @@ var documentApp = new Vue({
                 return;
             }
 
-            this.validateAuthorization();
+            if (! this.validateAuthorization()) {
+                return;
+            }
 
             SGui.showWaiting(3000);
             await axios.post(this.oData.routeRejectDps, {
@@ -384,8 +386,10 @@ var documentApp = new Vue({
             // validar longitud comentarios <= 255
             if (this.sComments.length > 255) {
                 SGui.showError('El comentario no puede exceder los 255 caracteres');
-                return;
+                return false;
             }
+
+            return true;
         },
         isUserInTurn() {
             if (! this.oData.idExternalUser) {
