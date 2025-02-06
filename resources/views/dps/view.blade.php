@@ -7,6 +7,7 @@
             this.routeDpsByPk = <?php echo json_encode(route('dps.by-pk', [$idYear, $idDoc])); ?>;
             this.routeAuthorizeDps = <?php echo json_encode(route('dps.authorize-dps', [$idYear, $idDoc])); ?>;
             this.routeRejectDps = <?php echo json_encode(route('dps.reject-dps', [$idYear, $idDoc])); ?>;
+            this.routeOcPending = <?php echo json_encode(route('dps.pending')); ?>;
             this.idYear = <?php echo json_encode($idYear); ?>;
             this.idDoc = <?php echo json_encode($idDoc); ?>;
             this.idExternalUser = <?php echo json_encode(\Auth::user()->external_id_n); ?>;
@@ -18,7 +19,7 @@
 @section('content')
     <div class="card" id="appDocument">
         {{-- <div class="card-header">
-            Órden de compra
+            Orden de compra
         </div> --}}
         <div class="card-body">
             {{-- <div class="grid-margin">
@@ -51,7 +52,7 @@
                                     id="provider" aria-describedby="helpId" :value="oDocument.oDpsHeader.provider">
                                 <textarea v-else readonly type="text" class="form-control form-control-sm" name="provider"
                                     id="provider" aria-describedby="helpId" :value="oDocument.oDpsHeader.provider" rows="2"></textarea>
-                                <small id="helpId" class="form-text text-muted">Proveedor de la órden de compra</small>
+                                <small id="helpId" class="form-text text-muted">Proveedor de la OC</small>
                             </div>
                         </div>
                         <div class="col-6 col-md-2">
@@ -159,7 +160,7 @@
                 <div class="row custom-minor-row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="">Notas de la órden de compra</label>
+                            <label for="">Notas de la OC</label>
                             <textarea readonly class="form-control form-control-sm" style="text-align: left" name="" id=""
                                 rows="2">@{{ getDpsNotes() }}</textarea>
                             <small class="text-muted">Notas correspondientes a la OC</small>
@@ -260,19 +261,19 @@
                                     </div>
                                     <div class="col-12 col-md-8">
                                         <div class="form-group">
-                                            <label for="">Notas de la requisición</label>
+                                            <label for="">Notas de la RM</label>
                                             <textarea readonly class="form-control" name="mrNotesName" id="mrNotesId" aria-describedby="helpRmEtysId" rows="2">@{{ getMrNotes() }}</textarea>
-                                            <small v-if="oMaterialRequest.lNotes && oMaterialRequest.lNotes.length > 0" 
+                                            <small v-if="oMaterialRequest.lEtyNotes && oMaterialRequest.lEtyNotes.length > 0" 
                                                     id="helpRmEtysId" 
                                                     class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la RM.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">PDF de la requisición de materiales</label>
+                                            <label for="">PDF de la Requisición de materiales</label>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                 data-toggle="modal" data-target="#modalRm">
-                                                Ver requisición de materiales
+                                                Ver Requisición de materiales
                                             </button>
                                         </div>
                                     </div>

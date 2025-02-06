@@ -11,13 +11,25 @@
         </div>
         <div class="col-md-10" style="text-align: center">
           <figure>
-            <blockquote class="blockquote">
-              <h1>Bienvenido</h1>
-              <h1>{{\Auth::user()->names}}</h1>
-              <h1> a Portal autorizaciones</h1>
+            <blockquote class="blockquote" style="margin-right: -4%; margin-left: -5%;">
+              <h2>Bienvenido</h2>
+              <h2>{{\Auth::user()->names}}</h2>
+              <h2>a</h2>
+              <h2 style="white-space: nowrap;">Portal autorizaciones</h2>
             </blockquote>
             <figcaption class="blockquote-footer" style="padding-left: 7%">
-                Bienvenido {{\Auth::user()->full_name}} a Portal autorizaciones
+                <div class="row">
+                  @if(\Auth::user()->hasPermissionByKeyCode('autorizador.dps'))
+                    <div class="col-12 col-md-6">
+                      <a type="button" href="{{ route('dps.pending') }}" class="btn btn-primary mb-2">OC pendientes de autorizar</a>
+                    </div>
+                  @endif
+                  @if(\Auth::user()->hasPermissionByKeyCode('autorizador.dps'))
+                    <div class="col-12 col-md-6">
+                      <a type="button" href="{{ route('dps.index') }}" class="btn btn-primary">Revisar todas las OC</a>
+                    </div>
+                  @endif
+                </div>
             </figcaption>
           </figure>
         </div>

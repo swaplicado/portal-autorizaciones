@@ -16,7 +16,7 @@
 @section('content')
     <div class="card" id="appDps">
         <div class="card-header">
-            Ordenes de compra
+            Órdenes de compra (OC)
         </div>
         <div class="card-body">
             <div class="grid-margin">
@@ -51,8 +51,8 @@
             </div>
             <div>
                 <p class="form-text text-muted">
-                    <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: de clic en el
-                    botón "Ver" ó presione dos veces sobre la OC.
+                    <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: click en el
+                    botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul.
                 </p>
             </div>
             <div class="table-responsive">

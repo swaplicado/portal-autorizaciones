@@ -342,6 +342,8 @@ var documentApp = new Vue({
                         this.getDocument();
                         this.sComments = '';
                         SGui.showOkMessage('Documento autorizado');
+                        // redireccionar a la vista de documentos pendientes
+                        window.location.href = this.oData.routeOcPending;
                     }
                     else {
                         SGui.showError(oData.message);
@@ -374,6 +376,8 @@ var documentApp = new Vue({
                         this.getDocument();
                         this.sComments = '';
                         SGui.showOkMessage('Documento rechazado');
+                        // redireccionar a la vista de documentos pendientes
+                        window.location.href = this.oData.routeOcPending;
                     }
                     else {
                         SGui.showError(oData.message);

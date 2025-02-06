@@ -93,6 +93,11 @@ class User extends Authenticatable
         return $RolePermissions;
     }
 
+    public function hasPermissionByKeyCode($keyCode){
+        $permissions = $this->permissions()->pluck('key_code')->toArray();
+        return in_array($keyCode, $permissions);
+    }
+
     public function permissions(){
         $RolePermissions = $this->permissionsByRol();
 
