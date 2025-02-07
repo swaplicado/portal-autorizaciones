@@ -37,10 +37,9 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="">Notas:</label>
+                                <label for="">Comentarios al iniciarse la autorización:</label>
                                 <textarea readonly type="text" class="form-control form-control-sm" aria-describedby="helpNotesId" rows="2">@{{ oDocument.oDpsHeader.notesAuth }}</textarea>
-                                <small id="helpNotesId" class="text-muted">Estas son las notas que agrega el departamento de
-                                    compras al enviar la OC para su autorización</small>
+                                <small id="helpNotesId" class="text-muted">Estos son los comentarios capturados por quien inició el proceso de autorización</small>
                             </div>
                         </div>
                     </div>

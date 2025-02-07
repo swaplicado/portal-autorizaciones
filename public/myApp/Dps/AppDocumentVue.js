@@ -221,11 +221,11 @@ var documentApp = new Vue({
         },
         getFileNotes(oContainer) {
             if (!oContainer) {
-                return "(Sin notas de archivo)";
+                return "(Sin comentarios de archivo)";
             }
 
             if (!oContainer.notes) {
-                return "(Sin notas de archivo)";
+                return "(Sin comentarios de archivo)";
             }
 
             return oContainer.notes;
