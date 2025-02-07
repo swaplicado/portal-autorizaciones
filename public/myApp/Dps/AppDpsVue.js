@@ -53,7 +53,11 @@ var app = new Vue({
 
                     // Agregar ícono de advertencia si el documento fue retornado
                     if (element.returned) {
-                        element.spanReturned = '<i class="bx bxs-error-circle bx-sm" style="color:#dbcd08e6"></i>';
+                        element.spanReturned = '<i class="bx bxs-error-circle bx-sm" ' +
+                                                    'style="color:#dbcd08e6" ' +
+                                                    'data-toggle="tooltip" ' +
+                                                    'data-placement="top" ' +
+                                                    'title="Este documento ha sido reenviado a autorización"></i>';
                     }
                     else {
                         element.spanReturned = '';
