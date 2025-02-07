@@ -50,6 +50,14 @@ var app = new Vue({
                                     element.idYear + '/' + 
                                     element.idDoc + '">' + 
                                     element.dpsFolio + '</a>';
+
+                    // Agregar ícono de advertencia si el documento fue retornado
+                    if (element.returned) {
+                        element.spanReturned = '<i class="bx bxs-error-circle bx-sm" style="color:#dbcd08e6"></i>';
+                    }
+                    else {
+                        element.spanReturned = '';
+                    }
                 }
 
                 drawTableJson(
@@ -62,6 +70,7 @@ var app = new Vue({
                     'provider',
                     'authText',
                     'userInTurn',
+                    'spanReturned',
                     'costCenters',
                     'subTotalCur',
                     'totalCur',

@@ -66,6 +66,7 @@
                         <th>Proveedor</th>
                         <th>Estatus</th>
                         <th>Turno</th>
+                        <th>-</th>
                         <th>Centro costo</th>
                         <th>Subtotal</th>
                         <th>Total</th>
@@ -114,15 +115,16 @@
         //     provider: 4
         //     authText: 5
         //     userInTurn: 6
-        //     costCenters: 7
-        //     subTotal: 8
-        //     total: 9
-        //     currency: 10
-        //     exchangeRate: 11
-        //     matReqFolio: 12
-        //     matReqDt: 13
-        //     matReqUser: 14
-        //     dpsUser: 15
+        //     wasReturned: 7
+        //     costCenters: 8
+        //     subTotal: 9
+        //     total: 10
+        //     currency: 11
+        //     exchangeRate: 12
+        //     matReqFolio: 13
+        //     matReqDt: 14
+        //     matReqUser: 15
+        //     dpsUser: 16
     </script>
     @include('layouts.table_jsControll', [
         'table_id' => 'table_dps',
@@ -133,12 +135,12 @@
         'double_click' => true,
         'show' => true,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [8, 9, 11],
-        'colTargetsAmount' => [8, 9],
-        'colTargetsQuantity' => [11],
-        'colTargetsNoWrap' => [2, 4, 13],
+        'colTargetsAlignRight' => [9, 10, 12],
+        'colTargetsAmount' => [9, 10],
+        'colTargetsQuantity' => [12],
+        'colTargetsNoWrap' => [2, 4, 14],
         'colTargetsDateHumans' => [],
-        'colTargetsDateHumansTwo' => [2,13],
+        'colTargetsDateHumansTwo' => [2,14],
         // 'noSort' => true,
     ])
     <script type="text/javascript" src="{{ asset('myApp/Utils/datatablesUtils.js') }}"></script>
