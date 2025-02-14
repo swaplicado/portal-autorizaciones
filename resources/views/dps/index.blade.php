@@ -99,7 +99,7 @@
         $(document).ready(function() {
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    let col_status = data[5];
+                    let col_status = data[6];
 
                     if (settings.nTable.id == 'table_dps') {
                         let sStatus = (<?php echo json_encode($statusFilter); ?>) >= 0 ? $('#status_filter').val() : "";
