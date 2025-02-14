@@ -7,6 +7,7 @@
             this.routeDpsByPk = <?php echo json_encode(route('dps.by-pk', [$idYear, $idDoc])); ?>;
             this.routeAuthorizeDps = <?php echo json_encode(route('dps.authorize-dps', [$idYear, $idDoc])); ?>;
             this.routeRejectDps = <?php echo json_encode(route('dps.reject-dps', [$idYear, $idDoc])); ?>;
+            this.routeOcPending = <?php echo json_encode(route('dps.pending')); ?>;
             this.idYear = <?php echo json_encode($idYear); ?>;
             this.idDoc = <?php echo json_encode($idDoc); ?>;
             this.idExternalUser = <?php echo json_encode(\Auth::user()->external_id_n); ?>;
@@ -18,14 +19,14 @@
 @section('content')
     <div class="card" id="appDocument">
         {{-- <div class="card-header">
-            Órden de compra
+            Orden de compra
         </div> --}}
         <div class="card-body">
             {{-- <div class="grid-margin">
                 b4-card
             </div> --}}
             <div class="card">
-                <h5 class="card-header card-header-blue">Órden de compra (OC)</h5>
+                <h5 class="card-header card-header-blue">Orden de compra (OC)</h5>
                 <div class="card-body">
                     <div v-if="! isBigScreenSize()">
                         <div class="row">
@@ -36,10 +37,9 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="">Notas:</label>
+                                <label for="">Comentarios al iniciarse la autorización:</label>
                                 <textarea readonly type="text" class="form-control form-control-sm" aria-describedby="helpNotesId" rows="2">@{{ oDocument.oDpsHeader.notesAuth }}</textarea>
-                                <small id="helpNotesId" class="text-muted">Estas son las notas que agrega el departamento de
-                                    compras al enviar la OC para su autorización</small>
+                                <small id="helpNotesId" class="text-muted">Estos son los comentarios capturados por quien inició el proceso de autorización</small>
                             </div>
                         </div>
                     </div>
@@ -47,9 +47,11 @@
                         <div class="col-12 col-md-8">
                             <div class="form-group">
                                 <label for="">Proveedor OC</label>
-                                <input readonly type="text" class="form-control form-control-sm" name="provider"
+                                <input v-if="isBigScreenSize()" readonly type="text" class="form-control form-control-sm" name="provider"
                                     id="provider" aria-describedby="helpId" :value="oDocument.oDpsHeader.provider">
-                                <small id="helpId" class="form-text text-muted">Proveedor de la órden de compra</small>
+                                <textarea v-else readonly type="text" class="form-control form-control-sm" name="provider"
+                                    id="provider" aria-describedby="helpId" :value="oDocument.oDpsHeader.provider" rows="2"></textarea>
+                                <small id="helpId" class="form-text text-muted">Proveedor de la OC</small>
                             </div>
                         </div>
                         <div class="col-6 col-md-2">
@@ -157,13 +159,14 @@
                 <div class="row custom-minor-row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="">Notas de la órden de compra</label>
+                            <label for="">Notas de la OC</label>
                             <textarea readonly class="form-control form-control-sm" style="text-align: left" name="" id=""
                                 rows="2">@{{ getDpsNotes() }}</textarea>
                             <small class="text-muted">Notas correspondientes a la OC</small>
                         </div>
                     </div>
                 </div>
+                @include('dps.modalprices')
                 <hr>
                 <div class="table-responsive">
                     <table class="display expandable-table dataTable no-footer custom-font-size" id="table_etys"
@@ -176,12 +179,15 @@
                             <th>Concepto</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>
+                            <th>Precio Ant.</th>
+                            <th>% Dif.</th>
                             <th>Precio Un.</th>
                             <th>Subtotal</th>
                             <th>Impuesto cargado</th>
                             <th>Impuesto retenido</th>
                             <th>Total</th>
                             <th>Moneda</th>
+                            <th>Centro costo</th>
                         </thead>
                         <tbody>
                         </tbody>
@@ -192,17 +198,17 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <h5 class="card-header card-header-yellow">Requisición de materiales</h5>
+                            <h5 class="card-header card-header-yellow">Requisición de materiales (RM)</h5>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Folio Req.</label>
+                                            <label for="">Folio RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrFolio">
                                             <small id="helpId" class="form-text text-muted">Este es el número
-                                                identificador de la requisición</small>
+                                                identificador de la RM</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
@@ -212,7 +218,7 @@
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrUser">
                                             <small id="helpId" class="form-text text-muted">Este es el usuario de
-                                                siie que hizo la requisición</small>
+                                                siie que hizo la RM</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
@@ -222,7 +228,7 @@
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="formatDateNormal(oMaterialRequest.mrDate)">
                                             <small id="helpId" class="form-text text-muted">Fecha en la que se
-                                                realizó la requisición</small>
+                                                realizó la RM</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
@@ -247,7 +253,7 @@
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Tipo Req.</label>
+                                            <label for="">Tipo RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrType === 'C' ? 'Consumo' : 'Resurtido'">
@@ -257,16 +263,19 @@
                                     </div>
                                     <div class="col-12 col-md-8">
                                         <div class="form-group">
-                                            <label for="">Notas de la requisición</label>
-                                            <textarea readonly class="form-control" name="" id="" rows="2">@{{ getMrNotes() }}</textarea>
+                                            <label for="">Notas de la RM</label>
+                                            <textarea readonly class="form-control" name="mrNotesName" id="mrNotesId" aria-describedby="helpRmEtysId" rows="2">@{{ getMrNotes() }}</textarea>
+                                            <small v-if="oMaterialRequest.lEtyNotes && oMaterialRequest.lEtyNotes.length > 0" 
+                                                    id="helpRmEtysId" 
+                                                    class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la RM.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">PDF de la Requisición</label>
+                                            <label for="">PDF de la Requisición de materiales</label>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                 data-toggle="modal" data-target="#modalRm">
-                                                Ver requisición de materiales
+                                                Ver Requisición de materiales
                                             </button>
                                         </div>
                                     </div>
@@ -293,7 +302,12 @@
                                 </button>
                             </div>
                             <div class="card-footer bg-transparent border-success" style="text-align: right">
-                                @{{ formatAmount(oFileContainer.totalLocal, 'MXN') }}</div>
+                                <div v-if="oFileContainer.textEtys">
+                                    @{{ oFileContainer.textEtys }}
+                                    <br>
+                                </div>
+                                @{{ 'Total archivo: ' + formatAmount(oFileContainer.totalLocal, 'MXN') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -307,31 +321,47 @@
                                         <div class="form-group">
                                             <label for="">Estatus autorización:</label>
                                             <input readonly :value="oDocument.oDpsHeader.authText" type="text"
-                                                class="form-control form-control-sm ml-1">
+                                                class="form-control form-control-sm ml-1" 
+                                                style="border: black 2px solid; font-weight: bold;">
                                         </div>
                                     </form>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <table class="table table-striped table-inverse table-responsive">
+                                        <table class="table table-striped table-inverse table-responsive" style="font-size: 0.7em;">
                                             <thead class="thead-inverse">
                                                 <tr>
-                                                    <th>Nivel</th>
+                                                    <th>Niv.</th>
+                                                    <th>Usuario</th>
                                                     <th>Estatus</th>
                                                     <th>Fecha autoriz.</th>
                                                     <th>Fecha rechazo</th>
-                                                    <th>Usuario</th>
                                                     <th>Comentario</th>
+                                                    <th>Vigente</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps">
+                                            <tbody v-if="oWebAuthorization.lSteps.filter(row => row.deleted === true).length > 0">
+                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === true)"
+                                                    style="color: gray; font-style: italic;">
                                                     <td scope="row">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td>@{{ oAuthRow.userName }}</td>
                                                     <td>@{{ oAuthRow.statusName }}</td>
+                                                    <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible)' }}</td>
+                                                    <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' }}</td>
+                                                    <td class="long-text">@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
+                                                </tr>
+                                            </tbody>
+                                            <hr>
+                                            <tbody>
+                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === false)">
+                                                    <td scope="row">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td><b>@{{ oAuthRow.userName }}</b></td>
+                                                    <td><b>@{{ oAuthRow.statusName }}</b></td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible aún)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible aún)' }}</td>
-                                                    <td>@{{ oAuthRow.userName }}</td>
-                                                    <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios aún)' }}</td>
+                                                    <td class="long-text">@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -356,7 +386,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Comentarios autorización o rechazo</label>
-                                            <textarea v-model="sComments" class="form-control" name="" id="" rows="2"></textarea>
+                                            <textarea v-model="sComments" class="form-control" name="" id="" rows="2" maxlength="1022"></textarea>
                                             <small class="text-muted">Notas que verán los usuarios involucrados en el
                                                 proceso de autorización.</small>
                                         </div>
@@ -382,16 +412,35 @@
 @endsection
 
 @section('scripts')
+    <script>
+        // idYear
+        // idDoc
+        // idEty
+        // Cve. 3
+        // Concepto 4
+        // Cantidad 5
+        // Unidad 6
+        // Precio Ant. 7
+        // % Dif. 8
+        // Precio Un. 9
+        // Subtotal 10
+        // Impuesto cargado 11
+        // Impuesto retenido 12
+        // Total 13
+        // Moneda 14
+        // Centro costo 15
+    </script>
     @include('layouts.table_jsControll', [
         'table_id' => 'table_etys',
         'colTargets' => [0, 1, 2],
         'colTargetsSercheable' => [],
+        'order' => [[3, 'asc']],
         // 'select' => true,
         'double_click' => false,
         'show' => false,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [5, 7, 8, 9, 10, 11],
-        'colTargetsAmount' => [7, 8, 9, 10, 11],
+        'colTargetsAlignRight' => [5, 7, 8, 9, 10, 11, 12, 13],
+        'colTargetsAmount' => [7, 9, 10, 11, 12, 13],
         'colTargetsQuantity' => [5],
         'colTargetsNoWrap' => [3],
         // 'noSort' => true,

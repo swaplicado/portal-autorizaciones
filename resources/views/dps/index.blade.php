@@ -16,7 +16,7 @@
 @section('content')
     <div class="card" id="appDps">
         <div class="card-header">
-            Órdenes de compra
+            Órdenes de compra (OC)
         </div>
         <div class="card-body">
             <div class="grid-margin">
@@ -25,19 +25,41 @@
                     <label for="type_filter">Filtrar tipo: </label>
                     <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
                 </span> --}}
-                {{-- <span class="nobreak">
-                    <label for="status_filter">Estatus autorización: </label>
-                    <select class="select2-class form-control" name="status_filter" id="status_filter"></select>
-                </span> --}}
-                <span class="nobreak">
-                    <label for="status_filter">Fecha: </label>
-                    <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i
-                            class='bx bxs-chevron-left bx-sm'></i></button>
-                    <input type="text" readonly class="form-control-sm" :value="sMonthYear" aria-describedby="helpId"
-                        placeholder="Nov 2024">
-                    <button type="button" class="btn btn-primary btn-sm" @click="nextMonth"><i
-                            class='bx bxs-chevron-right bx-sm'></i></button>
-                </span>
+                @if($statusFilter >= 0)
+                    <span class="nobreak">
+                        <label for="status_filter">Fecha: </label>
+                        <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i
+                                class='bx bxs-chevron-left bx-sm'></i></button>
+                        <input type="text" readonly class="form-control-sm" :value="sMonthYear" aria-describedby="helpId"
+                            placeholder="Nov 2024">
+                        <button type="button" class="btn btn-primary btn-sm" @click="nextMonth"><i
+                                class='bx bxs-chevron-right bx-sm'></i></button>
+                    </span>
+                    <span class="nobreak">
+                        <label for="status_filter">Estatus autorización: </label>
+                        <select class="select2-class form-control-sm" name="status_filter" id="status_filter">
+                            <option value="">TODOS</option>
+                            <option value="NA">NA</option>
+                            <option value="PENDIENTE">PENDIENTE</option>
+                            <option value="EN PROCESO">EN PROCESO</option>
+                            <option value="AUTORIZADO">AUTORIZADO</option>
+                            <option value="RECHAZADO">RECHAZADO</option>
+                            <option value="EN ENVÍO">EN ENVÍO</option>
+                        </select>
+                    </span>
+                @endif
+            </div>
+            <div>
+                <p class="form-text text-muted">
+                    <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: click en el
+                    botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul.
+                </p>
+                <p class="form-text text-muted">
+                    <i class="bx bxs-error-circle bx-xs" style="color:#fb060a"></i> Indica prioridad de autorización ALTA.
+                    / 
+                    <i class="bx bx-revision bx-xs" style="color:#dbcd08e6" data-toggle="tooltip" data-placement="top" title="Este documento ha sido reenviado a autorización"></i>
+                    Indica documento previamente rechazado 
+                </p>
             </div>
             <div>
                 <button onclick="subscribeUser()">Suscribirse a notificaciones</button>
@@ -48,9 +70,14 @@
                     <thead>
                         <th>idYear</th>
                         <th>idDoc</th>
-                        <th>Fecha</th>
+                        <th>-</th>
                         <th>Folio OC</th>
+                        <th>Fecha</th>
                         <th>Proveedor</th>
+                        <th>Estatus</th>
+                        <th>Turno</th>
+                        <th>-</th>
+                        <th>Centro costo</th>
                         <th>Subtotal</th>
                         <th>Total</th>
                         <th>Moneda</th>
@@ -59,7 +86,6 @@
                         <th>Fecha Req.</th>
                         <th>Usuario Req.</th>
                         <th>Usuario OC.</th>
-                        <th>Estatus</th>
                     </thead>
                     <tbody>
 
@@ -76,68 +102,56 @@
         $(document).ready(function() {
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    let col_type = null;
-                    let col_status = null;
+                    let col_status = data[6];
 
-                    // col_type = parseInt(data[indexesRequisitionsTable.typeResource]);
-                    // col_status = parseInt(data[indexesRequisitionsTable.statusResource]);
-
-                    // if (settings.nTable.id == 'table_resources') {
-                    //     // let iType = parseInt( $('#type_filter').val(), 10 );
-                    //     let iType = 1;
-                    //     let iStatus = parseInt($('#status_filter').val(), 10);
-                    //     if (col_type == iType || iType == 0) {
-                    //         return col_status == iStatus || iStatus == 0;
-                    //     } else {
-                    //         return false;
-                    //     }
-                    // }
+                    if (settings.nTable.id == 'table_dps') {
+                        let sStatus = (<?php echo json_encode($statusFilter); ?>) >= 0 ? $('#status_filter').val() : "";
+                        return col_status === sStatus || sStatus === "";
+                    }
 
                     return true;
                 }
             );
-
-            // $('#type_filter').change( function() {
-            //     table['table_resources'].draw();
-            // });
 
             $('#status_filter').change(function() {
                 table['table_dps'].draw();
             });
         });
 
-        //     idYear: 0,
-        //     idDoc: 1,
-        //     dt: 2,
-        //     dpsFolio: 3,
-        //     dpsNumRef: 4,
-        //     providerFiscalId: 5,
-        //     provider: 6,
-        //     subTotal: 7,
-        //     taxCharged: 8,
-        //     taxRetained: 9,
-        //     total: 10,
-        //     currency: 11,
-        //     exchangeRate: 12,
-        //     matReqFolio: 13,
-        //     matReqDt: 14,
-        //     dpsUser: 15,
+        //     idYear: 0
+        //     idDoc: 1
+        //     priority: 2
+        //     dpsFolio: 3
+        //     dt: 4
+        //     provider: 5
+        //     authText: 6
+        //     userInTurn: 7
+        //     wasReturned: 8
+        //     costCenters: 9
+        //     subTotal: 10
+        //     total: 11
+        //     currency: 12
+        //     exchangeRate: 13
+        //     matReqFolio: 14
+        //     matReqDt: 15
         //     matReqUser: 16
-        //     authText: 17
+        //     dpsUser: 17
     </script>
     @include('layouts.table_jsControll', [
         'table_id' => 'table_dps',
         'colTargets' => [0, 1],
         'colTargetsSercheable' => [],
-        // 'select' => true,
+        'order' => [[2, 'desc'], [3, 'asc']],
+        'displayLength' => 25,
         'double_click' => true,
         'show' => true,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [5, 6, 8],
-        'colTargetsAmount' => [5, 6],
-        'colTargetsQuantity' => [8],
-        'colTargetsNoWrap' => [2, 4, 10],
-        'colTargetsDateHumans' => [2, 10],
+        'colTargetsAlignRight' => [10, 11, 13],
+        'colTargetsAmount' => [10, 11],
+        'colTargetsQuantity' => [13],
+        'colTargetsNoWrap' => [4, 5, 15],
+        'colTargetsDateHumans' => [],
+        'colTargetsDateHumansTwo' => [4, 15],
         // 'noSort' => true,
     ])
     <script type="text/javascript" src="{{ asset('myApp/Utils/datatablesUtils.js') }}"></script>
@@ -150,6 +164,15 @@
             }
             SGui.showWaitingBlock(3000);
             app.onSelectDps(table['table_dps'].row('.selected').data());
+        });
+
+        $(document).on('dblclick', '#table_dps tbody tr', function() {
+            if (table['table_dps'].row(this).data() == undefined) {
+                SGui.showError("Debe seleccionar un renglón");
+                return;
+            }
+            SGui.showWaitingBlock(3000);
+            app.onSelectDps(table['table_dps'].row(this).data());
         });
     </script>
 @endsection

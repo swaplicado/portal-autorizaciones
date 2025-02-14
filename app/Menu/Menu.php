@@ -17,9 +17,9 @@ class Menu
         if ($type->id_typesuser == 1) {
             $lMenus = [
                 (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio'],
-                (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones'],
-                (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'OC pendientes'],
-                (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC']
+                // (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza RM'],
+                (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza OC pendientes'],
+                (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Consulta las OC']
             ];
         } else {
             $lPermissions = collect($oUser->permissionsByRol());
@@ -34,12 +34,12 @@ class Menu
             ];
             foreach ($viewsAccess as $view) {
                 switch ($view->key_code) {
-                    case 'autorizador.requisiciones':
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones'];
-                        break;
+                    // case 'autorizador.requisiciones':
+                    //     $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza RM'];
+                    //     break;
                     case 'autorizador.dps':
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'OC pendientes'];
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza OC pendientes'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Consulta las OC'];
                         break;
 
                     default:

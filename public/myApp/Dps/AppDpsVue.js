@@ -44,23 +44,57 @@ var app = new Vue({
             })
             .then(response => {
                 this.vDocuments = response.data; // Actualizar la lista de documentos
+
+                for (let element of this.vDocuments) {
+                    if (element.authorizationPriority && element.authorizationPriority > 0) {
+                        element.priority = '<i class="bx bxs-error-circle bx-xs" style="color:#fb060a"' + 
+                                                'data-toggle="tooltip" ' +
+                                                'data-placement="top" ' +
+                                                'title="Este documento tiene prioridad alta"></i>';
+                    }
+                    else {
+                        element.priority = '';
+                    }
+
+                    element.link = '<a href="' + this.oData.routeDpsView + '/' + 
+                                    element.idYear + '/' + 
+                                    element.idDoc + '">' + 
+                                    element.dpsFolio + '</a>';
+
+                    // Agregar ícono de advertencia si el documento fue retornado
+                    if (element.returned) {
+                        element.spanReturned = '<i class="bx bx-revision bx-xs" ' +
+                                                    'style="color: #dbcd08e6" ' +
+                                                    'data-toggle="tooltip" ' +
+                                                    'data-placement="top" ' +
+                                                    'title="Este documento ha sido reenviado a autorización"></i>';
+                    }
+                    else {
+                        element.spanReturned = '';
+                    }
+                }
+
                 drawTableJson(
                     'table_dps',
                     this.vDocuments,
                     'idYear',
                     'idDoc',
+                    'priority',
+                    'link',
                     'dt',
-                    'dpsFolio',
                     'provider',
-                    'subTotal',
-                    'total',
+                    'authText',
+                    'userInTurn',
+                    'spanReturned',
+                    'costCenters',
+                    'subTotalCur',
+                    'totalCur',
                     'currency',
                     'exchangeRate',
                     'matReqFolio',
                     'matReqDt',
                     'matReqUser',
                     'dpsUser',
-                    'authText'
                 );
             })
             .catch(error => {

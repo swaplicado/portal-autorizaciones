@@ -66,6 +66,9 @@
             @if (isset($ordering))
                 "ordering": true,
             @endif
+            @if (isset($displayLength))
+                "iDisplayLength": <?php echo json_encode($displayLength); ?>,
+            @endif
             "columnDefs": [{
                     "targets": <?php echo json_encode($colTargets); ?>,
                     "visible": false,
@@ -148,7 +151,26 @@
                             return data; // Devolver sin cambios si no es una fecha válida o en otro modo
                         }
                     @endif
-                }
+                },
+                {
+                    @if (isset($colTargetsDateHumansTwo))
+                        "targets": <?php echo json_encode($colTargetsDateHumansTwo); ?>,
+                        "render": function(data, type, row) {
+                            // Formatear la fecha solo en la visualización
+                            if (type === 'display' && data) {
+                                // Formatear fechas (yyyy-mm-dd a dd-mm-yy)
+                                const dateParts = data.split('-'); // Separar el formato yyyy-mm-dd
+                                if (dateParts.length === 3) {
+                                    const year = dateParts[0].slice(-2); // Obtener los últimos 2 dígitos del año
+                                    const month = String(dateParts[1]).padStart(2, '0'); // Asegurar dos dígitos
+                                    const day = String(dateParts[2]).padStart(2, '0'); // Asegurar dos dígitos
+                                    return `${day}-${month}-${year}`; // Formato dd-mm-yy
+                                }
+                            }
+                            return data; // Devolver sin cambios si no es una fecha válida o en otro modo
+                        }
+                    @endif
+                },
             ],
             "buttons": [
                 'pageLength',
