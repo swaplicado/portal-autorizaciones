@@ -54,6 +54,12 @@
                     <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: click en el
                     botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul.
                 </p>
+                <p class="form-text text-muted">
+                    <i class="bx bxs-error-circle bx-xs" style="color:#fb060a"></i> Indica prioridad de autorización ALTA.
+                    / 
+                    <i class="bx bx-revision bx-xs" style="color:#dbcd08e6" data-toggle="tooltip" data-placement="top" title="Este documento ha sido reenviado a autorización"></i>
+                    Indica documento previamente rechazado 
+                </p>
             </div>
             <div class="table-responsive">
                 <table class="display expandable-table dataTable no-footer custom-font-size" id="table_dps" width="100%"
@@ -61,8 +67,9 @@
                     <thead>
                         <th>idYear</th>
                         <th>idDoc</th>
-                        <th>Fecha</th>
+                        <th>-</th>
                         <th>Folio OC</th>
+                        <th>Fecha</th>
                         <th>Proveedor</th>
                         <th>Estatus</th>
                         <th>Turno</th>
@@ -110,37 +117,38 @@
 
         //     idYear: 0
         //     idDoc: 1
-        //     dt: 2
+        //     priority: 2
         //     dpsFolio: 3
-        //     provider: 4
-        //     authText: 5
-        //     userInTurn: 6
-        //     wasReturned: 7
-        //     costCenters: 8
-        //     subTotal: 9
-        //     total: 10
-        //     currency: 11
-        //     exchangeRate: 12
-        //     matReqFolio: 13
-        //     matReqDt: 14
-        //     matReqUser: 15
-        //     dpsUser: 16
+        //     dt: 4
+        //     provider: 5
+        //     authText: 6
+        //     userInTurn: 7
+        //     wasReturned: 8
+        //     costCenters: 9
+        //     subTotal: 10
+        //     total: 11
+        //     currency: 12
+        //     exchangeRate: 13
+        //     matReqFolio: 14
+        //     matReqDt: 15
+        //     matReqUser: 16
+        //     dpsUser: 17
     </script>
     @include('layouts.table_jsControll', [
         'table_id' => 'table_dps',
         'colTargets' => [0, 1],
         'colTargetsSercheable' => [],
-        'order' => [[3, 'asc']],
+        'order' => [[2, 'desc'], [3, 'asc']],
         'displayLength' => 25,
         'double_click' => true,
         'show' => true,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [9, 10, 12],
-        'colTargetsAmount' => [9, 10],
-        'colTargetsQuantity' => [12],
-        'colTargetsNoWrap' => [2, 4, 14],
+        'colTargetsAlignRight' => [10, 11, 13],
+        'colTargetsAmount' => [10, 11],
+        'colTargetsQuantity' => [13],
+        'colTargetsNoWrap' => [4, 5, 15],
         'colTargetsDateHumans' => [],
-        'colTargetsDateHumansTwo' => [2,14],
+        'colTargetsDateHumansTwo' => [4, 15],
         // 'noSort' => true,
     ])
     <script type="text/javascript" src="{{ asset('myApp/Utils/datatablesUtils.js') }}"></script>

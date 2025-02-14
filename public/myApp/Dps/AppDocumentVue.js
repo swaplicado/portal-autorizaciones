@@ -59,12 +59,6 @@ var documentApp = new Vue({
                     if (this.oDocument.oWebAuthorization) {
                         this.oWebAuthorization = this.oDocument.oWebAuthorization;
                     }
-
-                    if (this.oDocument.lEtys) {
-                        for (let oEty of this.oDocument.lEtys) {
-                            oEty.currency = 'MXN';
-                        }
-                    }
                 })
                 .catch(error => {
                     SGui.showError('Error al obtener los documentos' + error + '. Contacta a soporte técnico.');
@@ -81,6 +75,14 @@ var documentApp = new Vue({
             amt = amt + ' ' + currency;
             return amt;
         },
+        formatNumber(amount, decimals) {
+            if (typeof amount !== 'number') {
+                return '0.00';
+            }
+            let amt = amount.toLocaleString('es-MX', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+
+            return amt;
+        },
         formatDateNormal(data) {
             if (!data) {
                 return '';
@@ -95,6 +97,23 @@ var documentApp = new Vue({
                 return `${day}-${month}-${year}`;
             }
             return data;
+        },
+        formatDate(data) {
+            if (!data) {
+                return '';
+            }
+            
+            const parts = data.split('-'); // Separar el formato yyyy-mm-dd
+
+            if (parts.length === 3) {
+                const year = parts[0];
+                const month = String(parts[1]).padStart(2, '0'); // Asegurar dos dígitos
+                const day = String(parts[2]).padStart(2, '0'); // Asegurar dos dígitos
+
+                return `${day}/${month}/${year}`;
+            }
+
+            return '';
         },
         getDpsNotes() {
             let notes = '';
@@ -117,6 +136,24 @@ var documentApp = new Vue({
             return notes;
         },
         drawTable() {
+            if (this.oDocument.lEtys) {
+                for (let oEty of this.oDocument.lEtys) {
+                    oEty.currency = 'MXN';
+                    if (oEty.lItemHistory && oEty.lItemHistory.length > 0) {
+                        oEty.prevPrice = oEty.lItemHistory[0].priceUnitary;
+                        // agregar botón para abrir historial de precios de la partida con un modal:
+                        oEty.historyButton = '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#modalHistory" ' +
+                            'onclick="documentApp.onShowHistory(' + oEty.idYear + ', ' + oEty.idDoc + ', ' + oEty.idEty + ')">' + 
+                            this.formatNumber(oEty.lItemHistory[0].percentage, 2) + '%' +
+                            '</button>';    
+                    }
+                    else {
+                        oEty.prevPrice = 0;
+                        oEty.historyButton = 'NA';
+                    }
+                }
+            }
+
             drawTableJson(
                 'table_etys',
                 this.oDocument.lEtys,
@@ -127,6 +164,8 @@ var documentApp = new Vue({
                 'concept',
                 'quantity',
                 'unitSymbol',
+                'prevPrice',
+                'historyButton',
                 'price',
                 'subtotal',
                 'taxCharged',
@@ -151,6 +190,18 @@ var documentApp = new Vue({
                 }
             }
             this.oMaterialRequest = this.oDocumentEty.oMaterialRequest;
+        },
+        onShowHistory(idYear, idDoc, idEty) {
+            // Obtener objeto de partida de this.oDocument.lEtys
+            for (const oEty of this.oDocument.lEtys) {
+                if (idYear === oEty.idYear && idDoc === oEty.idDoc && idEty === oEty.idEty) {
+                    this.oDocumentEty = oEty;
+                    break;
+                }
+            }
+            
+            // mostrar modal del histórico de precios modalPrices
+            $('#modalPrices').modal('show');
         },
         getHeaderColor(fileType) {
             if (fileType === 'Q') {
@@ -322,6 +373,15 @@ var documentApp = new Vue({
             const isBig = screenWidth >= 768;
             return isBig;
         },
+        escapeString(str) {
+            return str
+                .replace(/'/g, "\\'") // Escapa comilla simple
+                .replace(/\\/g, "\\\\")  // Escapa barras invertidas
+                .replace(/"/g, '\\"')     // Escapa comillas dobles
+                .replace(/\n/g, "\\n")    // Escapa saltos de línea
+                .replace(/\r/g, "\\r")    // Escapa retornos de carro
+                .replace(/\t/g, "\\t");  // Escapa tabulaciones
+        },
         /**
          * Autorizaciones
          */
@@ -331,8 +391,9 @@ var documentApp = new Vue({
             }
 
             SGui.showWaiting(3000);
+            let jComments = this.escapeString(this.sComments);
             await axios.post(this.oData.routeAuthorizeDps, {
-                comments: this.sComments,
+                comments: jComments,
             })
                 .then(response => {
                     console.log(response.data);
@@ -365,8 +426,9 @@ var documentApp = new Vue({
             }
 
             SGui.showWaiting(3000);
+            let jComments = this.escapeString(this.sComments);
             await axios.post(this.oData.routeRejectDps, {
-                comments: this.sComments,
+                comments: jComments,
             })
                 .then(response => {
                     console.log(response.data);
@@ -389,9 +451,9 @@ var documentApp = new Vue({
                 });
         },
         validateAuthorization() {
-            // validar longitud comentarios <= 255
-            if (this.sComments.length > 255) {
-                SGui.showError('El comentario no puede exceder los 255 caracteres');
+            // validar longitud comentarios <= 1022
+            if (this.sComments.length > 1022) {
+                SGui.showError('El comentario no puede exceder los 1022 caracteres');
                 return false;
             }
 

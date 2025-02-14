@@ -166,6 +166,7 @@
                         </div>
                     </div>
                 </div>
+                @include('dps.modalprices')
                 <hr>
                 <div class="table-responsive">
                     <table class="display expandable-table dataTable no-footer custom-font-size" id="table_etys"
@@ -178,6 +179,8 @@
                             <th>Concepto</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>
+                            <th>Precio Ant.</th>
+                            <th>% Dif.</th>
                             <th>Precio Un.</th>
                             <th>Subtotal</th>
                             <th>Impuesto cargado</th>
@@ -299,7 +302,12 @@
                                 </button>
                             </div>
                             <div class="card-footer bg-transparent border-success" style="text-align: right">
-                                @{{ formatAmount(oFileContainer.totalLocal, 'MXN') }}</div>
+                                <div v-if="oFileContainer.textEtys">
+                                    @{{ oFileContainer.textEtys }}
+                                    <br>
+                                </div>
+                                @{{ 'Total archivo: ' + formatAmount(oFileContainer.totalLocal, 'MXN') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -340,7 +348,7 @@
                                                     <td>@{{ oAuthRow.statusName }}</td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' }}</td>
-                                                    <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td class="long-text">@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
                                                     <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
@@ -352,7 +360,7 @@
                                                     <td><b>@{{ oAuthRow.statusName }}</b></td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible aún)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible aún)' }}</td>
-                                                    <td>@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td class="long-text">@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
                                                     <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
@@ -378,7 +386,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Comentarios autorización o rechazo</label>
-                                            <textarea v-model="sComments" class="form-control" name="" id="" rows="2" maxlength="255"></textarea>
+                                            <textarea v-model="sComments" class="form-control" name="" id="" rows="2" maxlength="1022"></textarea>
                                             <small class="text-muted">Notas que verán los usuarios involucrados en el
                                                 proceso de autorización.</small>
                                         </div>
@@ -404,6 +412,24 @@
 @endsection
 
 @section('scripts')
+    <script>
+        // idYear
+        // idDoc
+        // idEty
+        // Cve. 3
+        // Concepto 4
+        // Cantidad 5
+        // Unidad 6
+        // Precio Ant. 7
+        // % Dif. 8
+        // Precio Un. 9
+        // Subtotal 10
+        // Impuesto cargado 11
+        // Impuesto retenido 12
+        // Total 13
+        // Moneda 14
+        // Centro costo 15
+    </script>
     @include('layouts.table_jsControll', [
         'table_id' => 'table_etys',
         'colTargets' => [0, 1, 2],
@@ -413,8 +439,8 @@
         'double_click' => false,
         'show' => false,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [5, 7, 8, 9, 10, 11],
-        'colTargetsAmount' => [7, 8, 9, 10, 11],
+        'colTargetsAlignRight' => [5, 7, 8, 9, 10, 11, 12, 13],
+        'colTargetsAmount' => [7, 9, 10, 11, 12, 13],
         'colTargetsQuantity' => [5],
         'colTargetsNoWrap' => [3],
         // 'noSort' => true,
