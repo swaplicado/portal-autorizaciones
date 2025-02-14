@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class PushSubscription extends Model
 {
     use HasFactory;
+    // indicar conexión a la base de datos
+    protected $connection = 'mysqlmngr';
 
     protected $fillable = ['user_id', 'endpoint', 'public_key', 'auth_token'];
 

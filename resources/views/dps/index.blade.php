@@ -58,11 +58,8 @@
                     <i class="bx bxs-error-circle bx-xs" style="color:#fb060a"></i> Indica prioridad de autorización ALTA.
                     / 
                     <i class="bx bx-revision bx-xs" style="color:#dbcd08e6" data-toggle="tooltip" data-placement="top" title="Este documento ha sido reenviado a autorización"></i>
-                    Indica documento previamente rechazado 
+                    Indica documento previamente rechazado <button onclick="subscribeUser()">.</button>
                 </p>
-            </div>
-            <div>
-                <button onclick="subscribeUser()">Suscribirse a notificaciones</button>
             </div>
             <div class="table-responsive">
                 <table class="display expandable-table dataTable no-footer custom-font-size" id="table_dps" width="100%"

@@ -11,8 +11,9 @@ class NotificationsController extends Controller
 {
     public function enviarNotificacion(Request $request)
     {
-        $userId = 76;
-        $title = "Notificación de prueba";
+        // obtener arreglo de enteros del request llamado "toUsers"
+        $toUsers = $request->toUsers;
+
         $message = "Esta es una notificación de prueba";
 
         $auth = [
@@ -25,9 +26,11 @@ class NotificationsController extends Controller
 
         $webPush = new WebPush($auth);
 
-        $subscriptions = PushSubscription::where('user_id', $userId)->get();
+        $subscriptions = PushSubscription::whereIn('user_id', $toUsers)->get();
 
+        $title = "";
         foreach ($subscriptions as $sub) {
+            $title = "Notificación de prueba usuario: ".$sub->user_id." ". date('Y-m-d H:i:s');
             $subscription = Subscription::create([
                 'endpoint' => $sub->endpoint,
                 'publicKey' => $sub->public_key,

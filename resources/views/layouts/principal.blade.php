@@ -90,7 +90,7 @@
 
                     console.log('Suscripción exitosa:', subscription);
 
-                    const response = await fetch('/save-subscription', {
+                    const response = await fetch('./save-subscription', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

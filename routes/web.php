@@ -66,9 +66,10 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
         return response()->json(['success' => true]);
     });
 
-    Route::get('/send-notification', [NotificationsController::class, 'enviarNotificacion'])->name('send-notification');
     Route::get('/get-public-key', [NotificationsController::class, 'setVapidKeys'])->name('get-public-key');
 });
+
+Route::get('/send-notification', [NotificationsController::class, 'enviarNotificacion'])->name('send-notification');
 
 Route::get('/unauthorized', function () {
     return view('layouts.unauthorized');
