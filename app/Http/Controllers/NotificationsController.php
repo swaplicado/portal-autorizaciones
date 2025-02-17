@@ -13,7 +13,10 @@ class NotificationsController extends Controller
     public function enviarNotificacion(Request $request)
     {
         // obtener arreglo de enteros del request llamado "toUsers"
-        $toUsers = [$request->idUser];
+        $toUsers = [];
+        $toUsers[] = $request->idUser;
+
+        Log::info($toUsers);
 
         if (empty($toUsers) || null === $toUsers) {
             return response()->json([
