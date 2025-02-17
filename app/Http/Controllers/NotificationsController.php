@@ -16,7 +16,7 @@ class NotificationsController extends Controller
         $toUsers = [];
         // recibir parámetro id_user
         if ($request->has('id_user')) {
-            $toUsers = $request->id_user;
+            $toUsers[] = $request->id_user;
         }
         else {
             return response()->json([
