@@ -35,6 +35,14 @@ class NotificationsController extends Controller
 
         $subscriptions = PushSubscription::whereIn('user_id', $toUsers)->get();
 
+        if ($subscriptions->isEmpty()) {
+            return response()->json([
+                'message' => 'No se encontraron suscripciones para los usuarios especificados.'
+            ], 404);
+        }
+
+        Log::info('Enviando notificación a: ' . $toUsers . ' con message: ' . $message);
+
         $title = "";
         foreach ($subscriptions as $sub) {
             $title = "Notificación de prueba usuario: ".$sub->user_id." ". date('Y-m-d H:i:s');
