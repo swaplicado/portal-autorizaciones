@@ -14,7 +14,7 @@ class NotificationsController extends Controller
         // obtener arreglo de enteros del request llamado "toUsers"
         $toUsers = $request->toUsers;
 
-        if (empty($toUsers)) {
+        if (empty($toUsers) || null === $toUsers) {
             return response()->json([
                 'message' => 'No se especificaron usuarios a los que enviar la notificación.'
             ], 400);
