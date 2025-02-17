@@ -47,7 +47,7 @@ class NotificationsController extends Controller
             ], 404);
         }
 
-        Log::info('Enviando notificación a: ' . $toUsers . ' con message: ' . $message);
+        Log::info('Enviando notificación a: ' . (implode(", ", $toUsers)) . ' con message: ' . $message);
 
         $title = "";
         foreach ($subscriptions as $sub) {
