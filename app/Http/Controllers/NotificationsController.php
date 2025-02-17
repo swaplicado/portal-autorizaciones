@@ -37,7 +37,8 @@ class NotificationsController extends Controller
 
         if ($subscriptions->isEmpty()) {
             return response()->json([
-                'message' => 'No se encontraron suscripciones para los usuarios especificados. ' . $toUsers
+                // concatenar array toUsers: 
+                'message' => 'No se encontraron suscripciones para los usuarios especificados. ' . (implode(", ", $toUsers))
             ], 404);
         }
 
