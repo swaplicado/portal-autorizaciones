@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Log;
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 use App\Models\PushSubscription;
@@ -47,6 +48,8 @@ class NotificationsController extends Controller
                 'title' => $title,
                 'body' => $message,
             ]);
+
+            Log::info('Enviando notificación a: ' . $sub->user_id . ' con title: ' . $title);
 
             $webPush->sendOneNotification($subscription, $payload);
         }
