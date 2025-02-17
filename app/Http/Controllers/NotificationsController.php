@@ -10,6 +10,12 @@ use App\Models\PushSubscription;
 
 class NotificationsController extends Controller
 {
+    /**
+     * Enviar notificación a un usuario específico mediante http request
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
     public function enviarNotificacion(Request $request)
     {
         // obtener arreglo de enteros del request llamado "toUsers"
@@ -24,10 +30,25 @@ class NotificationsController extends Controller
             ], 400);
         }
 
-        Log::info($toUsers);
-
         $message = "Esta es una notificación de prueba";
 
+        $result = $this->sendNotificationToUsers($toUsers, $message);
+
+        if ($result['status'] === 'error') {
+            return response()->json(['message' => $result['message']], $result['code']);
+        }
+
+        return response()->json(['message' => 'Notificación enviada!']);
+    }
+
+    /**
+     * Enviar notificación a un usuario específico mediante array de ids
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function sendNotificationToUsers(array $toUsers, string $message)
+    {
         $auth = [
             'VAPID' => [
                 'subject' => 'mailto:edwin.carmona@swaplicado.com.mx',
@@ -41,34 +62,42 @@ class NotificationsController extends Controller
         $subscriptions = PushSubscription::whereIn('user_id', $toUsers)->get();
 
         if ($subscriptions->isEmpty()) {
-            return response()->json([
-                // concatenar array toUsers: 
-                'message' => 'No se encontraron suscripciones para los usuarios especificados. ' . (implode(", ", $toUsers))
-            ], 404);
+            return [
+                'status' => 'error',
+                'message' => 'No se encontraron suscripciones para los usuarios especificados. ' . (implode(", ", $toUsers)),
+                'code' => 404
+            ];
         }
 
-        Log::info('Enviando notificación a: ' . (implode(", ", $toUsers)) . ' con message: ' . $message);
+        try {
+            $title = "";
 
-        $title = "";
-        foreach ($subscriptions as $sub) {
-            $title = "Notificación de prueba usuario: ".$sub->user_id." ". date('Y-m-d H:i:s');
-            $subscription = Subscription::create([
-                'endpoint' => $sub->endpoint,
-                'publicKey' => $sub->public_key,
-                'authToken' => $sub->auth_token,
-            ]);
+            foreach ($subscriptions as $sub) {
+                $title = "Notificación de prueba usuario: ".$sub->user_id." ". date('Y-m-d H:i:s');
+                $subscription = Subscription::create([
+                    'endpoint' => $sub->endpoint,
+                    'publicKey' => $sub->public_key,
+                    'authToken' => $sub->auth_token,
+                ]);
+                
+                $payload = json_encode([
+                    'title' => $title,
+                    'body' => $message,
+                ]);
+                
+                $webPush->sendOneNotification($subscription, $payload);
+            }
 
-            $payload = json_encode([
-                'title' => $title,
-                'body' => $message,
-            ]);
-
-            Log::info('Enviando notificación a: ' . $sub->user_id . ' con title: ' . $title);
-
-            $webPush->sendOneNotification($subscription, $payload);
+            return ['status' => 'success'];
         }
-
-        return "Notificación enviada!";
+        catch (\Throwable $th) {
+            Log::error($th);
+            return [
+                'status' => 'error',
+                'message' => 'Error al enviar notificación a los usuarios especificados. ' . $th->getMessage(),
+                'code' => 500
+            ];
+        }
     }
 
     private function convertPublicKeyToBase64Url($filePath, $varEnv) {
