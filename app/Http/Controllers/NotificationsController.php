@@ -14,15 +14,17 @@ class NotificationsController extends Controller
     {
         // obtener arreglo de enteros del request llamado "toUsers"
         $toUsers = [];
-        $toUsers[] = $request->idUser;
-
-        Log::info($toUsers);
-
-        if (empty($toUsers) || null === $toUsers) {
+        // recibir parámetro id_user
+        if ($request->has('id_user')) {
+            $toUsers = $request->id_user;
+        }
+        else {
             return response()->json([
                 'message' => 'No se especificaron usuarios a los que enviar la notificación.'
             ], 400);
         }
+
+        Log::info($toUsers);
 
         $message = "Esta es una notificación de prueba";
 
