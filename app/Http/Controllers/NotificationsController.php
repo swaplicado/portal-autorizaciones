@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Notifications\Core;
 use Log;
-use Minishlink\WebPush\WebPush;
-use Minishlink\WebPush\Subscription;
-use App\Models\PushSubscription;
 
 class NotificationsController extends Controller
 {
@@ -18,22 +16,28 @@ class NotificationsController extends Controller
      */
     public function enviarNotificacion(Request $request)
     {
-        // obtener arreglo de enteros del request llamado "toUsers"
-        $toUsers = [];
-        // recibir parámetro id_user
-        if ($request->has('id_user')) {
-            $toUsers[] = $request->id_user;
-        }
-        else {
+        // Obtener el parámetro idUser del request
+        $idUser = $request->get('idUser');
+
+        // Verificar si el idUser está presente
+        if (! $idUser) {
+            Log::error('No se especificaron usuarios a los cuales enviar la notificación.');
             return response()->json([
-                'message' => 'No se especificaron usuarios a los que enviar la notificación.'
+                'message' => 'No se especificaron usuarios a los cuales enviar la notificación.'
             ], 400);
         }
 
-        $message = "Esta es una notificación de prueba";
+        // Convertir idUser en un array si no lo es
+        $toUsers = is_array($idUser) ? $idUser : [$idUser];
 
-        $result = $this->sendNotificationToUsers($toUsers, $message);
+        // Recibir parámetros title y message con valores por defecto
+        $message = $request->get('message', 'Notificación de SIIE APP');
+        $title = $request->get('title', 'Notificación');
 
+        // Enviar la notificación
+        $result = Core::sendNotificationToUsers($toUsers, $message, $title);
+
+        // Verificar el resultado y responder en consecuencia
         if ($result['status'] === 'error') {
             return response()->json(['message' => $result['message']], $result['code']);
         }
@@ -41,63 +45,26 @@ class NotificationsController extends Controller
         return response()->json(['message' => 'Notificación enviada!']);
     }
 
-    /**
-     * Enviar notificación a un usuario específico mediante array de ids
-     * 
-     * @param \Illuminate\Http\Request $request
-     * @return mixed|\Illuminate\Http\JsonResponse
-     */
-    public function sendNotificationToUsers(array $toUsers, string $message)
-    {
-        $auth = [
-            'VAPID' => [
-                'subject' => 'mailto:edwin.carmona@swaplicado.com.mx',
-                'publicKey' => env('VAPID_PUBLIC_KEY'),
-                'privateKey' => env('VAPID_PRIVATE_KEY'),
-            ],
-        ];
+    public function notificationByUser(Request $request) {
+        $idUser = $request->get('idUser');
 
-        $webPush = new WebPush($auth);
-
-        $subscriptions = PushSubscription::whereIn('user_id', $toUsers)->get();
-
-        if ($subscriptions->isEmpty()) {
-            return [
-                'status' => 'error',
-                'message' => 'No se encontraron suscripciones para los usuarios especificados. ' . (implode(", ", $toUsers)),
-                'code' => 404
-            ];
+        if (! $idUser) {
+            Log::error('No se especificaron usuarios a los cuales enviar la notificación.');
+            return response()->json([
+                'message' => 'No se especificaron usuarios a los cuales enviar la notificación.'
+            ], 400);
         }
 
-        try {
-            $title = "";
+        $toUsers = is_array($idUser) ? $idUser : [$idUser];
+        $sFolio = $request->get('folio', 'NA');
 
-            foreach ($subscriptions as $sub) {
-                $title = "Notificación de prueba usuario: ".$sub->user_id." ". date('Y-m-d H:i:s');
-                $subscription = Subscription::create([
-                    'endpoint' => $sub->endpoint,
-                    'publicKey' => $sub->public_key,
-                    'authToken' => $sub->auth_token,
-                ]);
-                
-                $payload = json_encode([
-                    'title' => $title,
-                    'body' => $message,
-                ]);
-                
-                $webPush->sendOneNotification($subscription, $payload);
-            }
+        $result = Core::notifyToExternalUsersAboutOC($toUsers, $sFolio);
 
-            return ['status' => 'success'];
+        if ($result['status'] === 'error') {
+            return response()->json(['message' => $result['message']], $result['code']);
         }
-        catch (\Throwable $th) {
-            Log::error($th);
-            return [
-                'status' => 'error',
-                'message' => 'Error al enviar notificación a los usuarios especificados. ' . $th->getMessage(),
-                'code' => 500
-            ];
-        }
+
+        return response()->json(['message' => 'Notificación enviada!']);
     }
 
     private function convertPublicKeyToBase64Url($filePath, $varEnv) {

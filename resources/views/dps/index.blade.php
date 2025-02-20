@@ -16,7 +16,9 @@
 @section('content')
     <div class="card" id="appDps">
         <div class="card-header">
-            Órdenes de compra (OC)
+            Órdenes de compra (OC) <button class="btn" onclick="subscribeUser()" title="Suscribirse a notificaciones">
+                                        <i class='bx bxs-bell-plus' style='color:#f5d807'></i>
+                                    </button>
         </div>
         <div class="card-body">
             <div class="grid-margin">
@@ -58,7 +60,7 @@
                     <i class="bx bxs-error-circle bx-xs" style="color:#fb060a"></i> Indica prioridad de autorización ALTA.
                     / 
                     <i class="bx bx-revision bx-xs" style="color:#dbcd08e6" data-toggle="tooltip" data-placement="top" title="Este documento ha sido reenviado a autorización"></i>
-                    Indica documento previamente rechazado <button onclick="subscribeUser()">.</button>
+                    Indica documento previamente rechazado
                 </p>
             </div>
             <div class="table-responsive">

@@ -51,8 +51,6 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
     Route::post('/save-subscription', function(Request $request) {
         $data = $request->all();
 
-        \Log::info($data);
-
         try {
             auth()->user()->pushSubscriptions()->create([
                 'endpoint' => $data['endpoint'],
@@ -70,6 +68,7 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
 });
 
 Route::get('/send-notification', [NotificationsController::class, 'enviarNotificacion'])->name('send-notification');
+Route::get('/send-notification-users', [NotificationsController::class, 'notificationByUser'])->name('send-notification-users');
 
 Route::get('/unauthorized', function () {
     return view('layouts.unauthorized');

@@ -17,8 +17,8 @@ self.addEventListener('push', function(event) {
         const title = notificationData.title || 'Notificación';
         const options = {
             body: notificationData.body || 'Tienes un nuevo mensaje',
-            icon: notificationData.icon || './images/aeth_mini.png',
-            badge: notificationData.badge || './images/aeth_mini.png',
+            icon: notificationData.icon || './images/iconIphone.png',
+            badge: notificationData.badge || './images/iconIphone.png',
             data: notificationData.data || {},
         };
 
@@ -35,7 +35,7 @@ self.addEventListener('push', function(event) {
 self.addEventListener('notificationclick', function(event) {
     event.notification.close();
 
-    let url = '/'; // URL por defecto
+    let url = './pending'; // URL por defecto
     if (event.notification.data && event.notification.data.url) {
         url = event.notification.data.url; // Usar la URL proporcionada en los datos
     }

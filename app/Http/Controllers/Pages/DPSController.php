@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Pages;
 
+use Log;
 use App\Dps\DpsCore;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\Core;
 
 /**
  * Class DPSController
@@ -82,8 +84,8 @@ class DPSController extends Controller
     public function authorizeDps(Request $request, $idYear, $idDoc)
     {
         $sComments = $request->input('comments');
-        $oResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
-        return response()->json($oResponse);
+        $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
+        return response()->json($jResponse);
     }
 
     /**

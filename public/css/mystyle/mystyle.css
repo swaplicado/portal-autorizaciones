@@ -125,3 +125,9 @@
     color: #212529;
     background-color: #f3f17b;
 }
+
+a {
+    color: #1200ff;
+    text-decoration: none;
+    background-color: transparent;
+}
