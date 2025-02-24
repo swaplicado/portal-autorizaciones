@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RequisitionsController;
+use App\Http\Controllers\Api\DPSApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->group(function(){
+Route::middleware('auth:api')->group(function () {
+    // Test:
     Route::get('test', [RequisitionsController::class, 'test']);
+    Route::get('dps-test', [DPSApiController::class, 'test']);
+
+    /**
+     * Rutas de DPS
+     */
+    Route::get('dps', [DPSApiController::class, 'getDocumentsInRange']);
+    Route::get('dps-by-pk/', [DPSApiController::class, 'getDocument']);
+    Route::post('dps/authorize-dps', [DPSApiController::class, 'authorizeDps']);
+    Route::post('dps/reject-dps', [DPSApiController::class, 'rejectDps']);
 });

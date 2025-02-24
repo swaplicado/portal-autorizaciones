@@ -99,6 +99,10 @@ class DPSController extends Controller
     public function rejectDps(Request $request, $idYear, $idDoc)
     {
         $sComments = $request->input('comments');
+        // Validar sComments, son obligatorios
+        if (empty($sComments)) {
+            return response()->json(['error' => 'Los comentarios son obligatorios'], 400);
+        }
         $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
         return response()->json($oResponse);
     }

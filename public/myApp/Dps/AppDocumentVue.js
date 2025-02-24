@@ -397,8 +397,7 @@ var documentApp = new Vue({
             })
                 .then(response => {
                     console.log(response.data);
-                    const sData = response.data;
-                    const oData = JSON.parse(sData);
+                    const oData = response.data;
                     if (oData.code === 200) {
                         this.getDocument();
                         this.sComments = '';
@@ -432,8 +431,7 @@ var documentApp = new Vue({
             })
                 .then(response => {
                     console.log(response.data);
-                    const sData = response.data;
-                    const oData = JSON.parse(sData);
+                    const oData = response.data;
                     if (oData.code === 200) {
                         this.getDocument();
                         this.sComments = '';
