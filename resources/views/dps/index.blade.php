@@ -91,8 +91,8 @@
                 Órdenes de compra (OC) por autorizar
             @endif
              <button class="btn" onclick="subscribeUser()" title="Suscribirse a notificaciones">
-                                        <i class='bx bxs-bell-plus' style='color:#f5d807'></i>
-                                    </button>
+                <i class='bx bxs-bell-plus' style='color:#f5d807'></i>
+            </button>
         </div>
         <div class="card-body">
             <div class="grid-margin">
@@ -126,6 +126,15 @@
                 @endif
             </div>
             <div>
+                @if($statusFilter >= 0)
+                    <span class="nobreak">
+                            <a href="{{ route('dps.pending') }}" type="button" class="btn btn-primary btn-sm ml-1" id="btn_show">Ir a mis pendientes</a>
+                    </span>
+                @else
+                    <span class="nobreak">
+                        <a href="{{ route('dps.index') }}" type="button" class="btn btn-primary btn-sm ml-1" id="btn_show">Ir a todas</a>
+                    </span>
+                @endif
                 <p class="form-text text-muted">
                     <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: click en el
                     botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul.
@@ -149,7 +158,6 @@
                         <th>Proveedor</th>
                         <th>Estatus</th>
                         <th>Turno</th>
-                        <th>-</th>
                         <th>Centro costo</th>
                         <th>Subtotal</th>
                         <th>Total</th>
@@ -193,22 +201,21 @@
 
         //     idYear: 0
         //     idDoc: 1
-        //     priority: 2
+        //     icons: 2
         //     dpsFolio: 3
         //     dt: 4
         //     provider: 5
         //     authText: 6
         //     userInTurn: 7
-        //     wasReturned: 8
-        //     costCenters: 9
-        //     subTotal: 10
-        //     total: 11
-        //     currency: 12
-        //     exchangeRate: 13
-        //     matReqFolio: 14
-        //     matReqDt: 15
-        //     matReqUser: 16
-        //     dpsUser: 17
+        //     costCenters: 8
+        //     subTotal: 9
+        //     total: 10
+        //     currency: 11
+        //     exchangeRate: 12
+        //     matReqFolio: 13
+        //     matReqDt: 14
+        //     matReqUser: 15
+        //     dpsUser: 16
     </script>
     @include('layouts.table_jsControll', [
         'table_id' => 'table_dps',
@@ -219,12 +226,12 @@
         'double_click' => true,
         'show' => true,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [10, 11, 13],
-        'colTargetsAmount' => [10, 11],
-        'colTargetsQuantity' => [13],
-        'colTargetsNoWrap' => [4, 5, 15],
+        'colTargetsAlignRight' => [9, 10, 12],
+        'colTargetsAmount' => [9, 10],
+        'colTargetsQuantity' => [12],
+        'colTargetsNoWrap' => [4, 5, 14],
         'colTargetsDateHumans' => [],
-        'colTargetsDateHumansTwo' => [4, 15],
+        'colTargetsDateHumansTwo' => [4, 14],
         // 'noSort' => true,
     ])
     <script type="text/javascript" src="{{ asset('myApp/Utils/datatablesUtils.js') }}"></script>

@@ -46,32 +46,27 @@ var app = new Vue({
                 this.vDocuments = response.data; // Actualizar la lista de documentos
 
                 for (let element of this.vDocuments) {
+                    element.icons = '';
                     if (element.authorizationPriority && element.authorizationPriority > 0) {
-                        element.priority = '<i class="bx bxs-error-circle bx-xs" style="color:#fb060a"' + 
+                        element.icons += '<span data-order="2" class="order-value d-none">2</span>' +
+                                        '<i class="bx bxs-error-circle bx-xs" style="color:#fb060a"' + 
                                                 'data-toggle="tooltip" ' +
                                                 'data-placement="top" ' +
                                                 'title="Este documento tiene prioridad alta"></i>';
                     }
-                    else {
-                        element.priority = '';
+                    if (element.returned) {
+                        element.icons += '<span data-order="1" class="order-value d-none">1</span>' +
+                                        '<i class="bx bx-revision bx-xs" ' +
+                                                    'style="color:rgba(171, 160, 14, 0.9)" ' +
+                                                    'data-toggle="tooltip" ' +
+                                                    'data-placement="top" ' +
+                                                    'title="Este documento ha sido reenviado a autorización"></i>';
                     }
 
                     element.link = '<a href="' + this.oData.routeDpsView + '/' + 
                                     element.idYear + '/' + 
                                     element.idDoc + '">' + 
                                     element.dpsFolio + '</a>';
-
-                    // Agregar ícono de advertencia si el documento fue retornado
-                    if (element.returned) {
-                        element.spanReturned = '<i class="bx bx-revision bx-xs" ' +
-                                                    'style="color: #dbcd08e6" ' +
-                                                    'data-toggle="tooltip" ' +
-                                                    'data-placement="top" ' +
-                                                    'title="Este documento ha sido reenviado a autorización"></i>';
-                    }
-                    else {
-                        element.spanReturned = '';
-                    }
                 }
 
                 drawTableJson(
@@ -79,13 +74,12 @@ var app = new Vue({
                     this.vDocuments,
                     'idYear',
                     'idDoc',
-                    'priority',
+                    'icons',
                     'link',
                     'dt',
                     'provider',
                     'authText',
                     'userInTurn',
-                    'spanReturned',
                     'costCenters',
                     'subTotalCur',
                     'totalCur',

@@ -482,11 +482,16 @@ var documentApp = new Vue({
                     (this.oWebAuthorization.idAuthStatus == 2 || this.oWebAuthorization.idAuthStatus == 3) &&
                     ! this.oDocument.oDpsHeader.authorized;
         },
+        getRealIndex(oAuthRow) {
+            return this.oWebAuthorization.lSteps.findIndex(row => row === oAuthRow);
+        },
         onShowMoreComments(iIndex, bShow) {
-            this.oWebAuthorization.lSteps[iIndex].showFullComment = !bShow;
-            let sComment = this.oWebAuthorization.lSteps[iIndex].comments;
-            this.oWebAuthorization.lSteps[iIndex].comments = '...';
-            this.oWebAuthorization.lSteps[iIndex].comments = sComment;
+            if (this.oWebAuthorization.lSteps[iIndex]) {
+                this.oWebAuthorization.lSteps[iIndex].showFullComment = !bShow;
+                let sComment = this.oWebAuthorization.lSteps[iIndex].comments;
+                this.oWebAuthorization.lSteps[iIndex].comments = '...';
+                this.oWebAuthorization.lSteps[iIndex].comments = sComment;
+            }
         }
     },
 });

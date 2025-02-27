@@ -179,11 +179,11 @@
                             <th>Concepto</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>
-                            <th>Precio Ant.</th>
-                            <th>% Dif.</th>
-                            <th>Precio Un.</th>
+                            <th>Precio ant.</th>
+                            <th>% var.</th>
+                            <th>Precio unit.</th>
                             <th>Subtotal</th>
-                            <th>Impuesto cargado</th>
+                            <th>Impuesto trasladado</th>
                             <th>Impuesto retenido</th>
                             <th>Total</th>
                             <th>Moneda</th>
@@ -203,6 +203,16 @@
                                 <div class="row">
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
+                                            <label for="">Solicitante RM</label>
+                                            <input readonly type="text" class="form-control form-control-sm"
+                                                name="" id="" aria-describedby="helpId"
+                                                :value="oMaterialRequest.mrUser">
+                                            <small id="helpId" class="form-text text-muted">Este es el usuario de
+                                                siie que hizo la RM</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-group">
                                             <label for="">Folio RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
@@ -211,19 +221,9 @@
                                                 identificador de la RM</small>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Solicitante</label>
-                                            <input readonly type="text" class="form-control form-control-sm"
-                                                name="" id="" aria-describedby="helpId"
-                                                :value="oMaterialRequest.mrUser">
-                                            <small id="helpId" class="form-text text-muted">Este es el usuario de
-                                                siie que hizo la RM</small>
-                                        </div>
-                                    </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Fecha captura</label>
+                                            <label for="">Fecha captura RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="formatDateNormal(oMaterialRequest.mrDate)">
@@ -233,7 +233,7 @@
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Prioridad</label>
+                                            <label for="">Prioridad RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrPriority">
@@ -243,7 +243,7 @@
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Fecha requerida de entrega</label>
+                                            <label for="">Fecha requerida de entrega RM</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="formatDateNormal(oMaterialRequest.mrRequiredDate)">
@@ -314,17 +314,17 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header card-header-blue">Pasos de la autorización</div>
+                            <div class="card-header card-header-blue">Proceso de autorización</div>
                             <div class="card-body">
                                 <div v-if="oWebAuthorization" class="row">
                                     <form class="form-inline">
                                         <div class="form-group">
-                                            <label for="">Estatus autorización:</label>
+                                            <label for="">Estatus actual:</label>
                                             <input readonly :value="oDocument.oDpsHeader.authText" type="text"
                                                 class="form-control form-control-sm ml-1" 
                                                 style="border: black 2px solid; font-weight: bold;">
                                             <button type="button" class="btn btn-primary btn-sm ml-1" v-on:click="bShowHistory = !bShowHistory">
-                                                @{{ bShowHistory ? 'Ocultar' : 'Ver' }} historial
+                                                @{{ bShowHistory ? 'Ocultar' : 'Ver' }} anteriores
                                             </button>
                                         </div>
                                     </form>
@@ -337,9 +337,9 @@
                                                     <th>Niv.</th>
                                                     <th>Usuario</th>
                                                     <th>Estatus</th>
-                                                    <th>Fecha autoriz.</th>
-                                                    <th>Fecha rechazo</th>
-                                                    <th>Comentario</th>
+                                                    <th>Autorización</th>
+                                                    <th>Rechazo</th>
+                                                    <th>Comentarios</th>
                                                     <th>Vigente</th>
                                                 </tr>
                                             </thead>
@@ -358,7 +358,8 @@
                                                         <span v-else>
                                                             @{{ oAuthRow.comments }}
                                                         </span>
-                                                        <button href="#" v-if="oAuthRow.comments && oAuthRow.comments.length > 100" v-on:click="onShowMoreComments(index, oAuthRow.showFullComment)">
+                                                        <button class="btn btn-info btn-xs" v-if="oAuthRow.comments && oAuthRow.comments.length > 100" 
+                                                                @click="onShowMoreComments(getRealIndex(oAuthRow), oAuthRow.showFullComment)">
                                                             @{{ oAuthRow.showFullComment ? 'Ver menos' : 'Ver más' }}
                                                         </button>
                                                     </td>
@@ -367,7 +368,7 @@
                                             </tbody>
                                             <hr>
                                             <tbody>
-                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === false)">
+                                                <tr v-for="(oAuthRow, index) in oWebAuthorization.lSteps.filter(row => row.deleted === false)" :key="oAuthRow.id">
                                                     <td scope="row">@{{ oAuthRow.stepLevel }}</td>
                                                     <td><b>@{{ oAuthRow.userName }}</b></td>
                                                     <td><b>@{{ oAuthRow.statusName }}</b></td>
@@ -380,7 +381,8 @@
                                                         <span v-else>
                                                             @{{ oAuthRow.comments }}
                                                         </span>
-                                                        <button href="#" v-if="oAuthRow.comments && oAuthRow.comments.length > 100" v-on:click="onShowMoreComments(index, oAuthRow.showFullComment)">
+                                                        <button class="btn btn-info btn-xs" v-if="oAuthRow.comments && oAuthRow.comments.length > 100" 
+                                                                @click="onShowMoreComments(getRealIndex(oAuthRow), oAuthRow.showFullComment)">
                                                             @{{ oAuthRow.showFullComment ? 'Ver menos' : 'Ver más' }}
                                                         </button>
                                                     </td>
