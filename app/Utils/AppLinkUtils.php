@@ -20,8 +20,8 @@ class AppLinkUtils {
         ]);
 
         $body = '{
-                    "usr": "'.env('userAppLink').'",
-                    "usr_pswd": "'.env('userAppLinkPass').'",
+                    "usr": "'.env('userAppLink', 'swapst').'",
+                    "usr_pswd": "'.env('userAppLinkPass', '5w4p!*').'",
                     "reqUser": "'.$oUser->username.'"
                 }';
 

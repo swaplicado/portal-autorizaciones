@@ -35,6 +35,7 @@ class DpsCore
             'start_date' => $startDate,
             'end_date' => $endDate,
             'id_user' => $idUser,
+            'id_session_user' => $oSessionUser->external_id_n,
             'status_filter' => $statusFilter
         ];
 

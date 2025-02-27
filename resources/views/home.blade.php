@@ -21,12 +21,12 @@
                 <div class="row">
                   @if(\Auth::user()->hasPermissionByKeyCode('autorizador.dps'))
                     <div class="col-12 col-md-6">
-                      <a type="button" href="{{ route('dps.pending') }}" class="btn btn-primary mb-2">Autoriza OC pendientes</a>
+                      <a type="button" href="{{ route('dps.pending') }}" class="btn btn-primary mb-2">OC por autorizar</a>
                     </div>
                   @endif
                   @if(\Auth::user()->hasPermissionByKeyCode('autorizador.dps'))
                     <div class="col-12 col-md-6">
-                      <a type="button" href="{{ route('dps.index') }}" class="btn btn-primary">Consulta las OC</a>
+                      <a type="button" href="{{ route('dps.index') }}" class="btn btn-primary">Todas las OC</a>
                     </div>
                   @endif
                 </div>

@@ -323,6 +323,9 @@
                                             <input readonly :value="oDocument.oDpsHeader.authText" type="text"
                                                 class="form-control form-control-sm ml-1" 
                                                 style="border: black 2px solid; font-weight: bold;">
+                                            <button type="button" class="btn btn-primary btn-sm ml-1" v-on:click="bShowHistory = !bShowHistory">
+                                                @{{ bShowHistory ? 'Ocultar' : 'Ver' }} historial
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -340,15 +343,25 @@
                                                     <th>Vigente</th>
                                                 </tr>
                                             </thead>
-                                            <tbody v-if="oWebAuthorization.lSteps.filter(row => row.deleted === true).length > 0">
-                                                <tr v-for="oAuthRow in oWebAuthorization.lSteps.filter(row => row.deleted === true)"
+                                            <tbody v-if="bShowHistory && oWebAuthorization.lSteps.filter(row => row.deleted === true).length > 0">
+                                                <tr v-for="oAuthRow, index in oWebAuthorization.lSteps.filter(row => row.deleted === true)"
                                                     style="color: gray; font-style: italic;">
                                                     <td scope="row">@{{ oAuthRow.stepLevel }}</td>
                                                     <td>@{{ oAuthRow.userName }}</td>
                                                     <td>@{{ oAuthRow.statusName }}</td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' }}</td>
-                                                    <td class="long-text">@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td class="long-text">
+                                                        <span v-if="!oAuthRow.showFullComment">
+                                                            @{{ oAuthRow.comments ? (oAuthRow.comments.length > 100 ? (oAuthRow.comments.substring(0, 100) + '...') : oAuthRow.comments) : '(Sin comentarios)' }}
+                                                        </span>
+                                                        <span v-else>
+                                                            @{{ oAuthRow.comments }}
+                                                        </span>
+                                                        <button href="#" v-if="oAuthRow.comments && oAuthRow.comments.length > 100" v-on:click="onShowMoreComments(index, oAuthRow.showFullComment)">
+                                                            @{{ oAuthRow.showFullComment ? 'Ver menos' : 'Ver más' }}
+                                                        </button>
+                                                    </td>
                                                     <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
@@ -360,7 +373,17 @@
                                                     <td><b>@{{ oAuthRow.statusName }}</b></td>
                                                     <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible aún)' }}</td>
                                                     <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible aún)' }}</td>
-                                                    <td class="long-text">@{{ oAuthRow.comments ? oAuthRow.comments : '(Sin comentarios)' }}</td>
+                                                    <td class="long-text">
+                                                        <span v-if="!oAuthRow.showFullComment">
+                                                            @{{ oAuthRow.comments ? (oAuthRow.comments.length > 100 ? (oAuthRow.comments.substring(0, 100) + '...') : oAuthRow.comments) : '(Sin comentarios)' }}
+                                                        </span>
+                                                        <span v-else>
+                                                            @{{ oAuthRow.comments }}
+                                                        </span>
+                                                        <button href="#" v-if="oAuthRow.comments && oAuthRow.comments.length > 100" v-on:click="onShowMoreComments(index, oAuthRow.showFullComment)">
+                                                            @{{ oAuthRow.showFullComment ? 'Ver menos' : 'Ver más' }}
+                                                        </button>
+                                                    </td>
                                                     <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
@@ -387,7 +410,7 @@
                                         <div class="form-group">
                                             <label for="">Comentarios autorización o rechazo</label>
                                             <textarea v-model="sComments" class="form-control" name="" id="" rows="2" maxlength="1022"></textarea>
-                                            <small class="text-muted">Notas que verán los usuarios involucrados en el
+                                            <small class="text-muted">Texto que verán los usuarios involucrados en el
                                                 proceso de autorización.</small>
                                         </div>
                                     </div>

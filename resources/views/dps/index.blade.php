@@ -3,6 +3,75 @@
 @section('headJs')
     <link rel="stylesheet" href="{{ asset('css/mystyle/mystyle.css') }}">
     <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(function(reg) {
+                    console.log('Service Worker registrado!', reg);
+                })
+                .catch(function(error) {
+                    console.log('Error al registrar el Service Worker:', error);
+                });
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+            const base64 = (base64String + padding)
+                .replace(/-/g, '+')
+                .replace(/_/g, '/');
+
+            const rawData = atob(base64);
+            return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+        }
+
+        async function subscribeUser() {
+            const vapidPublicKey = "{{ env('VAPID_PUBLIC_KEY') }}";
+
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                try {
+                    const permission = await Notification.requestPermission();
+                    if (permission !== 'granted') {
+                        console.error('Permiso denegado para notificaciones');
+                        return;
+                    }
+                    console.log('Permiso concedido');
+
+                    console.log('Antes de obtener el Service Worker...');
+                    const registration = await navigator.serviceWorker.ready;
+                    console.log('Service Worker listo:', registration);
+
+                    const decodedPublicKey = urlBase64ToUint8Array(vapidPublicKey);
+
+                    const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: decodedPublicKey
+                    });
+
+                    console.log('Suscripción exitosa:', subscription);
+
+                    const response = await fetch('./save-subscription', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify(subscription)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error al guardar la suscripción: ${response.statusText}`);
+                    }
+
+                    alert('¡Te has suscrito a las notificaciones correctamente!');
+                } catch (error) {
+                    console.error('Error al suscribirse:', error.message);
+                    alert('Hubo un problema al suscribirse. Revisa la consola para más detalles.');
+                }
+            } else {
+                alert('Las notificaciones no son compatibles con tu navegador.');
+            }
+        }
+    </script>
+    <script>
         function GlobalData() {
             this.routeDps = <?php echo json_encode(route('dps.dps-range')); ?>;
             this.routeDpsView = <?php echo json_encode(route('dps.view')); ?>;
@@ -16,7 +85,12 @@
 @section('content')
     <div class="card" id="appDps">
         <div class="card-header">
-            Órdenes de compra (OC) <button class="btn" onclick="subscribeUser()" title="Suscribirse a notificaciones">
+            @if($statusFilter >= 0)
+                Todas las órdenes de compra (OC)
+            @else
+                Órdenes de compra (OC) por autorizar
+            @endif
+             <button class="btn" onclick="subscribeUser()" title="Suscribirse a notificaciones">
                                         <i class='bx bxs-bell-plus' style='color:#f5d807'></i>
                                     </button>
         </div>

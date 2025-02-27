@@ -44,7 +44,8 @@ var documentApp = new Vue({
         iCurrentIndex: 0,
         iNumFiles: 0,
         oWebAuthorization: new SWebAuthorization(),
-        sComments: ''
+        sComments: '',
+        bShowHistory: false,
     },
     mounted() {
         this.getDocument();
@@ -58,6 +59,9 @@ var documentApp = new Vue({
                     console.log(this.oDocument);
                     if (this.oDocument.oWebAuthorization) {
                         this.oWebAuthorization = this.oDocument.oWebAuthorization;
+                        for (let element of this.oWebAuthorization.lSteps) {
+                            element.showFullComment = false;
+                        }
                     }
                 })
                 .catch(error => {
@@ -477,6 +481,12 @@ var documentApp = new Vue({
             return this.isUserInTurn() && 
                     (this.oWebAuthorization.idAuthStatus == 2 || this.oWebAuthorization.idAuthStatus == 3) &&
                     ! this.oDocument.oDpsHeader.authorized;
+        },
+        onShowMoreComments(iIndex, bShow) {
+            this.oWebAuthorization.lSteps[iIndex].showFullComment = !bShow;
+            let sComment = this.oWebAuthorization.lSteps[iIndex].comments;
+            this.oWebAuthorization.lSteps[iIndex].comments = '...';
+            this.oWebAuthorization.lSteps[iIndex].comments = sComment;
         }
     },
 });

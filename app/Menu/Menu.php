@@ -18,8 +18,8 @@ class Menu
             $lMenus = [
                 (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio'],
                 // (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza RM'],
-                (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza OC pendientes'],
-                (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Consulta las OC']
+                (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'OC por autorizar'],
+                (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC']
             ];
         } else {
             $lPermissions = collect($oUser->permissionsByRol());
@@ -38,8 +38,8 @@ class Menu
                     //     $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza RM'];
                     //     break;
                     case 'autorizador.dps':
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza OC pendientes'];
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Consulta las OC'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'OC por autorizar'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC'];
                         break;
 
                     default:
