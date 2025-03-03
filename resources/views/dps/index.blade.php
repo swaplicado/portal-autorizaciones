@@ -77,6 +77,7 @@
             this.routeDpsView = <?php echo json_encode(route('dps.view')); ?>;
             this.bUser = <?php echo json_encode($bUser); ?>;
             this.statusFilter = <?php echo json_encode($statusFilter); ?>;
+            this.sessionUserName = <?php echo json_encode(\Auth::user()->username); ?>;
         }
         var oServerData = new GlobalData();
     </script>
@@ -115,12 +116,13 @@
                         <label for="status_filter">Estatus autorización: </label>
                         <select class="select2-class form-control-sm" name="status_filter" id="status_filter">
                             <option value="">TODOS</option>
-                            <option value="NA">NA</option>
+                            <!-- <option value="NA">NA</option> -->
+                            <option value="PENDIENTE PARA MÍ">PENDIENTE PARA MÍ</option>
                             <option value="PENDIENTE">PENDIENTE</option>
                             <option value="EN PROCESO">EN PROCESO</option>
                             <option value="AUTORIZADO">AUTORIZADO</option>
                             <option value="RECHAZADO">RECHAZADO</option>
-                            <option value="EN ENVÍO">EN ENVÍO</option>
+                            <!-- <option value="EN ENVÍO">EN ENVÍO</option> -->
                         </select>
                     </span>
                 @endif

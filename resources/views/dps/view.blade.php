@@ -341,13 +341,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <table class="table table-striped table-inverse table-responsive myTable" style="font-size: 0.7em;">
+                                        <table class="table table-striped table-inverse myTable" style="font-size: 0.7em; width: 100%;">
                                             <thead class="thead-inverse" style="height: 3rem">
                                                 <tr>
                                                     <th>Niv.</th>
-                                                    <th>Usuario</th>
-                                                    <th>Estatus</th>
-                                                    <th>Comentarios</th>
+                                                    <th style="width: 20%">Usuario</th>
+                                                    <th style="width: 20%">Estatus</th>
+                                                    <th style="width: 40%">Comentarios</th>
                                                     <th>Vigente</th>
                                                 </tr>
                                             </thead>

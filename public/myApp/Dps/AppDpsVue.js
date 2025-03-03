@@ -67,6 +67,10 @@ var app = new Vue({
                                     element.idYear + '/' + 
                                     element.idDoc + '">' + 
                                     element.dpsFolio + '</a>';
+
+                    if (this.oData.sessionUserName === element.userInTurn) {
+                        element.authText = 'PENDIENTE PARA MÍ'
+                    }
                 }
 
                 drawTableJson(
