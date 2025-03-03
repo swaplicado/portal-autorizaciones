@@ -1,5 +1,15 @@
 @extends('layouts.principal')
-
+@section('headStyles')
+<style>
+    .myTable th{
+        padding: 0.2rem;
+        text-align: center;
+        line-height: 1;
+        white-space: nowrap;
+        vertical-align: top !important;
+    }
+</style>
+@endsection
 @section('headJs')
     <link rel="stylesheet" href="{{ asset('css/mystyle/mystyle.css') }}">
     <script>
@@ -331,14 +341,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <table class="table table-striped table-inverse table-responsive" style="font-size: 0.7em;">
-                                            <thead class="thead-inverse">
+                                        <table class="table table-striped table-inverse table-responsive myTable" style="font-size: 0.7em;">
+                                            <thead class="thead-inverse" style="height: 3rem">
                                                 <tr>
                                                     <th>Niv.</th>
                                                     <th>Usuario</th>
                                                     <th>Estatus</th>
-                                                    <th>Autorización</th>
-                                                    <th>Rechazo</th>
                                                     <th>Comentarios</th>
                                                     <th>Vigente</th>
                                                 </tr>
@@ -346,12 +354,13 @@
                                             <tbody v-if="bShowHistory && oWebAuthorization.lSteps.filter(row => row.deleted === true).length > 0">
                                                 <tr v-for="oAuthRow, index in oWebAuthorization.lSteps.filter(row => row.deleted === true)"
                                                     style="color: gray; font-style: italic;">
-                                                    <td scope="row">@{{ oAuthRow.stepLevel }}</td>
-                                                    <td>@{{ oAuthRow.userName }}</td>
-                                                    <td>@{{ oAuthRow.statusName }}</td>
-                                                    <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible)' }}</td>
-                                                    <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' }}</td>
-                                                    <td class="long-text">
+                                                    <td scope="row" style="padding: 0.5rem; text-align: center;">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td style="padding: 0.5rem; text-align: center;">@{{ oAuthRow.userName }}</td>
+                                                    <td style="padding: 0.5rem; text-align: center;">
+                                                        @{{ oAuthRow.statusName }}
+                                                        <p>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : ( oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' ) }}</p>
+                                                    </td>
+                                                    <td class="long-text"  style="padding: 0.5rem; text-align: center;">
                                                         <span v-if="!oAuthRow.showFullComment">
                                                             @{{ oAuthRow.comments ? (oAuthRow.comments.length > 100 ? (oAuthRow.comments.substring(0, 100) + '...') : oAuthRow.comments) : '(Sin comentarios)' }}
                                                         </span>
@@ -363,18 +372,19 @@
                                                             @{{ oAuthRow.showFullComment ? 'Ver menos' : 'Ver más' }}
                                                         </button>
                                                     </td>
-                                                    <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
+                                                    <td style="padding: 0.5rem; text-align: center;">@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
                                             <hr>
                                             <tbody>
                                                 <tr v-for="(oAuthRow, index) in oWebAuthorization.lSteps.filter(row => row.deleted === false)" :key="oAuthRow.id">
-                                                    <td scope="row">@{{ oAuthRow.stepLevel }}</td>
-                                                    <td><b>@{{ oAuthRow.userName }}</b></td>
-                                                    <td><b>@{{ oAuthRow.statusName }}</b></td>
-                                                    <td>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : '(No disponible aún)' }}</td>
-                                                    <td>@{{ oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible aún)' }}</td>
-                                                    <td class="long-text">
+                                                    <td scope="row"  style="padding: 0.5rem;">@{{ oAuthRow.stepLevel }}</td>
+                                                    <td style="padding: 0.5rem; text-align: center;"><b>@{{ oAuthRow.userName }}</b></td>
+                                                    <td style="padding: 0.5rem; text-align: center;">
+                                                        <b>@{{ oAuthRow.statusName }}</b>
+                                                        <p><b>@{{ oAuthRow.authorizedAt ? oAuthRow.authorizedAt : ( oAuthRow.rejectedAt ? oAuthRow.rejectedAt : '(No disponible)' ) }}</b></p>
+                                                    </td>
+                                                    <td class="long-text" style="padding: 0.5rem; text-align: center;">
                                                         <span v-if="!oAuthRow.showFullComment">
                                                             @{{ oAuthRow.comments ? (oAuthRow.comments.length > 100 ? (oAuthRow.comments.substring(0, 100) + '...') : oAuthRow.comments) : '(Sin comentarios)' }}
                                                         </span>
@@ -385,8 +395,8 @@
                                                                 @click="onShowMoreComments(getRealIndex(oAuthRow), oAuthRow.showFullComment)">
                                                             @{{ oAuthRow.showFullComment ? 'Ver menos' : 'Ver más' }}
                                                         </button>
-                                                    </td>
-                                                    <td>@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
+                                                    </td style="padding: 0.5rem; text-align: center;">
+                                                    <td style="padding: 0.5rem; text-align: center;">@{{ oAuthRow.deleted === false ? 'Sí' : 'No' }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
