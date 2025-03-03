@@ -205,7 +205,7 @@
         //     dpsFolio: 3
         //     dt: 4
         //     provider: 5
-        //     authText: 6
+        //     authText: 6  // tener cuidado de cambiar el index en el filtro
         //     userInTurn: 7
         //     costCenters: 8
         //     subTotal: 9
