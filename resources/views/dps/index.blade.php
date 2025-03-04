@@ -118,7 +118,7 @@
                             <option value="">TODOS</option>
                             <!-- <option value="NA">NA</option> -->
                             <option value="PENDIENTE PARA MÍ">PENDIENTE PARA MÍ</option>
-                            <option value="PENDIENTE">PENDIENTE</option>
+                            <option value="PENDIENTE PARA OTROS">PENDIENTE PARA OTROS</option>
                             <option value="EN PROCESO">EN PROCESO</option>
                             <option value="AUTORIZADO">AUTORIZADO</option>
                             <option value="RECHAZADO">RECHAZADO</option>
