@@ -11,16 +11,51 @@
             </div>
             <div class="modal-body">
                 <div id="prices_list" v-if="oDocumentEty.lItemHistory">
-                    <div v-for="oItemH in oDocumentEty.lItemHistory" class="price-card">
-                        <div><strong>Clave:</strong> @{{ oItemH.conceptKey }}</div>
-                        <div><strong>Concepto:</strong> @{{ oItemH.concept }}</div>
-                        <div><strong>Precio:</strong> @{{ formatNumber(oItemH.currentPriceUnitaryCur, 2) }}</div>
-                        <div><strong>Moneda:</strong> @{{ oItemH.currencySymbol }}</div>
-                        <div><strong>% Variación:</strong> @{{ formatNumber(oItemH.percentage, 3) }}</div>
-                        <div><strong>Cantidad:</strong> @{{ formatNumber(oItemH.quantity, 2) }}</div>
-                        <div><strong>Unidad:</strong> @{{ oItemH.unitSymbol }}</div>
-                        <div><strong>Proveedor:</strong> @{{ oItemH.lastProvider }}</div>
-                        <div><strong>Fecha:</strong> @{{ formatDate(oItemH.lastPurchaseDate) }}</div>
+                    <div v-for="oItemH in oDocumentEty.lItemHistory" class="table-responsive">
+                        <table class="table table-bordered table-sm table-condensed">
+                            <tbody>
+                                <tr>
+                                    <th>Clave</th>
+                                    <td>@{{ oItemH.conceptKey }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <td>@{{ oItemH.concept }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Precio un. actual</th>
+                                    <td>@{{ formatNumber(oItemH.currentPriceUnitary, 2) + ' MXN' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Precio un. anterior</th>
+                                    <td>@{{ formatNumber(oItemH.priceUnitary, 2) + ' ' + oItemH.currencySymbol }}</td>
+                                </tr>
+                                <tr>
+                                    <th>% Variación</th>
+                                    <td>@{{ formatNumber(oItemH.percentage, 3) }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cantidad</th>
+                                    <td>@{{ formatNumber(oItemH.quantity, 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Unidad</th>
+                                    <td>@{{ oItemH.unitSymbol }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Proveedor</th>
+                                    <td>@{{ oItemH.lastProvider }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Factura</th>
+                                    <td>@{{ !! oItemH.numFact ? oItemH.numFact : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <td>@{{ formatDate(oItemH.lastPurchaseDate) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
