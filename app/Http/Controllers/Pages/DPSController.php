@@ -105,7 +105,14 @@ class DPSController extends Controller
             $sComments = $request->input('comments');
             $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-            CloudLogger::log('info', 'DPS autorizado [' . $idYear . ', ' . $idDoc . '] por ' . \Auth::user()->username . " [external_id_n: " . \Auth::user()->external_id_n . ']');
+            CloudLogger::log('info', sprintf(
+                "DPS autorizado [%d, %d] por %s [external_id_n: %s]%s",
+                $idYear,
+                $idDoc,
+                \Auth::user()->username,
+                \Auth::user()->external_id_n,
+                !empty($sComments) ? " Comentarios: {$sComments}" : ""
+            ));
             return response()->json($jResponse);
         }
         catch (\Throwable $th) {
@@ -134,7 +141,14 @@ class DPSController extends Controller
             }
             $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-            CloudLogger::log('info', 'DPS rechazado [' . $idYear . ', ' . $idDoc . '] por ' . \Auth::user()->username . " [external_id_n: " . \Auth::user()->external_id_n . ']');
+            CloudLogger::log('info', sprintf(
+                "DPS rechazado [%d, %d] por %s [external_id_n: %s]%s",
+                $idYear,
+                $idDoc,
+                \Auth::user()->username,
+                \Auth::user()->external_id_n,
+                !empty($sComments) ? " Comentarios: {$sComments}" : ""
+            ));
             return response()->json($oResponse);
         }
         catch (\Throwable $th) {
