@@ -22,6 +22,7 @@ class DPSController extends Controller
      */
     public function index(Request $request)
     {
+        CloudLogger::log('info', 'DPSController@index '.\Auth::user()->username);
         return view('dps.index')->with('bUser', 0)
                                 ->with('statusFilter', 0);
     }
