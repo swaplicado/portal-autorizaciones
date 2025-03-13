@@ -46,7 +46,7 @@ class DPSController extends Controller
      */
     public function getDocumentsInRange(Request $request)
     {
-        try {
+        // try {
             $firstDay = $request->input('firstDay');
             $lastDay = $request->input('lastDay');
             $bUser = $request->input('bUser');
@@ -59,13 +59,13 @@ class DPSController extends Controller
             $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
 
             return response()->json($lDocs);
-        }
-        catch (\Throwable $th) {
-            CloudLogger::log('error', $th->getMessage());
-            Log::error($th);
+        // }
+        // catch (\Throwable $th) {
+        //     CloudLogger::log('error', $th->getMessage());
+        //     Log::error($th);
 
-            return response()->json(['error' => $th->getMessage()], 500);
-        }
+        //     return response()->json(['error' => $th->getMessage()], 500);
+        // }
     }
 
     /**
@@ -101,26 +101,26 @@ class DPSController extends Controller
      */
     public function authorizeDps(Request $request, $idYear, $idDoc)
     {
-        try {
+        // try {
             $sComments = $request->input('comments');
             $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-            CloudLogger::log('info', sprintf(
-                "DPS autorizado [%d, %d] por %s [external_id_n: %s]%s",
-                $idYear,
-                $idDoc,
-                \Auth::user()->username,
-                \Auth::user()->external_id_n,
-                !empty($sComments) ? " Comentarios: {$sComments}" : ""
-            ));
+            // CloudLogger::log('info', sprintf(
+            //     "DPS autorizado [%d, %d] por %s [external_id_n: %s]%s",
+            //     $idYear,
+            //     $idDoc,
+            //     \Auth::user()->username,
+            //     \Auth::user()->external_id_n,
+            //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
+            // ));
             return response()->json($jResponse);
-        }
-        catch (\Throwable $th) {
-            CloudLogger::log('error', $th->getMessage());
-            Log::error($th);
+        // }
+        // catch (\Throwable $th) {
+        //     CloudLogger::log('error', $th->getMessage());
+        //     Log::error($th);
 
-            return response()->json(['error' => $th->getMessage()], 500);
-        }
+        //     return response()->json(['error' => $th->getMessage()], 500);
+        // }
     }
 
     /**
@@ -133,7 +133,7 @@ class DPSController extends Controller
      */
     public function rejectDps(Request $request, $idYear, $idDoc)
     {
-        try {
+        // try {
             $sComments = $request->input('comments');
             // Validar sComments, son obligatorios
             if (empty($sComments)) {
@@ -141,22 +141,22 @@ class DPSController extends Controller
             }
             $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-            CloudLogger::log('info', sprintf(
-                "DPS rechazado [%d, %d] por %s [external_id_n: %s]%s",
-                $idYear,
-                $idDoc,
-                \Auth::user()->username,
-                \Auth::user()->external_id_n,
-                !empty($sComments) ? " Comentarios: {$sComments}" : ""
-            ));
+            // CloudLogger::log('info', sprintf(
+            //     "DPS rechazado [%d, %d] por %s [external_id_n: %s]%s",
+            //     $idYear,
+            //     $idDoc,
+            //     \Auth::user()->username,
+            //     \Auth::user()->external_id_n,
+            //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
+            // ));
             return response()->json($oResponse);
-        }
-        catch (\Throwable $th) {
-            CloudLogger::log('error', $th->getMessage());
-            Log::error($th);
+        // }
+        // catch (\Throwable $th) {
+        //     CloudLogger::log('error', $th->getMessage());
+        //     Log::error($th);
 
-            return response()->json(['error' => $th->getMessage()], 500);
-        }
+        //     return response()->json(['error' => $th->getMessage()], 500);
+        // }
     }
 
     /**
