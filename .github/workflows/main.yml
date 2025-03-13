@@ -26,5 +26,5 @@ jobs:
         sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST << 'EOF'
         cd aeth.siieapp.com/portal-autorizaciones
         git pull origin production-hostgator
-        php artisan migrate
+        php artisan migrate --force
         EOF
