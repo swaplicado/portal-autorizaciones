@@ -11,6 +11,11 @@ class CloudLogger
     public static function log(string $severity, string $message): void
     {
         try {
+            $environment = env('APP_ENV', 'production');
+            if ($environment !== 'production') {
+                return;
+            }
+
             // Realizar petición https a cloud function de google:
             $timestamp = date('Y-m-d H:i:s');
             // minúsculas:

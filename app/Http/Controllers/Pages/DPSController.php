@@ -22,7 +22,6 @@ class DPSController extends Controller
      */
     public function index(Request $request)
     {
-        CloudLogger::log('info', 'DPSController@index '.\Auth::user()->username);
         return view('dps.index')->with('bUser', 0)
                                 ->with('statusFilter', 0);
     }
@@ -106,6 +105,7 @@ class DPSController extends Controller
             $sComments = $request->input('comments');
             $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
 
+            CloudLogger::log('info', 'DPS autorizado [' . $idYear . ', ' . $idDoc . '] por ' . \Auth::user()->username . " [external_id_n: " . \Auth::user()->external_id_n . ']');
             return response()->json($jResponse);
         }
         catch (\Throwable $th) {
@@ -134,6 +134,7 @@ class DPSController extends Controller
             }
             $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
 
+            CloudLogger::log('info', 'DPS rechazado [' . $idYear . ', ' . $idDoc . '] por ' . \Auth::user()->username . " [external_id_n: " . \Auth::user()->external_id_n . ']');
             return response()->json($oResponse);
         }
         catch (\Throwable $th) {
