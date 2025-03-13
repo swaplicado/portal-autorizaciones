@@ -6,7 +6,7 @@ use Log;
 use App\Dps\DpsCore;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Notifications\Core;
+use App\Logger\CloudLogger;
 
 /**
  * Class DPSController
@@ -46,17 +46,26 @@ class DPSController extends Controller
      */
     public function getDocumentsInRange(Request $request)
     {
-        $firstDay = $request->input('firstDay');
-        $lastDay = $request->input('lastDay');
-        $bUser = $request->input('bUser');
-        $statusFilter = $request->input('statusFilter');
-        if ($bUser > 0) {
-            $idUser = \Auth::user()->external_id_n;
-        } else {
-            $idUser = 0;
+        try {
+            $firstDay = $request->input('firstDay');
+            $lastDay = $request->input('lastDay');
+            $bUser = $request->input('bUser');
+            $statusFilter = $request->input('statusFilter');
+            if ($bUser > 0) {
+                $idUser = \Auth::user()->external_id_n;
+            } else {
+                $idUser = 0;
+            }
+            $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
+
+            return response()->json($lDocs);
         }
-        $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
-        return response()->json($lDocs);
+        catch (\Throwable $th) {
+            CloudLogger::log('error', $th->getMessage());
+            Log::error($th);
+
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     /**
@@ -69,8 +78,17 @@ class DPSController extends Controller
      */
     public function getDocument(Request $request, $idYear, $idDoc)
     {
-        $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user());
-        return response()->json($lDocs);
+        try {
+            $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user());
+
+            return response()->json($lDocs);
+        }
+        catch (\Throwable $th) {
+            CloudLogger::log('error', $th->getMessage());
+            Log::error($th);
+
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     /**
@@ -83,9 +101,18 @@ class DPSController extends Controller
      */
     public function authorizeDps(Request $request, $idYear, $idDoc)
     {
-        $sComments = $request->input('comments');
-        $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
-        return response()->json($jResponse);
+        try {
+            $sComments = $request->input('comments');
+            $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
+
+            return response()->json($jResponse);
+        }
+        catch (\Throwable $th) {
+            CloudLogger::log('error', $th->getMessage());
+            Log::error($th);
+
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     /**
@@ -98,13 +125,22 @@ class DPSController extends Controller
      */
     public function rejectDps(Request $request, $idYear, $idDoc)
     {
-        $sComments = $request->input('comments');
-        // Validar sComments, son obligatorios
-        if (empty($sComments)) {
-            return response()->json(['error' => 'Los comentarios son obligatorios'], 400);
+        try {
+            $sComments = $request->input('comments');
+            // Validar sComments, son obligatorios
+            if (empty($sComments)) {
+                return response()->json(['error' => 'Los comentarios son obligatorios'], 400);
+            }
+            $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
+
+            return response()->json($oResponse);
         }
-        $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
-        return response()->json($oResponse);
+        catch (\Throwable $th) {
+            CloudLogger::log('error', $th->getMessage());
+            Log::error($th);
+
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     /**
