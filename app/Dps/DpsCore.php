@@ -4,6 +4,7 @@ namespace App\Dps;
 use Exception;
 use App\Utils\AppLinkUtils;
 use Log;
+use App\Logger\CloudLogger;
 
 /**
  * Clase DpsCore
@@ -41,10 +42,11 @@ class DpsCore
 
         // Hacer la petición al servidor externo
         $rData = AppLinkUtils::requestAppLink($url, $method, $oSessionUser, $body, $requireAuth, $parameters);
-        Log::info(json_encode($rData));
 
         // Verificar si la respuesta es válida
         if ($rData->code != 200 && !$rData->data) {
+            CloudLogger::log('error', json_encode($rData));
+            Log::error($rData);
             throw new Exception("Error al obtener los documentos del servidor externo", 1);
         }
 
@@ -76,6 +78,8 @@ class DpsCore
 
         // Verificar si la respuesta es válida
         if (!$rData->data) {
+            CloudLogger::log('error', json_encode($rData));
+            Log::error($rData);
             throw new Exception("Error al obtener el documento del servidor externo", 1);
         }
 

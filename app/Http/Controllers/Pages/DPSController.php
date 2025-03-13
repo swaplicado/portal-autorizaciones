@@ -46,26 +46,19 @@ class DPSController extends Controller
      */
     public function getDocumentsInRange(Request $request)
     {
-        // try {
-            $firstDay = $request->input('firstDay');
-            $lastDay = $request->input('lastDay');
-            $bUser = $request->input('bUser');
-            $statusFilter = $request->input('statusFilter');
-            if ($bUser > 0) {
-                $idUser = \Auth::user()->external_id_n;
-            } else {
-                $idUser = 0;
-            }
-            $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
+        
+        $firstDay = $request->input('firstDay');
+        $lastDay = $request->input('lastDay');
+        $bUser = $request->input('bUser');
+        $statusFilter = $request->input('statusFilter');
+        if ($bUser > 0) {
+            $idUser = \Auth::user()->external_id_n;
+        } else {
+            $idUser = 0;
+        }
+        $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
 
-            return response()->json($lDocs);
-        // }
-        // catch (\Throwable $th) {
-        //     CloudLogger::log('error', $th->getMessage());
-        //     Log::error($th);
-
-        //     return response()->json(['error' => $th->getMessage()], 500);
-        // }
+        return response()->json($lDocs);
     }
 
     /**
@@ -78,17 +71,9 @@ class DPSController extends Controller
      */
     public function getDocument(Request $request, $idYear, $idDoc)
     {
-        try {
-            $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user());
+        $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user());
 
-            return response()->json($lDocs);
-        }
-        catch (\Throwable $th) {
-            CloudLogger::log('error', $th->getMessage());
-            Log::error($th);
-
-            return response()->json(['error' => $th->getMessage()], 500);
-        }
+        return response()->json($lDocs);
     }
 
     /**
@@ -101,26 +86,19 @@ class DPSController extends Controller
      */
     public function authorizeDps(Request $request, $idYear, $idDoc)
     {
-        // try {
-            $sComments = $request->input('comments');
-            $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
+        
+        $sComments = $request->input('comments');
+        $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-            // CloudLogger::log('info', sprintf(
-            //     "DPS autorizado [%d, %d] por %s [external_id_n: %s]%s",
-            //     $idYear,
-            //     $idDoc,
-            //     \Auth::user()->username,
-            //     \Auth::user()->external_id_n,
-            //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
-            // ));
-            return response()->json($jResponse);
-        // }
-        // catch (\Throwable $th) {
-        //     CloudLogger::log('error', $th->getMessage());
-        //     Log::error($th);
-
-        //     return response()->json(['error' => $th->getMessage()], 500);
-        // }
+        // CloudLogger::log('info', sprintf(
+        //     "DPS autorizado [%d, %d] por %s [external_id_n: %s]%s",
+        //     $idYear,
+        //     $idDoc,
+        //     \Auth::user()->username,
+        //     \Auth::user()->external_id_n,
+        //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
+        // ));
+        return response()->json($jResponse);
     }
 
     /**
@@ -133,30 +111,22 @@ class DPSController extends Controller
      */
     public function rejectDps(Request $request, $idYear, $idDoc)
     {
-        // try {
-            $sComments = $request->input('comments');
-            // Validar sComments, son obligatorios
-            if (empty($sComments)) {
-                return response()->json(['error' => 'Los comentarios son obligatorios'], 400);
-            }
-            $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
+        $sComments = $request->input('comments');
+        // Validar sComments, son obligatorios
+        if (empty($sComments)) {
+            return response()->json(['error' => 'Los comentarios son obligatorios'], 400);
+        }
+        $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-            // CloudLogger::log('info', sprintf(
-            //     "DPS rechazado [%d, %d] por %s [external_id_n: %s]%s",
-            //     $idYear,
-            //     $idDoc,
-            //     \Auth::user()->username,
-            //     \Auth::user()->external_id_n,
-            //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
-            // ));
-            return response()->json($oResponse);
-        // }
-        // catch (\Throwable $th) {
-        //     CloudLogger::log('error', $th->getMessage());
-        //     Log::error($th);
-
-        //     return response()->json(['error' => $th->getMessage()], 500);
-        // }
+        // CloudLogger::log('info', sprintf(
+        //     "DPS rechazado [%d, %d] por %s [external_id_n: %s]%s",
+        //     $idYear,
+        //     $idDoc,
+        //     \Auth::user()->username,
+        //     \Auth::user()->external_id_n,
+        //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
+        // ));
+        return response()->json($oResponse);
     }
 
     /**
