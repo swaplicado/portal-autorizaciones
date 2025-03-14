@@ -8,6 +8,31 @@ use Log;
 
 class PushNotificationController extends Controller
 {
+
+    public function sendGenericNotification(Request $request)
+    {
+        // Validar que idUser y folio estén presentes
+        $request->validate([
+            'idUser' => 'required',
+            'folio' => 'required',
+        ]);
+
+        $idUser = $request->idUser;
+        $folio = $request->folio;
+
+        // Crear title y body con mensaje genérico
+        $title = "Notificación de sistema";
+        $body = "Estimado usuario, su folio " . $folio . " ha sido procesado.";
+
+        // Inicializar otros parámetros
+        $oData = new \stdClass();
+        $sSound = false;
+        $iBadge = 0;
+
+        // Llamar a la función sendPushNotification
+        return $this->sendPushNotification($title, $body, null, [$idUser], $oData, $sSound, $iBadge);
+    }
+    
     public function sendNotification(Request $request)
     {
         // Validar que titles y cuerpo esten presentes
