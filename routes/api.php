@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PushNotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RequisitionsController;
@@ -33,3 +34,5 @@ Route::middleware('auth:api')->group(function () {
     Route::post('dps/authorize-dps', [DPSApiController::class, 'authorizeDps']);
     Route::post('dps/reject-dps', [DPSApiController::class, 'rejectDps']);
 });
+
+Route::post('send-push-notification', [PushNotificationController::class, 'sendNotification']);

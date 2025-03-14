@@ -33,6 +33,7 @@ class User extends Authenticatable
         'rol_id',
         'provider_id',
         'remember_token',
+        'expo_token',
         'is_active',
         'is_deleted',
         'created_by',

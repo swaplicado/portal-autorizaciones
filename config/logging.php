@@ -35,6 +35,11 @@ return [
     */
 
     'channels' => [
+        'cloud' => [
+            'driver' => 'custom',
+            'via' => App\Logging\GoogleCloudLogger::class,
+            'level' => 'info',
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

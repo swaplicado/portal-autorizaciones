@@ -21,42 +21,34 @@ class CloudLogger
             // minúsculas:
             $sSeverity = strtolower($severity);
             $logData = [
-                'message' => $message,
                 'severity' => $sSeverity,
                 'timestamp' => $timestamp,
                 'platform' => 'PHP'
             ];
-            $loggerRoute = env('CLOUD_LOGGER_URL', '');
-            if (empty($loggerRoute)) {
-                switch ($sSeverity) {
-                    case 'error':
-                        Log::error($message);
-                        break;
-                    case 'warning':
-                        Log::warning($message);
-                        break;
-                    default:
-                        Log::info($message);
-                        break;
-                }
-
-                throw new \Exception('CLOUD_LOGGER_URL not found in .env file');
+            
+            // validar si hay una sesión activa para obtener el usuario, si no continuar
+            if (\Auth::check()) {
+                $logData['username'] = \Auth::user()->username;
+                $logData['external_id'] = \Auth::user()->external_id_n;
             }
-    
-            $ch = curl_init($loggerRoute);
-    
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($logData));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, false); // No espera la respuesta
-            curl_setopt($ch, CURLOPT_TIMEOUT, 1); // Cierra la conexión rápido
-            curl_setopt($ch, CURLOPT_HEADER, false);
-    
-            curl_exec($ch);
-            curl_close($ch);
+
+            switch ($sSeverity) {
+                case 'error':
+                    Log::error($message);
+                    Log::channel('cloud')->error($message, $logData);
+                    break;
+                case 'warning':
+                    Log::warning($message);
+                    Log::channel('cloud')->warning($message, $logData);
+                    break;
+                default:
+                    Log::info($message);
+                    Log::channel('cloud')->info($message, $logData);
+                    break;
+            }
         }
         catch (\Throwable $th) {
-            Log::error($th->getMessage());
+            Log::error($th);
         }
     }
 }
