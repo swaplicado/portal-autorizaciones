@@ -37,3 +37,4 @@ Route::middleware('auth:api')->group(function () {
 
 Route::post('send-push-notification', [PushNotificationController::class, 'sendNotification']);
 Route::post('send-push-notification-u', [PushNotificationController::class, 'sendGenericNotification']);
+Route::post('send-push-notification-external', [PushNotificationController::class, 'sendExternalGenericNotification']);
