@@ -22,7 +22,7 @@ class DPSController extends Controller
      */
     public function index(Request $request)
     {
-        // Log::channel('cloud')->warning("[prueba portal local] Este es un mensaje de advertencia.");
+        CloudLogger::log('warning', 'Este es un mensaje de advertencia de prueba.');
         return view('dps.index')->with('bUser', 0)
                                 ->with('statusFilter', 0);
     }

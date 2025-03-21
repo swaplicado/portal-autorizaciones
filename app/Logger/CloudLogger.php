@@ -8,6 +8,14 @@ use Log;
 
 class CloudLogger
 {
+
+    /**
+     * Crea el log de un mensaje de manera local y en la nube a través de google logging.
+     *
+     * @param string $severity
+     * @param string $message
+     * @return void
+     */
     public static function log(string $severity, string $message): void
     {
         try {
