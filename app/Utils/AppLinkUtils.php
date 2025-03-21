@@ -1,7 +1,7 @@
 <?php namespace App\Utils;
 
 use GuzzleHttp\Client;
-use Carbon\Carbon;
+use App\Logger\CloudLogger;
 
 class AppLinkUtils {
     public static function AppLinkLogin($oUser){
@@ -30,6 +30,7 @@ class AppLinkUtils {
                 'body' => $body
             ]);
         } catch (\Throwable $th) {
+            CloudLogger::log('error', 'Error al intentar iniciar sesión en AppLink: ' . $th->getMessage());
             return null;
         }
 

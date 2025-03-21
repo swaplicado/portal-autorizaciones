@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Pages;
 
-use Log;
 use App\Dps\DpsCore;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -22,7 +21,6 @@ class DPSController extends Controller
      */
     public function index(Request $request)
     {
-        CloudLogger::log('warning', 'Este es un mensaje de advertencia de prueba.');
         return view('dps.index')->with('bUser', 0)
                                 ->with('statusFilter', 0);
     }
@@ -47,16 +45,17 @@ class DPSController extends Controller
      */
     public function getDocumentsInRange(Request $request)
     {
-        
         $firstDay = $request->input('firstDay');
         $lastDay = $request->input('lastDay');
         $bUser = $request->input('bUser');
         $statusFilter = $request->input('statusFilter');
+
         if ($bUser > 0) {
             $idUser = \Auth::user()->external_id_n;
         } else {
             $idUser = 0;
         }
+
         $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
 
         return response()->json($lDocs);
@@ -91,14 +90,6 @@ class DPSController extends Controller
         $sComments = $request->input('comments');
         $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-        // CloudLogger::log('info', sprintf(
-        //     "DPS autorizado [%d, %d] por %s [external_id_n: %s]%s",
-        //     $idYear,
-        //     $idDoc,
-        //     \Auth::user()->username,
-        //     \Auth::user()->external_id_n,
-        //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
-        // ));
         return response()->json($jResponse);
     }
 
@@ -119,14 +110,6 @@ class DPSController extends Controller
         }
         $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
 
-        // CloudLogger::log('info', sprintf(
-        //     "DPS rechazado [%d, %d] por %s [external_id_n: %s]%s",
-        //     $idYear,
-        //     $idDoc,
-        //     \Auth::user()->username,
-        //     \Auth::user()->external_id_n,
-        //     !empty($sComments) ? " Comentarios: {$sComments}" : ""
-        // ));
         return response()->json($oResponse);
     }
 

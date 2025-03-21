@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Log;
+use App\Logger\CloudLogger;
 
 class PushNotificationController extends Controller
 {
@@ -125,6 +125,7 @@ class PushNotificationController extends Controller
         //     return response()->json(['error' => 'Title and body are required.'], 400);
         // }
         if (empty($externalIds) && empty($userIds)) {
+            CloudLogger::log('error', 'User IDs or external IDs are required. Al enviar notificación push');
             return response()->json(['error' => 'User IDs or external IDs are required.'], 400);
         }
 
@@ -134,20 +135,19 @@ class PushNotificationController extends Controller
             $users = \App\Models\User::whereIn('id', $userIds)
                     ->whereNotNull('expo_token')
                     ->get();
-            Log::info('sendPushNotification, users: ' . json_encode($users));
             $lUsers = array_merge($lUsers, $users->toArray());
         }
         if (!empty($externalIds)) {
             $externalUsers = \App\Models\User::whereIn('external_id_n', $externalIds)
                                 ->whereNotNull('expo_token')
                                 ->get();
-            Log::info('sendPushNotification, externalUsers: ' . json_encode($externalUsers));
             $lUsers = array_merge($lUsers, $externalUsers->toArray());
         }
 
         // Eliminar usuarios repetidos en array:
         $lUsers = array_unique($lUsers, SORT_REGULAR);
         if (empty($lUsers)) {
+            CloudLogger::log('error', 'Usuarios no encontrados en la BD para la notificación push.');
             return response()->json(['error' => 'Usuarios no encontrados para la notificación.'], 404);
         }
 
@@ -176,7 +176,7 @@ class PushNotificationController extends Controller
         foreach ($lUsers as $key => $oUser) {
             $ch = curl_init($url);
             $aData['to'] = [$oUser['expo_token']];
-            Log::info('sendPushNotification, data: ' . json_encode($aData));
+            CloudLogger::log('info', 'sendPushNotification, data: ' . json_encode($aData));
 
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($aData));
@@ -199,9 +199,9 @@ class PushNotificationController extends Controller
         foreach ($multiCurl as $ch) {
             $response = curl_multi_getcontent($ch);
             if (curl_errno($ch)) {
-                Log::error('Curl error: ' . curl_error($ch));
+                CloudLogger::log('error', 'Curl error: ' . curl_error($ch));
             } else {
-                Log::info('sendPushNotification, response: ' . $response);
+                CloudLogger::log('info', 'sendPushNotification, response: ' . json_encode($response));
             }
             curl_multi_remove_handle($mh, $ch);
             curl_close($ch);

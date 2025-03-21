@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Logger\CloudLogger;
 use Illuminate\Http\Request;
 use App\Notifications\Core;
-use Log;
 
 class NotificationsController extends Controller
 {
@@ -21,7 +21,7 @@ class NotificationsController extends Controller
 
         // Verificar si el idUser está presente
         if (! $idUser) {
-            Log::error('No se especificaron usuarios a los cuales enviar la notificación.');
+            CloudLogger::log('error', 'No se especificaron usuarios a los cuales enviar la notificación.');
             return response()->json([
                 'message' => 'No se especificaron usuarios a los cuales enviar la notificación.'
             ], 400);
@@ -39,6 +39,7 @@ class NotificationsController extends Controller
 
         // Verificar el resultado y responder en consecuencia
         if ($result['status'] === 'error') {
+            CloudLogger::log('error', json_encode($result));
             return response()->json(['message' => $result['message']], $result['code']);
         }
 
@@ -49,7 +50,7 @@ class NotificationsController extends Controller
         $idUser = $request->get('idUser');
 
         if (! $idUser) {
-            Log::error('No se especificaron usuarios a los cuales enviar la notificación.');
+            CloudLogger::log('error', 'No se especificaron usuarios a los cuales enviar la notificación.');
             return response()->json([
                 'message' => 'No se especificaron usuarios a los cuales enviar la notificación.'
             ], 400);
@@ -61,6 +62,7 @@ class NotificationsController extends Controller
         $result = Core::notifyToExternalUsersAboutOC($toUsers, $sFolio);
 
         if ($result['status'] === 'error') {
+            CloudLogger::log('error', json_encode($result));
             return response()->json(['message' => $result['message']], $result['code']);
         }
 

@@ -5,6 +5,7 @@ use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 use App\Models\PushSubscription;
 use App\Models\User;
+use App\Logger\CloudLogger;
 
 class Core {
 
@@ -18,7 +19,7 @@ class Core {
     {
         // Verificar si el array de usuarios está vacío
         if (empty($toUsers)) {
-            Log::error('No se especificaron usuarios a los que enviar la notificación.');
+            CloudLogger::log('error', 'No se especificaron usuarios a los que enviar la notificación.');
 
             return [
                 'status' => 'error',
@@ -42,7 +43,7 @@ class Core {
                                             ->get();
 
         if ($subscriptions->isEmpty()) {
-            Log::error('No se encontraron suscripciones para los usuarios especificados. ' . (implode(", ", $toUsers)));
+            CloudLogger::log('error', 'No se encontraron suscripciones para los usuarios especificados. ' . (implode(", ", $toUsers)));
 
             return [
                 'status' => 'error',
@@ -69,7 +70,7 @@ class Core {
                     'body' => $message,
                 ]);
                 
-                Log::info('Enviando notificación a ' . $sub->user_id . ' ... ' . $notificationTitle);
+                CloudLogger::log('info', 'Enviando notificación a ' . $sub->user_id . ' ... ' . $notificationTitle);
 
                 $webPush->sendOneNotification($subscription, $payload);
             }
@@ -77,7 +78,7 @@ class Core {
             return ['status' => 'success'];
         }
         catch (\Throwable $th) {
-            Log::error($th);
+            CloudLogger::log('error', 'Error al enviar notificación a los usuarios especificados. ' . $th->getMessage());
 
             return [
                 'status' => 'error',
@@ -96,7 +97,7 @@ class Core {
             return self::sendNotificationToUsers($aUsers, $message, $title);
 
         } catch (\Throwable $th) {
-            Log::error($th);
+            CloudLogger::log('error', 'Error al enviar notificación a los usuarios externos. ' . $th->getMessage());
 
             return [
                 'status' => 'error',

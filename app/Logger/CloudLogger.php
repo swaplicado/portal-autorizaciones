@@ -2,21 +2,19 @@
 
 namespace App\Logger;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Log;
 
 class CloudLogger
 {
 
     /**
-     * Crea el log de un mensaje de manera local y en la nube a través de google logging.
+     * Crea un log de manera local y otro en la nube a través de google logging.
      *
      * @param string $severity
-     * @param string $message
+     * @param string|object|array $oMessage
      * @return void
      */
-    public static function log(string $severity, string $message): void
+    public static function log(string $severity, string $oMessage): void
     {
         try {
             $environment = env('APP_ENV', 'production');
@@ -40,18 +38,25 @@ class CloudLogger
                 $logData['external_id'] = \Auth::user()->external_id_n;
             }
 
+            $sMessage = '';
+            if (is_string($oMessage)) {
+                $sMessage = $oMessage;
+            } else {
+                $sMessage = json_encode($oMessage);
+            }
+
             switch ($sSeverity) {
                 case 'error':
-                    Log::error($message);
-                    Log::channel('cloud')->error($message, $logData);
+                    Log::error($oMessage);
+                    Log::channel('cloud')->error($sMessage, $logData);
                     break;
                 case 'warning':
-                    Log::warning($message);
-                    Log::channel('cloud')->warning($message, $logData);
+                    Log::warning($oMessage);
+                    Log::channel('cloud')->warning($sMessage, $logData);
                     break;
                 default:
-                    Log::info($message);
-                    Log::channel('cloud')->info($message, $logData);
+                    Log::info($oMessage);
+                    Log::channel('cloud')->info($sMessage, $logData);
                     break;
             }
         }
