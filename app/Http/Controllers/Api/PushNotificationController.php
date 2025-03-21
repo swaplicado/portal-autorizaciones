@@ -73,6 +73,10 @@ class PushNotificationController extends Controller
                 $title = "Tienes " . $counter . " OCs por autorizar";
                 $body = "¡Hola! Tienes " . $counter . " OCs por autorizar.";
                 $iBadge = $counter;
+                if ($counter == 0) {
+                    CloudLogger::log('info', 'No se enviaron notificaciones, badge: 0, en pendientes. ' . json_encode($request->all()));
+                    return response()->json(['message' => 'No se enviaron notificaciones, badge: 0, en pendientes.'], 200);
+                }
                 break;
             case '5':
                 $counter = $request->counter;
