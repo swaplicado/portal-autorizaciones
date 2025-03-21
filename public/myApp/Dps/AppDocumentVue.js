@@ -46,6 +46,7 @@ var documentApp = new Vue({
         oWebAuthorization: new SWebAuthorization(),
         sComments: '',
         bShowHistory: false,
+        bShowRm: false,
     },
     mounted() {
         this.getDocument();
@@ -194,6 +195,7 @@ var documentApp = new Vue({
                 }
             }
             this.oMaterialRequest = this.oDocumentEty.oMaterialRequest;
+            this.bShowRm = this.oMaterialRequest !== null && this.oMaterialRequest !== undefined && this.oMaterialRequest.idMaterialRequest > 0;
         },
         onShowHistory(idYear, idDoc, idEty) {
             // Obtener objeto de partida de this.oDocument.lEtys

@@ -205,7 +205,7 @@ class PushNotificationController extends Controller
             if (curl_errno($ch)) {
                 CloudLogger::log('error', 'Curl error: ' . curl_error($ch));
             } else {
-                CloudLogger::log('info', 'sendPushNotification, response: ' . json_encode($response));
+                CloudLogger::log('info', 'sendPushNotification, response: ' . json_encode(json_decode($response, true)));
             }
             curl_multi_remove_handle($mh, $ch);
             curl_close($ch);
@@ -213,6 +213,6 @@ class PushNotificationController extends Controller
 
         curl_multi_close($mh);
 
-        return response()->json(['success' => 'Notificación enviada correctamente.'], 200);
+        return response()->json(['success' => 'Proceso realizado.'], 200);
     }
 }
