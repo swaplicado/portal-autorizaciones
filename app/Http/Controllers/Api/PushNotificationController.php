@@ -165,6 +165,11 @@ class PushNotificationController extends Controller
             "sound" => $sSound
         ];
 
+        if (empty($title) && empty($body)) {
+            unset($aData['title']);
+            unset($aData['body']);
+        }
+
         if (! empty($iBadge)) {
             $aData['badge'] = $iBadge;
         }
