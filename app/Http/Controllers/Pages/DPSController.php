@@ -21,7 +21,7 @@ class DPSController extends Controller
      */
     public function index(Request $request)
     {
-        return view('dps.index')->with('bUser', 0)
+        return view('dps.index')->with('bUser', 1)
                                 ->with('statusFilter', 0);
     }
 
@@ -47,7 +47,7 @@ class DPSController extends Controller
     {
         $firstDay = $request->input('firstDay');
         $lastDay = $request->input('lastDay');
-        $bUser = $request->input('bUser');
+        $bUser = 1;
         $statusFilter = $request->input('statusFilter');
 
         if ($bUser > 0) {
