@@ -68,11 +68,13 @@ var app = new Vue({
                                     element.idDoc + '">' + 
                                     element.dpsFolio + '</a>';
 
-                    if (this.oData.sessionUserName === element.userInTurn) {
-                        element.authText = 'PENDIENTE PARA MÍ';
-                    }
-                    else {
-                        element.authText = 'PENDIENTE PARA OTROS';
+                    if (element.authText === 'PENDIENTE') {
+                        if (this.oData.sessionUserName === element.userInTurn) {
+                            element.authText = 'PENDIENTE PARA MÍ';
+                        }
+                        else {
+                            element.authText = 'PENDIENTE PARA OTROS';
+                        }
                     }
                 }
 
