@@ -139,7 +139,7 @@
                 @endif
                 <p class="form-text text-muted">
                     <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: click en el
-                    botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul.
+                    botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul
                 </p>
                 <p class="form-text text-muted">
                     <i class="bx bxs-error-circle bx-xs" style="color:#fb060a"></i> Indica prioridad de autorización ALTA.
