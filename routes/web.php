@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Pages\RequisitionsController;
 use App\Http\Controllers\Pages\DPSController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\Pages\RMController;
+use App\Http\Controllers\UserManuals\userManualsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,7 @@ Auth::routes();
 Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/manuals', [userManualsController::class, 'index'])->name('index');
 
     /** requisiciones */
     Route::group(['as' => 'requisitions.'], function () {
@@ -39,14 +42,27 @@ Route::middleware(['auth', 'app.middleware', 'menu'])->group( function () {
     });
     /** dps */
     Route::group(['as' => 'dps.'], function () {
-        Route::get('/dps', [DPSController::class, 'index'])->name('index');
-        Route::get('/pending', [DPSController::class, 'indexPending'])->name('pending');
+        Route::get('/dpsindex', [DPSController::class, 'index'])->name('index');
+        Route::get('/dpspending', [DPSController::class, 'indexPending'])->name('pending');
         Route::get('/dps-range', [DPSController::class, 'getDocumentsInRange'])->name('dps-range');
         Route::get('/dps/{idyear}/{iddoc}', [DPSController::class, 'getDocument'])->name('by-pk');
         Route::post('/dps/authorize-dps/{idyear?}/{iddoc?}', [DPSController::class, 'authorizeDps'])->name('authorize-dps');
         Route::post('/dps/reject-dps/{idyear?}/{iddoc?}', [DPSController::class, 'rejectDps'])->name('reject-dps');
         Route::get('/dps/view/{idyear?}/{iddoc?}', [DPSController::class, 'view'])->name('view');
     });
+
+    /** rm */
+    Route::group(['as' => 'rm.'], function () {
+        Route::get('/rmindex', [RMController::class, 'index'])->name('index');
+        Route::get('/rmpending', [RMController::class, 'indexPending'])->name('pending');
+        Route::get('/myrm', [RMController::class, 'indexMyRm'])->name('myrm');
+        Route::get('/rm-range', [RMController::class, 'getDocumentsInRange'])->name('rm-range');
+        Route::get('/rm/{iddoc}', [RMController::class, 'getDocument'])->name('by-pk');
+        Route::post('/rm/authorize-rm/{iddoc?}', [RMController::class, 'authorizeRm'])->name('authorize-rm');
+        Route::post('/rm/reject-rm/{iddoc?}', [RMController::class, 'rejectRm'])->name('reject-rm');
+        Route::get('/rm/view/{idyear?}/{iddoc?}', [RMController::class, 'view'])->name('view');
+    });
+        
 
     Route::post('/save-subscription', function(Request $request) {
         $data = $request->all();

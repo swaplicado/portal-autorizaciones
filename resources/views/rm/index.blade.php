@@ -73,8 +73,8 @@
     </script>
     <script>
         function GlobalData() {
-            this.routeDps = <?php echo json_encode(route('dps.dps-range')); ?>;
-            this.routeDpsView = <?php echo json_encode(route('dps.view')); ?>;
+            this.routeRm = <?php echo json_encode(route('rm.rm-range')); ?>;
+            this.routeRmView = <?php echo json_encode(route('rm.view')); ?>;
             this.bUser = <?php echo json_encode($bUser); ?>;
             this.statusFilter = <?php echo json_encode($statusFilter); ?>;
             this.sessionUserName = <?php echo json_encode(\Auth::user()->username); ?>;
@@ -84,13 +84,24 @@
 @endsection
 
 @section('content')
-    <div class="card" id="appDps">
+    <div class="card" id="appRm">
         <div class="card-header">
-            @if($statusFilter >= 0)
-                Todas las órdenes de compra (OC)
-            @else
-                Órdenes de compra (OC) por autorizar
-            @endif
+        @switch($statusFilter)
+            @case(0)
+                Todas las requisiciones de materiales (RM)
+                @break
+
+            @case(-1)
+                Requisiciones de materiales (RM) por autorizar
+                @break
+
+            @case(-2)
+                Mis requisiciones de materiales (RM)
+                @break
+
+            @default
+                Estado desconocido
+        @endswitch
              <button class="btn" onclick="subscribeUser()" title="Suscribirse a notificaciones">
                 <i class='bx bxs-bell-plus' style='color:#f5d807'></i>
             </button>
@@ -102,7 +113,7 @@
                     <label for="type_filter">Filtrar tipo: </label>
                     <select class="select2-class form-control" name="type_filter" id="type_filter"></select>
                 </span> --}}
-                @if($statusFilter >= 0)
+                @if($statusFilter >= 0 || $statusFilter == -2)
                     <span class="nobreak">
                         <label for="status_filter">Fecha: </label>
                         <button type="button" class="btn btn-primary btn-sm" @click="prevMonth"><i
@@ -119,6 +130,7 @@
                             <!-- <option value="NA">NA</option> -->
                             <option value="PENDIENTE PARA MÍ">PENDIENTE PARA MÍ</option>
                             <option value="PENDIENTE PARA OTROS">PENDIENTE PARA OTROS</option>
+                            <option value="(NO APLICA)">NO APLICA</option>
                             <option value="EN PROCESO">EN PROCESO</option>
                             <option value="AUTORIZADO">AUTORIZADO</option>
                             <option value="RECHAZADO">RECHAZADO</option>
@@ -130,45 +142,43 @@
             <div>
                 @if($statusFilter >= 0)
                     <span class="nobreak">
-                            <a href="{{ route('dps.pending') }}" type="button" class="btn btn-primary btn-sm ml-1" id="btn_show">Ir a mis pendientes</a>
+                            <a href="{{ route('rm.pending') }}" type="button" class="btn btn-primary btn-sm ml-1" id="btn_show">Ir a mis pendientes</a>
                     </span>
+                @elseif($statusFilter == -2)
+                
                 @else
                     <span class="nobreak">
-                        <a href="{{ route('dps.index') }}" type="button" class="btn btn-primary btn-sm ml-1" id="btn_show">Ir a todas</a>
+                        <a href="{{ route('rm.index') }}" type="button" class="btn btn-primary btn-sm ml-1" id="btn_show">Ir a todas</a>
                     </span>
                 @endif
                 <p class="form-text text-muted">
-                    <strong>Nota:</strong> Para ver el detalle de una orden de compra, seleccione un renglón, después: click en el
-                    botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul
+                    <strong>Nota:</strong> Para ver el detalle de una requisición de material, seleccione un renglón, después: click en el
+                    botón "Ver" / presione dos veces sobre el documento / click en el folio de color azul.
                 </p>
                 <p class="form-text text-muted">
-                    <i class="bx bxs-error-circle bx-xs" style="color:#fb060a"></i> Indica prioridad de autorización ALTA.
+                    <i class="bx bxs-error-circle bx-xs" style="color:#fb060a"></i> Indica prioridad de autorización URGENTE.
                     / 
                     <i class="bx bx-revision bx-xs" style="color:#dbcd08e6" data-toggle="tooltip" data-placement="top" title="Este documento ha sido reenviado a autorización"></i>
                     Indica documento previamente rechazado
                 </p>
             </div>
             <div class="table-responsive">
-                <table class="display expandable-table dataTable no-footer custom-font-size" id="table_dps" width="100%"
+                <table class="display expandable-table dataTable no-footer custom-font-size" id="table_rm" width="100%"
                     cellspacing="0">
                     <thead>
-                        <th>idYear</th>
-                        <th>idDoc</th>
+                        <th>idMaterialRequest</th>
                         <th>-</th>
-                        <th>Folio OC</th>
+                        <th>Folio</th>
+                        <th>Tipo</th>
                         <th>Fecha</th>
-                        <th>Proveedor</th>
+                        <th>Solicitante</th>
                         <th>Estatus</th>
-                        <th>Turno</th>
-                        <th>Centro costo</th>
-                        <th>Subtotal</th>
-                        <th>Total</th>
-                        <th>Moneda</th>
-                        <th>Tipo cambio</th>
-                        <th>Folio RM</th>
-                        <th>Fecha RM</th>
-                        <th>Usuario RM</th>
-                        <th>Usuario OC</th>
+                        <th>Prioridad</th>
+                        <th>Turno aut.</th>
+                        <th>Total ml.</th>
+                        <th>Naturaleza doc.</th>
+                        <th>Concepto/gasto</th>
+                        <th>F. requerida</th>
                     </thead>
                     <tbody>
 
@@ -185,11 +195,15 @@
         $(document).ready(function() {
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    let col_status = data[6];
+                    let col_status = data[5];
+                    let statusFilter = <?php echo json_encode($statusFilter); ?>;
 
-                    if (settings.nTable.id == 'table_dps') {
-                        let sStatus = (<?php echo json_encode($statusFilter); ?>) >= 0 ? $('#status_filter').val() : "";
-                        return col_status === sStatus || sStatus === "";
+                    if (settings.nTable.id === 'table_rm') {
+                        // Aplica el filtro si statusFilter es >= 0 o exactamente -2
+                        if (statusFilter >= 0 || statusFilter === -2) {
+                            let sStatus = $('#status_filter').val();
+                            return col_status === sStatus || sStatus === "";
+                        }
                     }
 
                     return true;
@@ -197,7 +211,7 @@
             );
 
             $('#status_filter').change(function() {
-                table['table_dps'].draw();
+                table['table_rm'].draw();
             });
         });
 
@@ -220,41 +234,41 @@
         //     dpsUser: 16
     </script>
     @include('layouts.table_jsControll', [
-        'table_id' => 'table_dps',
-        'colTargets' => [0, 1],
+        'table_id' => 'table_rm',
+        'colTargets' => [0],
         'colTargetsSercheable' => [],
-        'order' => [[2, 'desc'], [3, 'asc']],
+        'order' => [[1, 'desc'], [2, 'asc']],
         'displayLength' => 25,
         'double_click' => true,
         'show' => true,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [9, 10, 12],
-        'colTargetsAmount' => [9, 10],
-        'colTargetsQuantity' => [12],
-        'colTargetsNoWrap' => [4, 5, 14],
+        'colTargetsAlignRight' => [9],
+        'colTargetsAmount' => [9],
+        'colTargetsQuantity' => [],
+        'colTargetsNoWrap' => [],
         'colTargetsDateHumans' => [],
-        'colTargetsDateHumansTwo' => [4, 14],
+        'colTargetsDateHumansTwo' => [4],
         // 'noSort' => true,
     ])
     <script type="text/javascript" src="{{ asset('myApp/Utils/datatablesUtils.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('myApp/Dps/AppDpsVue.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('myApp/Rm/AppRmVue.js') }}"></script>
     <script>
         $('#btn_show').click(function() {
-            if (table['table_dps'].row('.selected').data() == undefined) {
+            if (table['table_rm'].row('.selected').data() == undefined) {
                 SGui.showError("Debe seleccionar un renglón");
                 return;
             }
             SGui.showWaitingBlock(3000);
-            app.onSelectDps(table['table_dps'].row('.selected').data());
+            app.onSelectRm(table['table_rm'].row('.selected').data());
         });
 
-        $(document).on('dblclick', '#table_dps tbody tr', function() {
-            if (table['table_dps'].row(this).data() == undefined) {
+        $(document).on('dblclick', '#table_rm tbody tr', function() {
+            if (table['table_rm'].row(this).data() == undefined) {
                 SGui.showError("Debe seleccionar un renglón");
                 return;
             }
             SGui.showWaitingBlock(3000);
-            app.onSelectDps(table['table_dps'].row(this).data());
+            app.onSelectRm(table['table_rm'].row(this).data());
         });
     </script>
 @endsection
