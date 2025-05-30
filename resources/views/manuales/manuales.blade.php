@@ -23,7 +23,7 @@
                 <tbody>
                         <tr>
                             <td>
-                                <a href="{{asset('manuales/rmautorizar.pdf')}}" target="_blank">
+                                <a href="{{asset('manuales/segundaversion.pdf')}}" target="_blank">
                                     <h3>Requisiciones de materiales por autorizar</h3>
                                 </a>
                             </td>

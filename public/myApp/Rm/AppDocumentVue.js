@@ -49,6 +49,29 @@ var documentApp = new Vue({
                 .then(response => {
                     this.oDocument = response.data; // Actualizar la lista de documentos
                     console.log(this.oDocument);
+
+                    if (Array.isArray(this.oDocument.lCostCenter)) {
+                        const centros = this.oDocument.lCostCenter
+                            .map(cc => {
+                                const centro = cc.costCenter || '';
+                                const pctDecimal = cc.percentage;
+                                // Verificamos que percentage sea un número válido
+                                const pct = typeof pctDecimal === 'number'
+                                    ? `${(pctDecimal * 100).toFixed(0)}%`
+                                    : '';
+                                return centro
+                                    ? (pct ? `${centro} - ${pct}` : centro)
+                                    : '';
+                            })
+                            .filter(line => line); // eliminamos entradas vacías
+
+                        this.oDocument.costCenterCount = centros.length;
+                        this.oDocument.costCenter = centros.join('\n');
+                    } else {
+                        this.oDocument.costCenterCount = 0;
+                        this.oDocument.costCenter = '';
+                    }
+
                     if (this.oDocument.oWebAuthorization) {
                         this.oWebAuthorization = this.oDocument.oWebAuthorization;
                         for (let element of this.oWebAuthorization.lSteps) {
@@ -124,10 +147,25 @@ var documentApp = new Vue({
         drawTable() {
             if (this.oDocument.lEtys) {
                 for (let oEty of this.oDocument.lEtys) {
-                    oEty.lEtyNotes = oEty.lEtyNotes.map(n => n.note).join(' | ');    
+                    oEty.lEtyNotes = oEty.lEtyNotes.map(n => n.note).join(' | ');  
+                    
+                    // Validar costCenter
+                    if (oEty.costCenter === 'null - null') {
+                        oEty.costCenter = ' - ';
+                    }
+
+                    oEty.itemRefName = oEty.itemRefName || ' - ';
+
+                    // Formatear la cantidad y concatenar con unidad
+                    const rawQty = parseFloat(oEty.quantity);
+                    const formattedQty = !isNaN(rawQty)
+                        ? rawQty.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : '';
+                    const unit = oEty.unitSymbol || '';
+                    oEty.quantityWithUnit = `${formattedQty} ${unit}`.trim();
                 }
             }
-
+            
             drawTableJson(
                 'table_etys',
                 this.oDocument.lEtys,
@@ -135,14 +173,16 @@ var documentApp = new Vue({
                 'idEty',
                 'itemKey',
                 'itemName',
-                'quantity',
+                'quantityWithUnit',
                 'priceUnitary',
                 'priceUnitarySystem',
                 'total',
+                'costCenter',
+                'itemRefName',
                 'lEtyNotes',
             );
 
-            if (this.oDocument.lEtys) {
+            if (this.oDocument.lEtys.length > 0) {
                 let pk = [this.oDocument.lEtys[0].idMaterialRequest, this.oDocument.lEtys[0].idEty];
                 this.onSelectDpsEty(pk);
             }

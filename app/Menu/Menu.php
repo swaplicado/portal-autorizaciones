@@ -51,12 +51,13 @@ class Menu
                         break;
                     case 'user.own_rm':
                         $lMenus[] = (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis RM'];
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Manuales'];
+                        
                     default:
                         # code...
                         break;
                 }
             }
+            $lMenus[] = (object) ['type' => $element, 'route' => route('index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Manuales'];
         }
 
         $sMenu = "";

@@ -120,6 +120,15 @@
                                                 almacén</small>
                                         </div>
                                     </div>
+                                    <div class="col-6 col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Concepto/gasto</label>
+                                            <input readonly type="text" class="form-control form-control-sm"
+                                                name="" id="" aria-describedby="helpId"
+                                                :value="oDocument.mrItemReference">
+                                            <small id="helpId" class="form-text text-muted"></small>
+                                        </div>
+                                    </div>
                                     <div class="col-12 col-md-8">
                                         <div class="form-group">
                                             <label for="">Notas</label>
@@ -127,6 +136,30 @@
                                             <small v-if="oDocument.lEtyNotes && oDocument.lEtyNotes.length > 0" 
                                                     id="helpRmEtysId" 
                                                     class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la RM.</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-8">
+                                        <div class="form-group">
+                                            <label for="">Centros de costos</label>
+                                            <!-- Si solo hay uno: input -->
+                                            <input v-if="oDocument.costCenterCount === 1"
+                                                readonly type="text"
+                                                class="form-control form-control-sm"
+                                                :value="oDocument.costCenter"
+                                                :title="oDocument.costCenter"
+                                                style="white-space: nowrap; overflow-x: auto;"
+                                                @click="$event.target.select()" />
+
+                                            <!-- Si hay más de uno: textarea -->
+                                            <textarea v-else
+                                                readonly rows="3"
+                                                class="form-control form-control-sm"
+                                                :value="oDocument.costCenter"
+                                                :title="oDocument.costCenter"
+                                                style="resize: none;"
+                                                @click="$event.target.select()"></textarea>
+
+                                            <small id="helpId" class="form-text text-muted"></small>
                                         </div>
                                     </div>
                                 </div>
@@ -144,6 +177,8 @@
                                                 <th>Precio unitario</th>
                                                 <th>Precio unitario de sistema</th>
                                                 <th>Total</th>
+                                                <th>Centro costo</th>
+                                                <th>Concepto/gasto</th>
                                                 <th>Notas</th>
                                             </tr>
                                         </thead>
@@ -310,9 +345,9 @@
         //'double_click' => false,
         'show' => false,
         'colTargetsNoOrder' => [],
-        'colTargetsAlignRight' => [5,6,7],
+        'colTargetsAlignRight' => [4,5,6,7],
         'colTargetsAmount' => [5,6,7],
-        'colTargetsQuantity' => [4],
+        'colTargetsQuantity' => [],
         'colTargetsNoWrap' => [],
         // 'noSort' => true,
     ])

@@ -24,7 +24,7 @@ class RMController extends Controller
     public function index(Request $request)
     {
         //RmCore::getDocuments('2025-04-01', '2025-04-30', 95, \Auth::user());
-        return view('rm.index')->with('bUser', 0)
+        return view('rm.index')->with('bUser', 1)
                                  ->with('statusFilter', 0);
     }
 
