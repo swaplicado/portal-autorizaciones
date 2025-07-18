@@ -16,7 +16,7 @@ use App\Notifications\Core;
 class RMController extends Controller
 {
     /**
-     * Display the RM index page.
+     * Display the requisition index page.
      *
      * @param Request $request
      * @return \Illuminate\View\View
@@ -29,7 +29,7 @@ class RMController extends Controller
     }
 
     /**
-     * Display the RM index page with pending status.
+     * Display the requisition index page with pending status.
      *
      * @param Request $request
      * @return \Illuminate\View\View

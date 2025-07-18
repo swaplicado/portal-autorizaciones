@@ -17,12 +17,12 @@ class Menu
         if ($type->id_typesuser == 1) {
             $lMenus = [
                 (object) ['type' => $element, 'route' => route('home'), 'icon' => 'bx bx-home bx-sm', 'name' => 'Inicio'],
-                // (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza RM'],
+                // (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza requisiciones'],
                 (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'OC por autorizar'],
                 (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC'],
-                (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'RM por autorizar'],
-                (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las RM'],
-                (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis RM'],
+                (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones por autorizar'],
+                (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las requisiciones'],
+                (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis requisiciones'],
                 (object) ['type' => $element, 'route' => route('index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Manuales'],
             ];
         } else {
@@ -39,18 +39,18 @@ class Menu
             foreach ($viewsAccess as $view) {
                 switch ($view->key_code) {
                     // case 'autorizador.requisiciones':
-                    //     $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza RM'];
+                    //     $lMenus[] = (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza requisiciones'];
                     //     break;
                     case 'autorizador.dps':
                         $lMenus[] = (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'OC por autorizar'];
                         $lMenus[] = (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC'];
                         break;
                     case 'autorizador.rm':
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'RM por autorizar'];
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las RM'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones por autorizar'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las requisiciones'];
                         break;
                     case 'user.own_rm':
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis RM'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis requisiciones'];
                         
                     default:
                         # code...
