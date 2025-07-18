@@ -20,9 +20,9 @@ class Menu
                 // (object) ['type' => $element, 'route' => route('requisitions.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Autoriza requisiciones'],
                 (object) ['type' => $element, 'route' => route('dps.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'OC por autorizar'],
                 (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC'],
-                (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones por autorizar'],
-                (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las requisiciones'],
-                (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis requisiciones'],
+                (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Reqs. por autorizar'],
+                (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las reqs.'],
+                (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis reqs.'],
                 (object) ['type' => $element, 'route' => route('index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Manuales'],
             ];
         } else {
