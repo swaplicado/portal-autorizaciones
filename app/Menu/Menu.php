@@ -46,11 +46,11 @@ class Menu
                         $lMenus[] = (object) ['type' => $element, 'route' => route('dps.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las OC'];
                         break;
                     case 'autorizador.rm':
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Requisiciones por autorizar'];
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las requisiciones'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.pending'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Reqs. por autorizar'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.index'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Todas las reqs.'];
                         break;
                     case 'user.own_rm':
-                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis requisiciones'];
+                        $lMenus[] = (object) ['type' => $element, 'route' => route('rm.myrm'), 'icon' => 'bx bx-file bx-sm', 'name' => 'Mis reqs.'];
                         
                     default:
                         # code...
