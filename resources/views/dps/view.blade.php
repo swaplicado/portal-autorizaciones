@@ -208,42 +208,42 @@
                 <div v-if="bShowRm" class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <h5 class="card-header card-header-yellow">Requisición de materiales (RM)</h5>
+                            <h5 class="card-header card-header-yellow">Requisición</h5>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Solicitante RM</label>
+                                            <label for="">Solicitante requisición</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrUser">
                                             <small id="helpId" class="form-text text-muted">Este es el usuario de
-                                                siie que hizo la RM</small>
+                                                siie que hizo la requisición</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Folio RM</label>
+                                            <label for="">Folio requisición</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrFolio">
                                             <small id="helpId" class="form-text text-muted">Este es el número
-                                                identificador de la RM</small>
+                                                identificador de la requisición</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Fecha captura RM</label>
+                                            <label for="">Fecha captura requisición</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="formatDateNormal(oMaterialRequest.mrDate)">
                                             <small id="helpId" class="form-text text-muted">Fecha en la que se
-                                                realizó la RM</small>
+                                                realizó la requisición</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Prioridad RM</label>
+                                            <label for="">Prioridad requisición</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrPriority">
@@ -253,7 +253,7 @@
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Fecha requerida de entrega RM</label>
+                                            <label for="">Fecha requerida de entrega requisición</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="formatDateNormal(oMaterialRequest.mrRequiredDate)">
@@ -263,7 +263,7 @@
                                     </div>
                                     <div class="col-6 col-md-4">
                                         <div class="form-group">
-                                            <label for="">Tipo RM</label>
+                                            <label for="">Tipo requisición</label>
                                             <input readonly type="text" class="form-control form-control-sm"
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oMaterialRequest.mrType === 'C' ? 'Consumo' : 'Resurtido'">
@@ -273,19 +273,19 @@
                                     </div>
                                     <div class="col-12 col-md-8">
                                         <div class="form-group">
-                                            <label for="">Notas de la RM</label>
+                                            <label for="">Notas de la requisición</label>
                                             <textarea readonly class="form-control" name="mrNotesName" id="mrNotesId" aria-describedby="helpRmEtysId" rows="2">@{{ getMrNotes() }}</textarea>
                                             <small v-if="oMaterialRequest.lEtyNotes && oMaterialRequest.lEtyNotes.length > 0" 
                                                     id="helpRmEtysId" 
-                                                    class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la RM.</small>
+                                                    class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la requisición.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="form-group">
-                                            <label for="">PDF de la Requisición de materiales</label>
+                                            <label for="">PDF de la Requisición</label>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                 data-toggle="modal" data-target="#modalRm">
-                                                Ver Requisición de materiales
+                                                Ver Requisición
                                             </button>
                                         </div>
                                     </div>
@@ -297,7 +297,7 @@
                 <div v-else>
                     <div class="row">
                         <div class="col-12">
-                            <label style="color: red;" for="">Orden de compra sin requisición de materiales</label>
+                            <label style="color: red;" for="">Orden de compra sin requisición</label>
                         </div>
                     </div>
                     <hr>

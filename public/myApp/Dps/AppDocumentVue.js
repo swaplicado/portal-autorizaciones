@@ -133,7 +133,7 @@ var documentApp = new Vue({
         getMrNotes() {
             let notes = '';
             if (!this.oMaterialRequest.lNotes) {
-                return 'Estas son las notas de la requisición de materiales';
+                return 'Estas son las notas de la requisición';
             }
             this.oMaterialRequest.lNotes.forEach(note => {
                 notes += note.note + '\n';

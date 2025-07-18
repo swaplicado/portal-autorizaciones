@@ -165,9 +165,9 @@
                         <th>Total</th>
                         <th>Moneda</th>
                         <th>Tipo cambio</th>
-                        <th>Folio RM</th>
-                        <th>Fecha RM</th>
-                        <th>Usuario RM</th>
+                        <th>Folio requisición</th>
+                        <th>Fecha requisición</th>
+                        <th>Usuario requisición</th>
                         <th>Usuario OC</th>
                     </thead>
                     <tbody>

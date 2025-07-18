@@ -88,15 +88,15 @@
         <div class="card-header">
         @switch($statusFilter)
             @case(0)
-                Todas las requisiciones de materiales (RM)
+                Todas las requisiciones
                 @break
 
             @case(-1)
-                Requisiciones de materiales (RM) por autorizar
+                Requisiciones por autorizar
                 @break
 
             @case(-2)
-                Mis requisiciones de materiales (RM)
+                Mis requisiciones
                 @break
 
             @default

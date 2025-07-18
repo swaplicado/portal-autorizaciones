@@ -35,7 +35,7 @@
                 b4-card
             </div> --}}
             <div class="card">
-                <h5 class="card-header card-header-blue">Requisición de materiales (RM)</h5>
+                <h5 class="card-header card-header-blue">Requisición</h5>
                 <div class="card-body">
                     <div v-if="! isBigScreenSize()">
                         <div class="row">
@@ -67,7 +67,7 @@
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="oDocument.mrUser">
                                             <small id="helpId" class="form-text text-muted">Este es el usuario de
-                                                siie que hizo la RM</small>
+                                                siie que hizo la requisición</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
@@ -77,7 +77,7 @@
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="`${oDocument.mrProvEntity}-${oDocument.mrFolio}`">
                                             <small id="helpId" class="form-text text-muted">Este es el número
-                                                identificador de la RM</small>
+                                                identificador de la requisición</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
@@ -87,7 +87,7 @@
                                                 name="" id="" aria-describedby="helpId"
                                                 :value="formatDateNormal(oDocument.mrDate)">
                                             <small id="helpId" class="form-text text-muted">Fecha en la que se
-                                                realizó la RM</small>
+                                                realizó la requisición</small>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
@@ -135,7 +135,7 @@
                                             <textarea readonly class="form-control" name="mrNotesName" id="mrNotesId" aria-describedby="helpRmEtysId" rows="2">@{{ oDocument.lNotes.map(n => n.note).join(' | ') }}</textarea>
                                             <small v-if="oDocument.lEtyNotes && oDocument.lEtyNotes.length > 0" 
                                                     id="helpRmEtysId" 
-                                                    class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la RM.</small>
+                                                    class="form-text text-muted">IMPORTANTE: También hay notas en las partidas de la requisición.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-8">
