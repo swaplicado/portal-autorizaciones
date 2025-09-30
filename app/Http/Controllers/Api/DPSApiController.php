@@ -47,10 +47,11 @@ class DPSApiController extends Controller
         // Obtener los parámetros de la solicitud
         $idYear = $request->input('idYear');
         $idDoc = $request->input('idDoc');
+        $idCompany = $request->input('idCompany');
 
         // Crear una instancia del controlador DPS y delegar la petición.
         $dpsController = new DpsController();
-        return $dpsController->getDocument($request, $idYear, $idDoc);
+        return $dpsController->getDocument($request, $idYear, $idDoc, $idCompany );
     }
 
     /**
@@ -67,8 +68,9 @@ class DPSApiController extends Controller
         // Obtener los parámetros de la solicitud
         $idYear = $request->input('idYear');
         $idDoc = $request->input('idDoc');
+        $idCompany = $request->input('idCompany');
 
-        return $dpsController->authorizeDps($request, $idYear, $idDoc);
+        return $dpsController->authorizeDps($request, $idYear, $idDoc, $idCompany);
     }
 
     /**
@@ -85,7 +87,8 @@ class DPSApiController extends Controller
         // Obtener los parámetros de la solicitud
         $idYear = $request->input('idYear');
         $idDoc = $request->input('idDoc');
+        $idCompany = $request->input('idCompany');
 
-        return $dpsController->rejectDps($request, $idYear, $idDoc);
+        return $dpsController->rejectDps($request, $idYear, $idDoc, $idCompany);
     }
 }

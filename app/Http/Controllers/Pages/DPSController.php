@@ -49,14 +49,15 @@ class DPSController extends Controller
         $lastDay = $request->input('lastDay');
         $bUser = 1;
         $statusFilter = $request->input('statusFilter');
-
+        $idCompany = $request->input('idCompany');
+        $idCompany = empty($idCompany) ? 0 : $idCompany;
         if ($bUser > 0) {
             $idUser = \Auth::user()->external_id_n;
         } else {
             $idUser = 0;
         }
 
-        $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
+        $lDocs = DpsCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter, $idCompany);
 
         return response()->json($lDocs);
     }
@@ -69,9 +70,9 @@ class DPSController extends Controller
      * @param int $idDoc
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDocument(Request $request, $idYear, $idDoc)
+    public function getDocument(Request $request, $idYear, $idDoc, $idCompany = 0)
     {
-        $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user());
+        $lDocs = DpsCore::getDocument($idYear, $idDoc, \Auth::user(), $idCompany);
 
         return response()->json($lDocs);
     }
@@ -84,11 +85,10 @@ class DPSController extends Controller
      * @param int $idDoc
      * @return \Illuminate\Http\JsonResponse
      */
-    public function authorizeDps(Request $request, $idYear, $idDoc)
+    public function authorizeDps(Request $request, $idYear, $idDoc, $idCompany)
     {
-        
         $sComments = $request->input('comments');
-        $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments);
+        $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments, $idCompany);
 
         return response()->json($jResponse);
     }
@@ -101,14 +101,14 @@ class DPSController extends Controller
      * @param int $idDoc
      * @return \Illuminate\Http\JsonResponse
      */
-    public function rejectDps(Request $request, $idYear, $idDoc)
+    public function rejectDps(Request $request, $idYear, $idDoc, $idCompany)
     {
         $sComments = $request->input('comments');
         // Validar sComments, son obligatorios
         if (empty($sComments)) {
             return response()->json(['error' => 'Los comentarios son obligatorios'], 400);
         }
-        $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments);
+        $oResponse = DpsCore::rejectDps($idYear, $idDoc, \Auth::user(), $sComments, $idCompany);
 
         return response()->json($oResponse);
     }
