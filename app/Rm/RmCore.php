@@ -19,7 +19,7 @@ class RmCore
      * @param  string  $endDate         Fecha de fin en formato 'YYYY-MM-DD'.
      * @param  int     $idUser          ID del usuario que solicita los documentos.
      * @param  object  $oSessionUser    Objeto de sesión del usuario autenticado.
-     * @param  int     $statusFilter    (Opcional) Filtro de estado de los documentos. Por defecto es 0.
+     * @param  int     $statusFilter    Filtro de estado de los documentos. Por defecto es 0.
      * @return mixed   Datos obtenidos del servidor externo.
      * @throws Exception Si no se pueden obtener los documentos.
      */
@@ -31,12 +31,14 @@ class RmCore
         $method = "GET";
         $body = "";
         $requireAuth = true;
+        $idCompany = 0;
         $parameters = [
             'start_date' => $startDate,
             'end_date' => $endDate,
             'id_user' => $idUser,
             'id_session_user' => $oSessionUser->external_id_n,
-            'status_filter' => $statusFilter
+            'status_filter' => $statusFilter,
+            'id_company' => $idCompany
         ];
 
         // Hacer la petición al servidor externo
