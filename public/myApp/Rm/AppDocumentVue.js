@@ -117,6 +117,21 @@ var documentApp = new Vue({
             }
             return data;
         },
+        formatDateTime(data) {
+            if (!data) {
+                return '';
+            }
+            const dateObj = new Date(data);
+            if (isNaN(dateObj.getTime())) {
+                return data; // Retorna el valor original si no es una fecha válida
+            }
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+            const year = dateObj.getFullYear();
+            const hours = String(dateObj.getHours()).padStart(2, '0');
+            const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        },
         formatDate(data) {
             if (!data) {
                 return '';

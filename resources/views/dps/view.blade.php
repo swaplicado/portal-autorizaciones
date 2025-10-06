@@ -45,6 +45,22 @@
                         <br>
                     </div>
                     <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Usuario OC</label>
+                                <input readonly type="text" name="folio" id="folio"
+                                    class="form-control form-control-sm" :value="oDocument.oDpsHeader.dpsAuthUser">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Enviado el</label>
+                                <input readonly type="text" name="folio" id="folio"
+                                    class="form-control form-control-sm" :value="formatDateTime(oDocument.oDpsHeader.dpsAuthTs)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Comentarios al iniciarse la autorización:</label>

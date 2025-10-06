@@ -19,11 +19,13 @@ class DpsCore
      * @param  string  $endDate         Fecha de fin en formato 'YYYY-MM-DD'.
      * @param  int     $idUser          ID del usuario que solicita los documentos.
      * @param  object  $oSessionUser    Objeto de sesión del usuario autenticado.
-     * @param  int     $statusFilter    (Opcional) Filtro de estado de los documentos. Por defecto es 0.
+     * @param  int     $statusFilter    Filtro de estado de los documentos. Por defecto es 0.
+     * @param  int     $idCompany       ID de la compañía del usuario.
+     * 
      * @return mixed   Datos obtenidos del servidor externo.
      * @throws Exception Si no se pueden obtener los documentos.
      */
-    public static function getDocuments($startDate, $endDate, $idUser, $oSessionUser, $statusFilter = 0)
+    public static function getDocuments($startDate, $endDate, $idUser, $oSessionUser, $statusFilter, $idCompany)
     {
         // Obtener configuración del sistema
         $config = \App\Utils\Configuration::getConfigurations();
@@ -31,12 +33,14 @@ class DpsCore
         $method = "GET";
         $body = "";
         $requireAuth = true;
+        $idCompany = $idCompany ?? 0;
         $parameters = [
             'start_date' => $startDate,
             'end_date' => $endDate,
             'id_user' => $idUser,
             'id_session_user' => $oSessionUser->external_id_n,
-            'status_filter' => $statusFilter
+            'status_filter' => $statusFilter,
+            'id_company' => $idCompany
         ];
 
         // Hacer la petición al servidor externo
@@ -60,15 +64,17 @@ class DpsCore
      * @return mixed   Datos obtenidos del servidor externo.
      * @throws Exception Si no se puede obtener el documento.
      */
-    public static function getDocument($idYear, $idDocument, $oSessionUser)
+    public static function getDocument($idYear, $idDocument, $oSessionUser, $idCompany)
     {
         // Obtener configuración del sistema
         $config = \App\Utils\Configuration::getConfigurations();
         $url = $config->AppLinkRoute . "/" . $config->AppLinkRouteGetDpsByPk;
+        $idCompany = $idCompany ?? 0;
         $parameters = [
             'id_year' => $idYear,
             'id_doc' => $idDocument,
-            'id_user' => $oSessionUser->external_id_n ?? 1  // ID de usuario por defecto
+            'id_user' => $oSessionUser->external_id_n ?? 1,  // ID de usuario por defecto
+            'id_company' => $idCompany
         ];
 
         // Hacer la petición al servidor externo
@@ -92,7 +98,7 @@ class DpsCore
      * @param  string  $sComments    Comentarios sobre la autorización.
      * @return mixed   Respuesta del servidor externo.
      */
-    public static function authorizeDps($idYear, $idDocument, $oSessionUser, $sComments)
+    public static function authorizeDps($idYear, $idDocument, $oSessionUser, $sComments, $idCompany)
     {
         // Obtener configuración del sistema
         $config = \App\Utils\Configuration::getConfigurations();
@@ -100,6 +106,7 @@ class DpsCore
         $method = "POST";
         $dataType = 2;
         $userId = $oSessionUser->external_id_n;
+        $idCompany = $idCompany ?? 0;
 
         // Validar si el usuario tiene una cuenta asociada
         if (!$userId) {
@@ -115,7 +122,8 @@ class DpsCore
             "idResource" => [$idYear, $idDocument],
             "dataType" => $dataType,
             "comment" => $sComments,
-            "userId" => $userId
+            "userId" => $userId,
+            "idCompany" => $idCompany
         ]);
 
         $requireAuth = true;
@@ -135,7 +143,7 @@ class DpsCore
      * @param  string  $sComments    Comentarios sobre el rechazo.
      * @return mixed   Respuesta del servidor externo.
      */
-    public static function rejectDps($idYear, $idDocument, $oSessionUser, $sComments)
+    public static function rejectDps($idYear, $idDocument, $oSessionUser, $sComments, $idCompany)
     {
         // Obtener configuración del sistema
         $config = \App\Utils\Configuration::getConfigurations();
@@ -143,13 +151,15 @@ class DpsCore
         $method = "POST";
         $dataType = 2;
         $userId = $oSessionUser->external_id_n;
+        $idCompany = $idCompany ?? 0;
 
         // Crear JSON para el cuerpo de la solicitud
         $body = json_encode([
             "idResource" => [$idYear, $idDocument],
             "dataType" => $dataType,
             "comment" => $sComments,
-            "userId" => $userId
+            "userId" => $userId,
+            "idCompany" => $idCompany
         ]);
 
         $requireAuth = true;
