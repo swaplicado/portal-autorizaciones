@@ -85,7 +85,7 @@ class DPSController extends Controller
      * @param int $idDoc
      * @return \Illuminate\Http\JsonResponse
      */
-    public function authorizeDps(Request $request, $idYear, $idDoc, $idCompany)
+    public function authorizeDps(Request $request, $idYear, $idDoc, $idCompany = 0)
     {
         $sComments = $request->input('comments');
         $jResponse = DpsCore::authorizeDps($idYear, $idDoc, \Auth::user(), $sComments, $idCompany);
@@ -101,7 +101,7 @@ class DPSController extends Controller
      * @param int $idDoc
      * @return \Illuminate\Http\JsonResponse
      */
-    public function rejectDps(Request $request, $idYear, $idDoc, $idCompany)
+    public function rejectDps(Request $request, $idYear, $idDoc, $idCompany = 0)
     {
         $sComments = $request->input('comments');
         // Validar sComments, son obligatorios

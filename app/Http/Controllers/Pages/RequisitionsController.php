@@ -75,6 +75,7 @@ class RequisitionsController extends Controller
         $idResource = $request->idResource;
         $dataType = $request->dataType;
         $authorize = 1;
+        $idCompany = $request->idCompany ?? 0;
         
         try {
             $body = '{
@@ -82,7 +83,8 @@ class RequisitionsController extends Controller
                 "dataType": '.$dataType.',
                 "authorize": '.$authorize.',
                 "userId": '.Auth::user()->external_id_n.',
-                "user": "'.Auth::user()->username.'"
+                "user": "'.Auth::user()->username.'",
+                "idCompany": '.$idCompany.'
             }';
 
             $requireAuth = true;
@@ -132,6 +134,7 @@ class RequisitionsController extends Controller
         $dataType = $request->dataType;
         $comment = $request->comment;
         $authorize = 0;
+        $idCompany = $request->idCompany ?? 0;
         
         try {
             $body = '{
@@ -140,7 +143,8 @@ class RequisitionsController extends Controller
                 "authorize": '.$authorize.',
                 "comment": "'.$comment.'",
                 "userId": '.Auth::user()->external_id_n.',
-                "user": "'.Auth::user()->username.'"
+                "user": "'.Auth::user()->username.'",
+                "idCompany": '.$idCompany.'
             }';
             $requireAuth = true;
             $parameters = null;
