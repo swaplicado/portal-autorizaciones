@@ -36,7 +36,7 @@
     <div class="full-unavailable">
       <div class="unavailable-card">
         <h1>Este portal ya no está disponible</h1>
-        <p>Las autorizaciones ahora se gestionan en el Portal de Compras. Haga clic en el botón para ir allá.</p>
+        <p>Las autorizaciones ahora se gestionan en el Portal de Compras. Haga clic en el botón para ir allá</p>
         <a href="https://aeth.swaplicado.com/auth/login" class="btn btn-portal btn-lg" target="_blank" rel="noopener">Ir al nuevo portal</a>
         <div class="small-note">Si el enlace no funciona, contacte al administrador para obtener la URL correcta.</div>
       </div>
