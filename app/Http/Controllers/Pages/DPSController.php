@@ -21,8 +21,9 @@ class DPSController extends Controller
      */
     public function index(Request $request)
     {
-        return view('dps.index')->with('bUser', 1)
-                                ->with('statusFilter', 0);
+        // return view('dps.index')->with('bUser', 1)
+        //                         ->with('statusFilter', 0);
+        return view('unavailable');
     }
 
     /**
@@ -33,8 +34,9 @@ class DPSController extends Controller
      */
     public function indexPending(Request $request)
     {
-        return view('dps.index')->with('bUser', 1)
-                                ->with('statusFilter', -1);
+        // return view('dps.index')->with('bUser', 1)
+        //                         ->with('statusFilter', -1);
+        return view('unavailable');
     }
 
     /**

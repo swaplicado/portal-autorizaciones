@@ -89,3 +89,8 @@ Route::get('/send-notification-users', [NotificationsController::class, 'notific
 Route::get('/unauthorized', function () {
     return view('layouts.unauthorized');
 })->name('unauthorized');
+
+/* Página: portal no disponible -> aviso de redirección al nuevo portal */
+Route::get('/portal-no-disponible', function () {
+    return view('unavailable');
+})->name('portal.unavailable');
