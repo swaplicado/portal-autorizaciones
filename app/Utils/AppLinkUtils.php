@@ -14,7 +14,8 @@ class AppLinkUtils {
 
         $client = new Client([
             'base_uri' => $config->AppLinkRoute,
-            'timeout' => 30.0,
+            'timeout' => 10.0,
+            'connect_timeout' => 5.0,
             'headers' => $headers,
             'verify' => false
         ]);
@@ -100,7 +101,8 @@ class AppLinkUtils {
 
         $client = new Client([
             'base_uri' => $config->AppLinkRoute,
-            'timeout' => 30.0,
+            'timeout' => 10.0,
+            'connect_timeout' => 5.0,
             'headers' => $headers
         ]);
 

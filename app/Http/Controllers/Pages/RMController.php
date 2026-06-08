@@ -64,7 +64,11 @@ class RMController extends Controller
         }
         Log::info($firstDay);
         //dd($firstDay);
-        $lDocs = RmCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
+        try {
+            $lDocs = RmCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 503);
+        }
         return response()->json($lDocs);
     }
 
@@ -87,7 +91,11 @@ class RMController extends Controller
         }
         Log::info($firstDay);
         //dd($firstDay);
-        $lDocs = RmCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
+        try {
+            $lDocs = RmCore::getDocuments($firstDay, $lastDay, $idUser, \Auth::user(), $statusFilter);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 503);
+        }
         return response()->json($lDocs);    
     }
 
