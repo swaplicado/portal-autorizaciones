@@ -117,9 +117,21 @@ class AppLinkUtils {
         }
 
         // Enviar la solicitud
-        $response = $client->request($method, $route, $options);
-        $jsonString = $response->getBody()->getContents();
+        try {
+            $response = $client->request($method, $route, $options);
+        } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            CloudLogger::log('error', 'Error de conexión en requestAppLink [' . $method . ' ' . $route . ']: ' . $e->getMessage());
+            return null;
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $statusCode = $e->hasResponse() ? $e->getResponse()->getStatusCode() : 'N/A';
+            CloudLogger::log('error', 'Error HTTP ' . $statusCode . ' en requestAppLink [' . $method . ' ' . $route . ']: ' . $e->getMessage());
+            return null;
+        } catch (\Throwable $th) {
+            CloudLogger::log('error', 'Error inesperado en requestAppLink [' . $method . ' ' . $route . ']: ' . $th->getMessage());
+            return null;
+        }
 
+        $jsonString = $response->getBody()->getContents();
         $data = json_decode($jsonString);
         return $data;
     }

@@ -50,7 +50,11 @@ class RmCore
         Log::info(json_encode($rData));
 
         // Verificar si la respuesta es válida
-         if ($rData->code != 200 && !$rData->data) {
+        if (is_null($rData)) {
+            throw new Exception("No se pudo conectar al servidor externo (AppLink)", 1);
+        }
+
+        if ($rData->code != 200 || !$rData->data) {
             throw new Exception("Error al obtener los documentos del servidor externo", 1);
         }
 
