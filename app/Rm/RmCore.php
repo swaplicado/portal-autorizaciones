@@ -56,8 +56,10 @@ class RmCore
 
         // Obtener el código de respuesta de forma segura
         $code = is_array($rData) ? $rData['code'] : (is_object($rData) ? $rData->code ?? $rData->get('code') : null);
-
+        Log::info($rData->code);
+        Log::info($code);
         if ($code != 200) {
+            Log::error("Error al obtener los documentos del servidor externo. Código: " . $code);
             throw new Exception("Error al obtener los documentos del servidor externo", 1);
         }
 
