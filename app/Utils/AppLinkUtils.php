@@ -90,12 +90,14 @@ class AppLinkUtils {
             $headers = [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'Authorization' => $data->token
+                'Authorization' => $data->token,
+                'X-Proxy-Token' => '1234$%&&'
             ];
         } else {
             $headers = [
                 'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
+                'X-Proxy-Token' => '1234$%&&'
             ];
         }
 
