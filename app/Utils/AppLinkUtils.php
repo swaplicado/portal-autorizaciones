@@ -103,6 +103,11 @@ class AppLinkUtils {
             $headers['Authorization'] = $data->token;
         }
 
+        Log::info("Solicitud a AppLink [{$method} {$route}]: ", [
+            'headers' => $headers,
+            'body' => $body,
+            'parameters' => $parameters
+        ]);
         // ⚠️ IMPORTANTE: Pasar headers en la configuración Y en cada request
         $client = new Client([
             'base_uri' => $cloudFunctionUrl,  // 👈 Usar Cloud Function
@@ -128,8 +133,9 @@ class AppLinkUtils {
 
         // Enviar la solicitud
         try {
+            Log::info("Enviando solicitud a AppLink: {$method} {$route}");
             $response = $client->request($method, $route, $options);
-            
+            Log::info("Estado HTTP recibido: " . $response->getStatusCode());
             $jsonString = $response->getBody()->getContents();
             $data = json_decode($jsonString);
             
@@ -149,14 +155,17 @@ class AppLinkUtils {
             return $data;
             
         } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            Log::error("Error de conexión en requestAppLink [{$method} {$route}]: " . $e->getMessage());
             CloudLogger::log('error', "Error de conexión en requestAppLink [{$method} {$route}]: " . $e->getMessage());
             return null;
         } catch (\GuzzleHttp\Exception\RequestException $e) {
+            Log::error("Error HTTP en requestAppLink [{$method} {$route}]: " . $e->getMessage());
             $statusCode = $e->hasResponse() ? $e->getResponse()->getStatusCode() : 'N/A';
             $responseBody = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : 'Sin respuesta';
             CloudLogger::log('error', "Error HTTP {$statusCode} en requestAppLink [{$method} {$route}]: {$e->getMessage()} | Body: {$responseBody}");
             return null;
         } catch (\Throwable $th) {
+            Log::error("Error inesperado en requestAppLink [{$method} {$route}]: " . $th->getMessage());
             CloudLogger::log('error', "Error inesperado en requestAppLink [{$method} {$route}]: " . $th->getMessage());
             return null;
         }
