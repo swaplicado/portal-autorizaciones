@@ -54,7 +54,7 @@ class RmCore
             throw new Exception("No se pudo conectar al servidor externo (AppLink)", 1);
         }
 
-        if ($rData->code != 200 || !$rData->data) {
+        if ($rData->code != 200) {
             throw new Exception("Error al obtener los documentos del servidor externo", 1);
         }
 
