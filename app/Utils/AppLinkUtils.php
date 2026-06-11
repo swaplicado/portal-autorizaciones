@@ -107,9 +107,8 @@ class AppLinkUtils {
             'base_uri' => $cloudFunctionUrl,  // 👈 Usar Cloud Function
             'timeout' => 15.0,                // Aumentar timeout
             'connect_timeout' => 10.0,
-            'verify' => true,
+            'verify' => false,
             'http_errors' => false,           // Para manejar errores manualmente
-            // NO poner headers aquí, los pasaremos en cada request
         ]);
 
         $options = [
