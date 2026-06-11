@@ -44,7 +44,7 @@ class RmCore
         // Imprimir parámetros:
         Log::info("Parámetros de la petición:");
         Log::info(json_encode($parameters));
-        Log::info("Antes de la petición");
+        Log::info("Antes de la petición...");
 
         // Hacer la petición al servidor externo
         $rData = AppLinkUtils::requestAppLink($url, $method, $oSessionUser, $body, $requireAuth, $parameters);
