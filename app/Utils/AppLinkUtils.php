@@ -9,7 +9,8 @@ class AppLinkUtils {
 
         $headers = [
             'Content-Type' => 'application/json',
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
+            'X-Proxy-Token' => '1234$%&&'
         ];
 
         $client = new Client([
