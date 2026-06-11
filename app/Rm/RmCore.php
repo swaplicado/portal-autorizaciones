@@ -54,11 +54,17 @@ class RmCore
             throw new Exception("No se pudo conectar al servidor externo (AppLink)", 1);
         }
 
-        if ($rData->code != 200) {
+        // Obtener el código de respuesta de forma segura
+        $code = is_array($rData) ? $rData['code'] : (is_object($rData) ? $rData->code ?? $rData->get('code') : null);
+
+        if ($code != 200) {
             throw new Exception("Error al obtener los documentos del servidor externo", 1);
         }
 
-        return $rData->data;
+        // Obtener data de forma segura
+        $data = is_array($rData) ? $rData['data'] : (is_object($rData) ? $rData->data ?? $rData->get('data') : null);
+
+        return $data;
     }
 
     /**
