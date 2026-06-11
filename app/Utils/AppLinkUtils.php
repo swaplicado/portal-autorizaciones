@@ -81,7 +81,7 @@ class AppLinkUtils {
         $config = \App\Utils\Configuration::getConfigurations();
         
         // ⚠️ FORZAR Cloud Function URL (ignorar $config->AppLinkRoute)
-        $cloudFunctionUrl = 'https://proxy-applink-954473475135.us-central1.run.app';
+        $cloudFunctionUrl = $config->AppLinkRoute;
         
         // Construir headers base (siempre incluir X-Proxy-Token)
         $headers = [
@@ -111,8 +111,8 @@ class AppLinkUtils {
         // ⚠️ IMPORTANTE: Pasar headers en la configuración Y en cada request
         $client = new Client([
             'base_uri' => $cloudFunctionUrl,  // 👈 Usar Cloud Function
-            'timeout' => 15.0,                // Aumentar timeout
-            'connect_timeout' => 10.0,
+            'timeout' => 60,                // Aumentar timeout
+            'connect_timeout' => 30.0,
             'verify' => false,
             'http_errors' => false,           // Para manejar errores manualmente
         ]);
