@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client;
 use App\Logger\CloudLogger;
+use Log;
 
 class AppLinkUtils {
     public static function AppLinkLogin($oUser){
@@ -125,13 +126,6 @@ class AppLinkUtils {
             $options['json'] = $body;
         }
 
-        // 🔍 DEBUG: Log de lo que se va a enviar
-        CloudLogger::log('info', "Enviando {$method} a {$cloudFunctionUrl}{$route}");
-        CloudLogger::log('info', "Headers: " . json_encode($headers));
-        if ($parameters) {
-            CloudLogger::log('info', "Parámetros: " . json_encode($parameters));
-        }
-
         // Enviar la solicitud
         try {
             $response = $client->request($method, $route, $options);
@@ -141,7 +135,6 @@ class AppLinkUtils {
             
             // Si recibe 401, el token expiró - forzar nuevo login
             if ($response->getStatusCode() == 401 && $requireAuth) {
-                CloudLogger::log('warning', 'Token expirado, forzando nuevo login');
                 // Limpiar token cacheado si estás usando caché
                 $data = AppLinkUtils::AppLinkLogin($oUser);
                 if ($data && $data->code == 200) {
@@ -152,7 +145,7 @@ class AppLinkUtils {
                     $data = json_decode($jsonString);
                 }
             }
-            
+            Log::info("Respuesta del servidor externo (AppLink) para [{$method} {$route}]: " . $jsonString);
             return $data;
             
         } catch (\GuzzleHttp\Exception\ConnectException $e) {
