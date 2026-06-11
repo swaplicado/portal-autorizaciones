@@ -47,6 +47,7 @@ class RmCore
 
         // Hacer la petición al servidor externo
         $rData = AppLinkUtils::requestAppLink($url, $method, $oSessionUser, $body, $requireAuth, $parameters);
+        Log::info("Respuesta del servidor:");
         Log::info(json_encode($rData));
 
         // Verificar si la respuesta es válida
