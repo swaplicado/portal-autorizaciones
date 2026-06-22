@@ -2,7 +2,7 @@
     "appmanagerRoute": "https://aeth.siieapp.com/appsmanager/public",
     "appmanagerProfileRoute": "https://aeth.siieapp.com/appsmanager/public/profile",
 
-    "AppLinkRoute": "https://proxy-applink-954473475135.us-central1.run.app",
+    "AppLinkRoute": "177.244.31.58:9002",
     "AppLinkRouteLogin": "login",
     "AppLinkRouteGetResources": "requisitions/getResources",
     "AppLinkRouteAuthorizeResource": "requisitions/approbeRequisition",
